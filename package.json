@@ -8,7 +8,8 @@
     "deploy-local": "graph deploy simpleweb/polygon-faucet --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.30.2",
-    "@graphprotocol/graph-ts": "^0.27.0"
+    "@graphprotocol/graph-cli": "^0.38.0",
+    "@graphprotocol/graph-ts": "^0.29.3",
+    "mustache": "^4.2.0"
   }
 }
