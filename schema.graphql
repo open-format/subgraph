@@ -1,0 +1,24 @@
+type App @entity {
+  id: ID!
+  createdAt: BigInt!
+  creator: Bytes!
+  contracts: [Contract!]!
+}
+
+type Contract @entity {
+  id: ID!
+  type: String!
+  metadata: ContractMetadata!
+}
+
+type ContractMetadata @entity {
+  name: String!
+  symbol: String
+}
+
+type NFT @entity {
+  id: ID!
+  contract: Contract!
+  owner: Bytes!
+  metadataURI: String!
+}
