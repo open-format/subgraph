@@ -1,0 +1,7 @@
+{
+  "network": "mumbai",
+  "factory": {
+    "address": "0x123",
+    "startBlock": "124"
+  }
+}

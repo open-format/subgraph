@@ -338,6 +338,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openformat/subgraph@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@openformat/subgraph@workspace:."
+  dependencies:
+    "@graphprotocol/graph-cli": ^0.38.0
+    "@graphprotocol/graph-ts": ^0.29.3
+    mustache: ^4.2.0
+  languageName: unknown
+  linkType: soft
+
 "@rescript/std@npm:9.0.0":
   version: 9.0.0
   resolution: "@rescript/std@npm:9.0.0"
@@ -1894,16 +1904,6 @@ __metadata:
   checksum: b191531e36c607977e5b1c47811158733c34ccb3bfde92c44798929e9b4154884378536d26ad90dfecd32e1ffc09c545d23535ad91b3161a27ddbb8ebe0cbecb
   languageName: node
   linkType: hard
-
-"faucet@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "faucet@workspace:."
-  dependencies:
-    "@graphprotocol/graph-cli": ^0.38.0
-    "@graphprotocol/graph-ts": ^0.29.3
-    mustache: ^4.2.0
-  languageName: unknown
-  linkType: soft
 
 "file-uri-to-path@npm:1.0.0":
   version: 1.0.0
