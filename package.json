@@ -10,10 +10,10 @@
     "create-local": "graph create open-format/mumbai --node http://0.0.0.0:8020",
     "gen:mumbai": "graph codegen subgraph.mumbai.yaml",
     "gen:near": "graph codegen subgraph.near.yaml",
+    "gen:local": "graph codegen subgraph.local.yaml",
     "deploy-local": "graph deploy open-format/mumbai --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020",
     "deploy:mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --network mumbai open-format/mumbai subgraph.mumbai.yaml",
     "deploy:near": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --network near open-format/near subgraph.near.yaml",
-    "codegen": "graph codegen",
     "build": "graph build",
     "auth": "graph auth https://api.thegraph.com/deploy/"
   },
