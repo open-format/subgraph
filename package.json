@@ -21,5 +21,6 @@
     "@graphprotocol/graph-cli": "^0.38.0",
     "@graphprotocol/graph-ts": "^0.29.3",
     "mustache": "^4.2.0"
-  }
+  },
+  "packageManager": "yarn@1.22.1"
 }
