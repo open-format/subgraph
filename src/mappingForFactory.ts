@@ -1,10 +1,9 @@
 import { Created } from "../generated/Factory/Factory";
-import { loadOrCreateProxy } from "./helpers";
+import { loadOrCreateApp } from "./helpers";
 
 export function handleCreated(event: Created): void {
-  //@TODO: Do we want to call this variable Proxy or App?
-  let proxy = loadOrCreateProxy(event.params.id);
-  proxy.creator = event.params.owner;
-  proxy.createdAt = event.block.timestamp;
-  proxy.save();
+  let app = loadOrCreateApp(event.params.id);
+  app.creator = event.params.owner;
+  app.createdAt = event.block.timestamp;
+  app.save();
 }
