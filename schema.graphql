@@ -2,23 +2,23 @@ type App @entity {
   id: ID!
   createdAt: BigInt!
   creator: Bytes!
-  contracts: [Contract!]!
+  contracts: [Contract!]
 }
 
 type Contract @entity {
   id: ID!
   type: String!
-  metadata: ContractMetadata!
+  createdAt: BigInt!
 }
 
 type ContractMetadata @entity {
   name: String!
   symbol: String
-}
 
 type NFT @entity {
   id: ID!
   contract: Contract!
   owner: Bytes!
   metadataURI: String!
+  createdAt: BigInt!
 }
