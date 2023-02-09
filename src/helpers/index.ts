@@ -1,3 +1,9 @@
-import { loadOrCreateProxy } from "./loadOrCreateProxy";
+import { loadOrCreateApp } from "./loadOrCreateApp";
+import { loadOrCreateContract } from "./loadOrCreateContract";
+import { loadOrCreateContractMetadata } from "./loadOrCreateContractMetadata";
 
-export { loadOrCreateProxy };
+export {
+  loadOrCreateApp,
+  loadOrCreateContract,
+  loadOrCreateContractMetadata,
+};
