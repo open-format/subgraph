@@ -5,8 +5,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: mainnet
+    # prettier-ignore
+    network: {{network}}
     source:
+      address: "{{factory.address}}"
+      startBlock: "{{factory.startBlock}}"
       abi: Factory
     mapping:
       kind: ethereum/events
