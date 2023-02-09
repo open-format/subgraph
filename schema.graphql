@@ -12,6 +12,7 @@ type Contract @entity {
   creator: Bytes!
   metadata: ContractData!
   app: App
+  tokens: [NFT!] @derivedFrom(field: "contract")
 }
 
 type ContractData @entity {
