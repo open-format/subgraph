@@ -2,18 +2,25 @@ type App @entity {
   id: ID!
   createdAt: BigInt!
   creator: Bytes!
-  contracts: [Contract!]
+  contracts: [Contract!] @derivedFrom(field: "app")
 }
 
 type Contract @entity {
   id: ID!
   type: String!
   createdAt: BigInt!
+  creator: Bytes!
+  metadata: ContractData!
+  app: App
 }
 
-type ContractMetadata @entity {
+type ContractData @entity {
+  id: ID!
   name: String!
   symbol: String
+  royaltyBps: BigInt
+  royaltyRecipient: Bytes
+}
 
 type NFT @entity {
   id: ID!
