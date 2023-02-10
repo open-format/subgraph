@@ -1,4 +1,5 @@
 import { NFTId } from "./idTemplates";
+import { loadNFT } from "./loadNFT";
 import { loadOrCreateApp } from "./loadOrCreateApp";
 import { loadOrCreateContract } from "./loadOrCreateContract";
 import { loadOrCreateContractMetadata } from "./loadOrCreateContractMetadata";
@@ -9,5 +10,6 @@ export {
   loadOrCreateContract,
   loadOrCreateContractMetadata,
   loadOrCreateNFT,
+  loadNFT,
   NFTId,
 };
