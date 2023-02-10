@@ -2,7 +2,7 @@ type App @entity {
   id: ID!
   createdAt: BigInt!
   creator: Bytes!
-  contracts: [Contract!] @derivedFrom(field: "app")
+  contracts: [Contract!]! @derivedFrom(field: "app")
 }
 
 type Contract @entity {
@@ -12,7 +12,7 @@ type Contract @entity {
   creator: Bytes!
   metadata: ContractData!
   app: App
-  tokens: [NFT!] @derivedFrom(field: "contract")
+  tokens: [NFT!]! @derivedFrom(field: "contract")
 }
 
 type ContractData @entity {
