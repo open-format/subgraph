@@ -25,6 +25,7 @@ type ContractData @entity {
 
 type NFT @entity {
   id: ID!
+  tokenId: BigInt!
   contract: Contract!
   owner: Bytes!
   metadataURI: String!
