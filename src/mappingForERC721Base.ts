@@ -20,6 +20,7 @@ export function handleMinted(event: Minted): void {
   NFT.metadataURI = event.params.tokenURI;
   NFT.tokenId = totalSupply;
 
+  NFT.createdAtBlock = event.block.number;
   NFT.createdAt = event.block.timestamp;
   NFT.contract = event.address.toHex();
 
@@ -39,6 +40,7 @@ export function handleBatchMinted(event: BatchMinted): void {
     NFT.owner = event.params.to;
     NFT.metadataURI = event.params.baseURI + tokenId.toString();
     NFT.tokenId = tokenId;
+    NFT.createdAtBlock = event.block.number;
     NFT.createdAt = event.block.timestamp;
     NFT.contract = event.address.toHex();
     NFT.save();
