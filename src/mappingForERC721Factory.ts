@@ -13,6 +13,7 @@ export function handleCreated(event: Created): void {
 
   //@dev The type needs to come from the contract
   contract.type = "ERC721";
+  contract.createdAtBlock = event.block.number;
   contract.createdAt = event.block.timestamp;
   contract.creator = event.params.creator;
   contract.metadata = contractMetadata.id;

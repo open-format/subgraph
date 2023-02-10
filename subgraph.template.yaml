@@ -46,3 +46,28 @@ dataSources:
         - event: Created(address,address,string,string,address,uint16)
           handler: handleCreated
       file: ./src/mappingForERC721Factory.ts
+  - kind: ethereum/contract
+    name: ERC721Base
+    # prettier-ignore
+    network: {{network}}
+    source:
+      address: "{{ERC721Base.address}}"
+      startBlock: "{{ERC721Base.startBlock}}"
+      abi: ERC721Base
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
+      eventHandlers:
+        - event: Minted(address,string)
+          handler: handleMinted
+        - event: BatchMinted(address,uint256,string)
+          handler: handleBatchMinted
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappingForERC721Base.ts
