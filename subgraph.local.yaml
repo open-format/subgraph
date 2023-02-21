@@ -48,7 +48,6 @@ dataSources:
     network: mainnet
     source:
       abi: ERC721Base
-      startBlock: 40
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
