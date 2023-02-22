@@ -21,16 +21,15 @@ dataSources:
         - name: Factory
           file: ./abis/Factory.json
       eventHandlers:
-        - event: Created(address,address)
+        - event: Created(address,address,string)
           handler: handleCreated
       file: ./src/mappingForFactory.ts
-  - kind: ethereum/contract
-    name: ERC721Factory
+templates:
+  - name: ERC721FactoryFacet
+    kind: ethereum/contract
     # prettier-ignore
     network: {{network}}
     source:
-      address: "{{ERC721Factory.address}}"
-      startBlock: "{{ERC721Factory.startBlock}}"
       abi: ERC721Factory
     mapping:
       kind: ethereum/events
@@ -46,13 +45,11 @@ dataSources:
         - event: Created(address,address,string,string,address,uint16)
           handler: handleCreated
       file: ./src/mappingForERC721Factory.ts
-  - kind: ethereum/contract
-    name: ERC721Base
+  - name: ERC721Base
+    kind: ethereum/contract
     # prettier-ignore
     network: {{network}}
     source:
-      address: "{{ERC721Base.address}}"
-      startBlock: "{{ERC721Base.startBlock}}"
       abi: ERC721Base
     mapping:
       kind: ethereum/events

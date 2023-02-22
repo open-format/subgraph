@@ -1,15 +1,20 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigInt, dataSource } from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
   ERC721Base as ERC721BaseContract,
-  Minted,
   Transfer,
 } from "../generated/ERC721Base/ERC721Base";
+import { Minted } from "../generated/templates/ERC721Base/ERC721Base";
 
 import { loadNFT, loadOrCreateNFT } from "./helpers";
 
+let context = dataSource.context();
+let contractAddress = Address.fromString(
+  context.getString("ERC721Contract")
+);
+
 export function handleMinted(event: Minted): void {
-  const boundContract = ERC721BaseContract.bind(event.address);
+  const boundContract = ERC721BaseContract.bind(contractAddress);
   const totalSupply = boundContract
     .totalSupply()
     .minus(BigInt.fromI32(1));
