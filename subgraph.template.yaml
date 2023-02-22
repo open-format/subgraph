@@ -24,7 +24,7 @@ dataSources:
       eventHandlers:
         - event: Created(address,address,string)
           handler: handleCreated
-      file: ./src/mappingForFactory.ts
+      file: ./src/Factory.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -45,7 +45,7 @@ templates:
       eventHandlers:
         - event: Created(address,address,string,string,address,uint16)
           handler: handleCreated
-      file: ./src/mappingForERC721Factory.ts
+      file: ./src/facet/ERC721Factory.ts
   - name: ERC721Base
     kind: ethereum/contract
     # prettier-ignore
@@ -68,4 +68,4 @@ templates:
           handler: handleBatchMinted
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/mappingForERC721Base.ts
+      file: ./src/ERC721Base.ts

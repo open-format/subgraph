@@ -4,12 +4,12 @@ import {
   dataSource,
   DataSourceContext,
 } from "@graphprotocol/graph-ts";
-import { Created } from "../generated/ERC721Factory/ERC721Factory";
-import { ERC721Base } from "../generated/templates";
+import { Created } from "../../generated/ERC721Factory/ERC721Factory";
+import { ERC721Base } from "../../generated/templates";
 import {
   loadOrCreateContract,
   loadOrCreateContractMetadata,
-} from "./helpers";
+} from "../helpers";
 
 let context = dataSource.context();
 let appAddress = Address.fromString(context.getString("app"));
