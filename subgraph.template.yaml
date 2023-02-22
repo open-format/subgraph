@@ -9,11 +9,12 @@ dataSources:
     network: {{network}}
     source:
       address: "{{factory.address}}"
-      startBlock: "{{factory.startBlock}}"
+      # prettier-ignore
+      startBlock: {{startBlock}}
       abi: Factory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - App
@@ -21,20 +22,19 @@ dataSources:
         - name: Factory
           file: ./abis/Factory.json
       eventHandlers:
-        - event: Created(address,address)
+        - event: Created(address,address,string)
           handler: handleCreated
-      file: ./src/mappingForFactory.ts
-  - kind: ethereum/contract
-    name: ERC721Factory
+      file: ./src/Factory.ts
+templates:
+  - name: ERC721FactoryFacet
+    kind: ethereum/contract
     # prettier-ignore
     network: {{network}}
     source:
-      address: "{{ERC721Factory.address}}"
-      startBlock: "{{ERC721Factory.startBlock}}"
       abi: ERC721Factory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Contract
@@ -45,18 +45,16 @@ dataSources:
       eventHandlers:
         - event: Created(address,address,string,string,address,uint16)
           handler: handleCreated
-      file: ./src/mappingForERC721Factory.ts
-  - kind: ethereum/contract
-    name: ERC721Base
+      file: ./src/facet/ERC721Factory.ts
+  - name: ERC721Base
+    kind: ethereum/contract
     # prettier-ignore
     network: {{network}}
     source:
-      address: "{{ERC721Base.address}}"
-      startBlock: "{{ERC721Base.startBlock}}"
       abi: ERC721Base
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - NFT
@@ -70,4 +68,4 @@ dataSources:
           handler: handleBatchMinted
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/mappingForERC721Base.ts
+      file: ./src/ERC721Base.ts

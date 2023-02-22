@@ -1,6 +1,7 @@
 type App @entity {
   id: ID!
   creator: Bytes!
+  name: String!
   contracts: [Contract!]! @derivedFrom(field: "app")
   createdAt: BigInt!
   createdAtBlock: BigInt!

@@ -1,15 +1,7 @@
 {
   "network": "mumbai",
+  "startBlock": 32293440,
   "factory": {
-    "address": "0xF6f2EdB20138513796AF8A61DfbcCe72A7FaAE86",
-    "startBlock": "32013000"
-  },
-  "ERC721Factory": {
-    "address": "0x4e60Ca6c7A81E653aA926ef84161C69a4734C240",
-    "startBlock": "32013000"
-  },
-  "ERC721Base": {
-    "address": "0xF79919d5b72bc454cec7351C466A6206a56ab144",
-    "startBlock": "32013000"
+    "address": "0x52f5FFd74ED2817eF631a8A0C11f54f2b2228f4d"
   }
 }
