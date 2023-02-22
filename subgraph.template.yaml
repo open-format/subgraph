@@ -9,7 +9,8 @@ dataSources:
     network: {{network}}
     source:
       address: "{{factory.address}}"
-      startBlock: "{{factory.startBlock}}"
+      # prettier-ignore
+      startBlock: {{startBlock}}
       abi: Factory
     mapping:
       kind: ethereum/events
