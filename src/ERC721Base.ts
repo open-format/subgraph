@@ -1,4 +1,9 @@
-import { Address, BigInt, dataSource } from "@graphprotocol/graph-ts";
+import {
+  Address,
+  BigInt,
+  dataSource,
+  store,
+} from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
   ERC721Base as ERC721BaseContract,
@@ -6,7 +11,7 @@ import {
 } from "../generated/ERC721Base/ERC721Base";
 import { Minted } from "../generated/templates/ERC721Base/ERC721Base";
 
-import { loadNFT, loadOrCreateNFT } from "./helpers";
+import { loadNFT, loadOrCreateNFT, ZERO_ADDRESS } from "./helpers";
 
 let context = dataSource.context();
 let contractAddress = Address.fromString(
@@ -16,7 +21,7 @@ let contractAddress = Address.fromString(
 export function handleMinted(event: Minted): void {
   const boundContract = ERC721BaseContract.bind(contractAddress);
   const totalSupply = boundContract
-    .totalSupply()
+    .nextTokenIdToMint()
     .minus(BigInt.fromI32(1));
 
   let NFT = loadOrCreateNFT(event.address, totalSupply.toString());
@@ -53,14 +58,13 @@ export function handleBatchMinted(event: BatchMinted): void {
 }
 
 export function handleTransfer(event: Transfer): void {
-  const boundContract = ERC721BaseContract.bind(event.address);
-  const totalSupply = boundContract
-    .totalSupply()
-    .minus(BigInt.fromI32(1));
-
-  let NFT = loadNFT(event.address, totalSupply.toString());
+  let NFT = loadNFT(event.address, event.params.tokenId.toString());
   if (NFT) {
-    NFT.owner = event.params.to;
-    NFT.save();
+    if (event.params.to == ZERO_ADDRESS) {
+      store.remove("NFT", NFT.id);
+    } else {
+      NFT.owner = event.params.to;
+      NFT.save();
+    }
   }
 }
