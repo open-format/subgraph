@@ -1,32 +1,33 @@
-import {
-  Address,
-  BigInt,
-  dataSource,
-  store,
-} from "@graphprotocol/graph-ts";
+import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
   ERC721Base as ERC721BaseContract,
-  Transfer,
-} from "../generated/ERC721Base/ERC721Base";
-import { Minted } from "../generated/templates/ERC721Base/ERC721Base";
+  Minted,
+  Transfer
+} from "../generated/templates/ERC721Base/ERC721Base";
 
-import { loadNFT, loadOrCreateNFT, ZERO_ADDRESS } from "./helpers";
+import {
+  loadNFT,
+  loadOrCreateContractMetadata,
+  loadOrCreateNFT,
+  loadOrCreateUser,
+  ZERO_ADDRESS
+} from "./helpers";
 
 let context = dataSource.context();
-let contractAddress = Address.fromString(
-  context.getString("ERC721Contract")
-);
+let contractAddress = Address.fromString(context.getString("ERC721Contract"));
+const boundContract = ERC721BaseContract.bind(contractAddress);
+const contractMetadata = loadOrCreateContractMetadata(contractAddress);
 
 export function handleMinted(event: Minted): void {
-  const boundContract = ERC721BaseContract.bind(contractAddress);
   const totalSupply = boundContract
     .nextTokenIdToMint()
     .minus(BigInt.fromI32(1));
 
   let NFT = loadOrCreateNFT(event.address, totalSupply.toString());
+  let user = loadOrCreateUser(event.params.to, event);
 
-  NFT.owner = event.params.to;
+  NFT.owner = user.id;
   NFT.metadataURI = event.params.tokenURI;
   NFT.tokenId = totalSupply;
 
@@ -34,12 +35,14 @@ export function handleMinted(event: Minted): void {
   NFT.createdAt = event.block.timestamp;
   NFT.contract = event.address.toHex();
 
+  //@TODO: Move into reuseable helper;
+  contractMetadata.totalSupply = boundContract.totalSupply();
+  contractMetadata.save();
   NFT.save();
+  user.save();
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
-  //@TODO: update when startTokenId is added to BatchMinted event
-  const boundContract = ERC721BaseContract.bind(event.address);
   const totalSupplyBeforeMint = boundContract
     .totalSupply()
     .minus(event.params.quantity);
@@ -47,7 +50,7 @@ export function handleBatchMinted(event: BatchMinted): void {
     const tokenId = totalSupplyBeforeMint.plus(BigInt.fromI32(i));
 
     let NFT = loadOrCreateNFT(event.address, tokenId.toString());
-    NFT.owner = event.params.to;
+    NFT.owner = event.params.to.toHex();
     NFT.metadataURI = event.params.baseURI + tokenId.toString();
     NFT.tokenId = tokenId;
     NFT.createdAtBlock = event.block.number;
@@ -55,6 +58,8 @@ export function handleBatchMinted(event: BatchMinted): void {
     NFT.contract = event.address.toHex();
     NFT.save();
   }
+  contractMetadata.totalSupply = boundContract.totalSupply();
+  contractMetadata.save();
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -63,8 +68,10 @@ export function handleTransfer(event: Transfer): void {
     if (event.params.to == ZERO_ADDRESS) {
       store.remove("NFT", NFT.id);
     } else {
-      NFT.owner = event.params.to;
+      NFT.owner = event.params.to.toHex();
       NFT.save();
     }
   }
+  contractMetadata.totalSupply = boundContract.totalSupply();
+  contractMetadata.save();
 }
