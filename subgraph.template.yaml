@@ -69,4 +69,41 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/ERC721Base.ts
-      
+  - name: ERC20FactoryFacet
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ERC20FactoryFacet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Contract
+        - ContractData
+        - User
+      abis:
+        - name: ERC20FactoryFacet
+          file: ./abis/ERC20FactoryFacet.json
+      eventHandlers:
+        - event: Created(address,address,string,string,uint8,uint256)
+          handler: handleCreated
+      file: ./src/facet/ERC20Factory.ts
+  - name: ERC20Base
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ERC20Base
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: ERC20Base
+          file: ./abis/ERC20Base.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/ERC20Base.ts
