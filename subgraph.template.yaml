@@ -5,12 +5,14 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    # prettier-ignore
     network: {{network}}
     source:
+    {{#factory.address}}
       address: "{{factory.address}}"
-      # prettier-ignore
+    {{/factory.address}}
+    {{#startBlock}}
       startBlock: {{startBlock}}
+    {{/startBlock}}
       abi: Factory
     mapping:
       kind: ethereum/events
@@ -28,7 +30,6 @@ dataSources:
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
-    # prettier-ignore
     network: {{network}}
     source:
       abi: ERC721Factory
@@ -48,7 +49,6 @@ templates:
       file: ./src/facet/ERC721Factory.ts
   - name: ERC721Base
     kind: ethereum/contract
-    # prettier-ignore
     network: {{network}}
     source:
       abi: ERC721Base
@@ -69,3 +69,4 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/ERC721Base.ts
+      
