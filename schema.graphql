@@ -1,6 +1,6 @@
 type App @entity {
   id: ID!
-  creator: Bytes!
+  creator: User!
   name: String!
   contracts: [Contract!]! @derivedFrom(field: "app")
   createdAt: BigInt!
@@ -10,10 +10,10 @@ type App @entity {
 type Contract @entity {
   id: ID!
   type: String!
-  creator: Bytes!
+  creator: User!
   metadata: ContractData!
+  nfts: [NFT!]! @derivedFrom(field: "contract")
   app: App
-  tokens: [NFT!]! @derivedFrom(field: "contract")
   createdAt: BigInt!
   createdAtBlock: BigInt!
 }
@@ -21,7 +21,8 @@ type Contract @entity {
 type ContractData @entity {
   id: ID!
   name: String!
-  symbol: String
+  symbol: String!
+  totalSupply: BigInt!
   royaltyBps: BigInt
   royaltyRecipient: Bytes
 }
@@ -30,8 +31,31 @@ type NFT @entity {
   id: ID!
   tokenId: BigInt!
   contract: Contract!
-  owner: Bytes!
+  owner: User!
   metadataURI: String!
   createdAt: BigInt!
   createdAtBlock: BigInt!
+}
+
+type User @entity {
+  id: ID!
+  apps: [App!] @derivedFrom(field: "creator")
+  contracts: [Contract!] @derivedFrom(field: "creator")
+  tokens: [Token!] @derivedFrom(field: "owner")
+  nfts: [NFT!] @derivedFrom(field: "owner")
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
+}
+
+type Token @entity {
+  id: ID!
+  owner: User!
+  balance: BigInt!
+  contract: Contract!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
 }
