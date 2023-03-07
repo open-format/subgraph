@@ -5,10 +5,10 @@ import {
   ContractData,
   NFT,
   Token,
+  TokenBalance,
   User
 } from "../../generated/schema";
-import {Transfer} from "../../generated/templates/ERC20Base/ERC20Base";
-import {NFTId, TokenId} from "./idTemplates";
+import {NFTId, TokenBalanceId} from "./idTemplates";
 
 export function loadOrCreateApp(appAddress: Address): App {
   const id = appAddress.toHex();
@@ -80,18 +80,39 @@ export function loadOrCreateNFT(
 
 export function loadOrCreateToken(
   contractAddress: Address,
-  userAddress: Address,
-  event: Transfer
+  event: ethereum.Event
 ): Token {
-  const id = TokenId(contractAddress, userAddress);
+  const id = contractAddress.toHex();
   let _Token = Token.load(id);
 
   if (!_Token) {
     _Token = new Token(id);
-    _Token.owner = userAddress.toHex();
     _Token.createdAt = event.block.timestamp;
     _Token.createdAtBlock = event.block.number;
   }
 
+  _Token.updatedAt = event.block.timestamp;
+  _Token.updatedAtBlock = event.block.number;
+
   return _Token as Token;
+}
+
+export function loadOrCreateTokenBalance(
+  contractAddress: Address,
+  userAddress: Address,
+  event: ethereum.Event
+): TokenBalance {
+  const id = TokenBalanceId(contractAddress, userAddress);
+  let _TokenBalance = TokenBalance.load(id);
+
+  if (!_TokenBalance) {
+    _TokenBalance = new TokenBalance(id);
+    _TokenBalance.createdAt = event.block.timestamp;
+    _TokenBalance.createdAtBlock = event.block.number;
+  }
+
+  _TokenBalance.updatedAt = event.block.timestamp;
+  _TokenBalance.updatedAtBlock = event.block.number;
+
+  return _TokenBalance as TokenBalance;
 }

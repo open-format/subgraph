@@ -4,7 +4,7 @@ export function NFTId(contractAddress: Address, tokenId: string): string {
   return contractAddress.toHex() + "-" + tokenId;
 }
 
-export function TokenId(
+export function TokenBalanceId(
   contractAddress: Address,
   userAddress: Address
 ): string {

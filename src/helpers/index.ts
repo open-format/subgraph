@@ -1,5 +1,5 @@
 import {Address} from "@graphprotocol/graph-ts";
-import {NFTId, TokenId} from "./idTemplates";
+import {NFTId, TokenBalanceId} from "./idTemplates";
 import {loadNFT} from "./load";
 import {
   loadOrCreateApp,
@@ -7,6 +7,7 @@ import {
   loadOrCreateContractMetadata,
   loadOrCreateNFT,
   loadOrCreateToken,
+  loadOrCreateTokenBalance,
   loadOrCreateUser
 } from "./loadOrCreate";
 
@@ -20,8 +21,9 @@ export {
   loadOrCreateContractMetadata,
   loadOrCreateNFT,
   loadOrCreateToken,
+  loadOrCreateTokenBalance,
   loadOrCreateUser,
   loadNFT,
   NFTId,
-  TokenId
+  TokenBalanceId
 };
