@@ -28,7 +28,7 @@ export function handleCreated(event: Created): void {
   contract.type = "ERC721";
   contract.createdAtBlock = event.block.number;
   contract.createdAt = event.block.timestamp;
-  contract.creator = user.id;
+  contract.owner = user.id;
   contract.metadata = contractMetadata.id;
   contract.app = appAddress.toHex();
 

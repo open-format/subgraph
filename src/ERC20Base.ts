@@ -1,13 +1,12 @@
-import {Address, dataSource, store} from "@graphprotocol/graph-ts";
-import {Token, User} from "../generated/schema";
+import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
+import {TokenBalance, User} from "../generated/schema";
 import {
   ERC20Base as ERC20BaseContract,
   Transfer
 } from "../generated/templates/ERC20Base/ERC20Base";
-
 import {
   loadOrCreateContractMetadata,
-  loadOrCreateToken,
+  loadOrCreateTokenBalance,
   loadOrCreateUser,
   ZERO_ADDRESS
 } from "./helpers";
@@ -18,36 +17,28 @@ let contractAddress = Address.fromString(context.getString("ERC20Contract"));
 export function handleTransfer(event: Transfer): void {
   const boundContract = ERC20BaseContract.bind(contractAddress);
   const contractMetadata = loadOrCreateContractMetadata(contractAddress);
-  let token: Token;
+
+  let tokenBalance: TokenBalance;
   let user: User;
 
-  if (event.params.from == ZERO_ADDRESS) {
-    // Mint
-    token = loadOrCreateToken(contractAddress, event.params.to, event);
-    user = loadOrCreateUser(event.params.to, event);
-  } else {
-    // Burn & Transfer
-    token = loadOrCreateToken(contractAddress, event.params.from, event);
-    user = loadOrCreateUser(event.params.from, event);
-  }
-  user.save();
+  const isMinted = event.params.from == ZERO_ADDRESS;
+  const address = isMinted ? event.params.to : event.params.from;
 
-  if (token) {
-    if (event.params.from == ZERO_ADDRESS) {
-      // Mint & Transfer
-      token.owner = event.params.to.toHex();
-      token.balance = boundContract.balanceOf(event.params.to);
-    } else {
-      // Burn
-      token.balance = boundContract.balanceOf(event.params.from);
-      store.remove("Token", token.id);
-    }
-    token.contract = contractAddress.toHex();
-    token.updatedAt = event.block.timestamp;
-    token.updatedAtBlock = event.block.number;
-    token.save();
+  user = loadOrCreateUser(address, event);
+  tokenBalance = loadOrCreateTokenBalance(contractAddress, address, event);
+
+  tokenBalance.user = address.toHex();
+  tokenBalance.token = contractAddress.toHex();
+  tokenBalance.balance = boundContract.balanceOf(
+    Address.fromString(tokenBalance.user)
+  );
+
+  if (tokenBalance.balance === BigInt.fromI32(0)) {
+    store.remove("TokenBalance", tokenBalance.id);
   }
 
   contractMetadata.totalSupply = boundContract.totalSupply();
   contractMetadata.save();
+  tokenBalance.save();
+  user.save();
 }

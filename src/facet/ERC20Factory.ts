@@ -9,6 +9,7 @@ import {Created} from "../../generated/templates/ERC20FactoryFacet/ERC20Factory"
 import {
   loadOrCreateContract,
   loadOrCreateContractMetadata,
+  loadOrCreateToken,
   loadOrCreateUser
 } from "../helpers";
 
@@ -24,11 +25,12 @@ export function handleCreated(event: Created): void {
   let contract = loadOrCreateContract(event.params.id);
   let contractMetadata = loadOrCreateContractMetadata(event.params.id);
   let user = loadOrCreateUser(event.params.creator, event);
+  let token = loadOrCreateToken(event.params.id, event);
 
   contract.type = "ERC20";
   contract.createdAtBlock = event.block.number;
   contract.createdAt = event.block.timestamp;
-  contract.creator = event.params.creator.toHex();
+  contract.owner = event.params.creator.toHex();
   contract.metadata = contractMetadata.id;
   contract.app = appAddress.toHex();
 
@@ -36,7 +38,10 @@ export function handleCreated(event: Created): void {
   contractMetadata.symbol = event.params._symbol;
   contractMetadata.totalSupply = BigInt.fromI32(0);
 
+  token.contract = event.params.id.toHex();
+
   contract.save();
   contractMetadata.save();
   user.save();
+  token.save();
 }

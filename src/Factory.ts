@@ -13,7 +13,7 @@ export function handleCreated(event: Created): void {
   let app = loadOrCreateApp(event.params.id);
   let user = loadOrCreateUser(event.params.owner, event);
 
-  app.creator = user.id;
+  app.owner = user.id;
   app.name = event.params.name;
   app.createdAtBlock = event.block.number;
   app.createdAt = event.block.timestamp;
