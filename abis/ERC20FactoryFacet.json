@@ -6,11 +6,6 @@
       "type": "error"
     },
     {
-      "inputs": [],
-      "name": "ReentrancyGuard__ReentrantCall",
-      "type": "error"
-    },
-    {
       "anonymous": false,
       "inputs": [
         {
@@ -28,26 +23,26 @@
         {
           "indexed": false,
           "internalType": "string",
-          "name": "name",
+          "name": "_name",
           "type": "string"
         },
         {
           "indexed": false,
           "internalType": "string",
-          "name": "symbol",
+          "name": "_symbol",
           "type": "string"
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "royaltyRecipient",
-          "type": "address"
+          "internalType": "uint8",
+          "name": "_decimals",
+          "type": "uint8"
         },
         {
           "indexed": false,
-          "internalType": "uint16",
-          "name": "royaltyBps",
-          "type": "uint16"
+          "internalType": "uint256",
+          "name": "_supply",
+          "type": "uint256"
         }
       ],
       "name": "Created",
@@ -66,17 +61,17 @@
           "type": "string"
         },
         {
-          "internalType": "address",
-          "name": "_royaltyRecipient",
-          "type": "address"
+          "internalType": "uint8",
+          "name": "_decimals",
+          "type": "uint8"
         },
         {
-          "internalType": "uint16",
-          "name": "_royaltyBps",
-          "type": "uint16"
+          "internalType": "uint256",
+          "name": "_supply",
+          "type": "uint256"
         }
       ],
-      "name": "createERC721",
+      "name": "createERC20",
       "outputs": [
         {
           "internalType": "address",
@@ -84,12 +79,12 @@
           "type": "address"
         }
       ],
-      "stateMutability": "payable",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "getERC721FactoryImplementation",
+      "name": "getERC20FactoryImplementation",
       "outputs": [
         {
           "internalType": "address",
