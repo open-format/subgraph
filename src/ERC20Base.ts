@@ -56,6 +56,11 @@ export function handleTransfer(event: Transfer): void {
   } else if (isBurned) {
     sender.save();
     senderTokenBalance.save();
+
+    //@TODO is burntSupply the correct name?
+    contractMetadata.burntSupply = contractMetadata.burntSupply.plus(
+      event.params.value
+    );
   } else {
     sender.save();
     receiver.save();

@@ -66,6 +66,10 @@ export function handleTransfer(event: Transfer): void {
   let NFT = loadNFT(event.address, event.params.tokenId.toString());
   if (NFT) {
     if (event.params.to == ZERO_ADDRESS) {
+      //@TODO is burntSupply the correct name?
+      contractMetadata.burntSupply = contractMetadata.burntSupply.plus(
+        BigInt.fromU32(1)
+      );
       store.remove("NFT", NFT.id);
     } else {
       NFT.owner = event.params.to.toHex();

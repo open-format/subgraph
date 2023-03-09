@@ -1,4 +1,4 @@
-import {Address, ethereum} from "@graphprotocol/graph-ts";
+import {Address, BigInt, ethereum} from "@graphprotocol/graph-ts";
 import {
   App,
   Contract,
@@ -40,6 +40,7 @@ export function loadOrCreateContractMetadata(
 
   if (!_contractMetadata) {
     _contractMetadata = new ContractData(id);
+    _contractMetadata.burntSupply = BigInt.fromU32(0);
   }
 
   return _contractMetadata as ContractData;
