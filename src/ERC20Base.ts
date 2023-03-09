@@ -45,6 +45,8 @@ export function handleTransfer(event: Transfer): void {
     Address.fromString(receiver.id)
   );
 
+  //@TODO delete  senderTokenBalance and/or receiverTokenBalance entity if balanceOf is zero.
+
   const isMinted = event.params.from == ZERO_ADDRESS;
   const isBurned = event.params.to == ZERO_ADDRESS;
 
