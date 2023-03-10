@@ -24,6 +24,7 @@ type ContractData @entity {
   name: String!
   symbol: String!
   totalSupply: BigInt!
+  burntSupply: BigInt!
   decimals: BigInt
   royaltyBps: BigInt
   royaltyRecipient: Bytes

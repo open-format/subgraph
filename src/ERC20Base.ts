@@ -1,5 +1,4 @@
-import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
-import {TokenBalance, User} from "../generated/schema";
+import {Address, dataSource} from "@graphprotocol/graph-ts";
 import {
   ERC20Base as ERC20BaseContract,
   Transfer
@@ -18,27 +17,58 @@ export function handleTransfer(event: Transfer): void {
   const boundContract = ERC20BaseContract.bind(contractAddress);
   const contractMetadata = loadOrCreateContractMetadata(contractAddress);
 
-  let tokenBalance: TokenBalance;
-  let user: User;
+  // sender and receiver User and TokenBalance entities required for Wallet > Wallet transfers
+  let sender = loadOrCreateUser(event.params.from, event);
+  let receiver = loadOrCreateUser(event.params.to, event);
 
-  const isMinted = event.params.from == ZERO_ADDRESS;
-  const address = isMinted ? event.params.to : event.params.from;
-
-  user = loadOrCreateUser(address, event);
-  tokenBalance = loadOrCreateTokenBalance(contractAddress, address, event);
-
-  tokenBalance.user = address.toHex();
-  tokenBalance.token = contractAddress.toHex();
-  tokenBalance.balance = boundContract.balanceOf(
-    Address.fromString(tokenBalance.user)
+  let senderTokenBalance = loadOrCreateTokenBalance(
+    contractAddress,
+    event.params.from,
+    event
   );
 
-  if (tokenBalance.balance === BigInt.fromI32(0)) {
-    store.remove("TokenBalance", tokenBalance.id);
+  senderTokenBalance.user = sender.id;
+  senderTokenBalance.token = contractAddress.toHex();
+  senderTokenBalance.balance = boundContract.balanceOf(
+    Address.fromString(sender.id)
+  );
+
+  let receiverTokenBalance = loadOrCreateTokenBalance(
+    contractAddress,
+    event.params.to,
+    event
+  );
+
+  receiverTokenBalance.user = receiver.id;
+  receiverTokenBalance.token = contractAddress.toHex();
+  receiverTokenBalance.balance = boundContract.balanceOf(
+    Address.fromString(receiver.id)
+  );
+
+  //@TODO delete  senderTokenBalance and/or receiverTokenBalance entity if balanceOf is zero.
+
+  const isMinted = event.params.from == ZERO_ADDRESS;
+  const isBurned = event.params.to == ZERO_ADDRESS;
+
+  if (isMinted) {
+    receiver.save();
+    receiverTokenBalance.save();
+  } else if (isBurned) {
+    sender.save();
+    senderTokenBalance.save();
+
+    //@TODO is burntSupply the correct name?
+    contractMetadata.burntSupply = contractMetadata.burntSupply.plus(
+      event.params.value
+    );
+  } else {
+    sender.save();
+    receiver.save();
+
+    receiverTokenBalance.save();
+    senderTokenBalance.save();
   }
 
   contractMetadata.totalSupply = boundContract.totalSupply();
   contractMetadata.save();
-  tokenBalance.save();
-  user.save();
 }
