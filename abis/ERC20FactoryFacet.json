@@ -2,7 +2,27 @@
   "abi": [
     {
       "inputs": [],
+      "name": "ERC20Factory_doNotHavePermission",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ERC20Factory_failedToInitialize",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ERC20Factory_noImplementationFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "Factory__FailedDeployment",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ReentrancyGuard__ReentrantCall",
       "type": "error"
     },
     {
@@ -23,30 +43,55 @@
         {
           "indexed": false,
           "internalType": "string",
-          "name": "_name",
+          "name": "name",
           "type": "string"
         },
         {
           "indexed": false,
           "internalType": "string",
-          "name": "_symbol",
+          "name": "symbol",
           "type": "string"
         },
         {
           "indexed": false,
           "internalType": "uint8",
-          "name": "_decimals",
+          "name": "decimals",
           "type": "uint8"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "_supply",
+          "name": "supply",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "implementationId",
+          "type": "bytes32"
         }
       ],
       "name": "Created",
       "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_implementationId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "calculateERC20FactoryDeploymentAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -69,6 +114,11 @@
           "internalType": "uint256",
           "name": "_supply",
           "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_implementationId",
+          "type": "bytes32"
         }
       ],
       "name": "createERC20",
@@ -79,11 +129,17 @@
           "type": "address"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_implementationId",
+          "type": "bytes32"
+        }
+      ],
       "name": "getERC20FactoryImplementation",
       "outputs": [
         {
