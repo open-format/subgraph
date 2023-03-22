@@ -1,6 +1,6 @@
 {
-  "network": "mumbai",
-  "startBlock": 33425937,
+  "network": "matic",
+  "startBlock": 40635680,
   "factory": {
     "address": "0x19781Af95cA4E113D5D1412452225D11A84ce992"
   }

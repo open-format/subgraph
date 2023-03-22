@@ -1,0 +1,7 @@
+{
+  "network": "aurora",
+  "startBlock": 87868445,
+  "factory": {
+    "address": "0x1F2CD226AD558a362026FF7f64F8BE92Ee5Ed8Fd"
+  }
+}
