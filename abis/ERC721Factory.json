@@ -2,6 +2,21 @@
   "abi": [
     {
       "inputs": [],
+      "name": "ERC721Factory_doNotHavePermission",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ERC721Factory_failedToInitialize",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ERC721Factory_noImplementationFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "Factory__FailedDeployment",
       "type": "error"
     },
@@ -48,10 +63,35 @@
           "internalType": "uint16",
           "name": "royaltyBps",
           "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "implementationId",
+          "type": "bytes32"
         }
       ],
       "name": "Created",
       "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_implementationId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "calculateERC721FactoryDeploymentAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -74,6 +114,11 @@
           "internalType": "uint16",
           "name": "_royaltyBps",
           "type": "uint16"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_implementationId",
+          "type": "bytes32"
         }
       ],
       "name": "createERC721",
@@ -88,7 +133,13 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_implementationId",
+          "type": "bytes32"
+        }
+      ],
       "name": "getERC721FactoryImplementation",
       "outputs": [
         {
