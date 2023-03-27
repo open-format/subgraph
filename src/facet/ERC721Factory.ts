@@ -25,7 +25,12 @@ export function handleCreated(event: Created): void {
   let contractMetadata = loadOrCreateContractMetadata(event.params.id);
   let user = loadOrCreateUser(event.params.creator, event);
 
-  contract.type = "ERC721";
+  if (event.params.implementationId.toString() == "LazyMint") {
+    contract.type = "NFTDrop";
+  } else {
+    contract.type = "NFT";
+  }
+
   contract.createdAtBlock = event.block.number;
   contract.createdAt = event.block.timestamp;
   contract.owner = user.id;
