@@ -26,7 +26,7 @@ export function handleCreated(event: Created): void {
   let user = loadOrCreateUser(event.params.creator, event);
 
   if (event.params.implementationId.toString() == "LazyMint") {
-    contract.type = "NFTDrop";
+    contract.type = "NFTLazyMint";
   } else {
     contract.type = "NFT";
   }
