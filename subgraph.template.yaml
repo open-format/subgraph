@@ -42,7 +42,7 @@ templates:
         - ContractData
       abis:
         - name: ERC721Factory
-          file: ./abis/ERC721Factory.json
+          file: ./abis/ERC721FactoryFacet.json
       eventHandlers:
         - event: Created(address,address,string,string,address,uint16,bytes32)
           handler: handleCreated
