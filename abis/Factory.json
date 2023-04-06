@@ -107,6 +107,11 @@
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        },
+        {
           "internalType": "bytes32",
           "name": "_name",
           "type": "bytes32"

@@ -2,6 +2,26 @@
   "abi": [
     {
       "inputs": [],
+      "name": "ApplicationAccess_AccountsAndApprovalsMustBeTheSameLength",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ApplicationAccess_notAuthorised",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CurrencyTransferLib_insufficientValue",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CurrencyTransferLib_nativeTokenTransferFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "ERC721Factory_doNotHavePermission",
       "type": "error"
     },
@@ -18,6 +38,16 @@
     {
       "inputs": [],
       "name": "Factory__FailedDeployment",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Ownable__NotOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Ownable__NotTransitiveOwner",
       "type": "error"
     },
     {
@@ -72,6 +102,63 @@
         }
       ],
       "name": "Created",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "accounts",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool[]",
+          "name": "approvals",
+          "type": "bool[]"
+        }
+      ],
+      "name": "CreatorAccessUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "currency",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "PaidPlatformFee",
       "type": "event"
     },
     {
@@ -149,6 +236,56 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_price",
+          "type": "uint256"
+        }
+      ],
+      "name": "platformFeeInfo",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     }
   ]
