@@ -107,3 +107,21 @@ templates:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/ERC20Base.ts
+  - name: RewardsFacet
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: RewardsFacet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Action
+      abis:
+        - name: RewardsFacet
+          file: ./abis/RewardsFacet.json
+      eventHandlers:
+        - event: Reward(address,address,uint256,string,address,string)
+          handler: handleReward
+      file: ./src/facet/RewardsFacet.ts

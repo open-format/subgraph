@@ -1,6 +1,10 @@
 import {DataSourceContext} from "@graphprotocol/graph-ts";
 import {Created} from "../generated/Factory/Factory";
-import {ERC20FactoryFacet, ERC721FactoryFacet} from "../generated/templates";
+import {
+  ERC20FactoryFacet,
+  ERC721FactoryFacet,
+  RewardsFacet
+} from "../generated/templates";
 import {loadOrCreateApp, loadOrCreateUser} from "./helpers";
 
 export function handleCreated(event: Created): void {
@@ -9,6 +13,7 @@ export function handleCreated(event: Created): void {
 
   ERC721FactoryFacet.createWithContext(event.params.id, context);
   ERC20FactoryFacet.createWithContext(event.params.id, context);
+  RewardsFacet.createWithContext(event.params.id, context);
 
   let app = loadOrCreateApp(event.params.id);
   let user = loadOrCreateUser(event.params.owner, event);
