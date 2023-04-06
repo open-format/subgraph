@@ -72,3 +72,21 @@ type User @entity {
   updatedAt: BigInt!
   updatedAtBlock: BigInt!
 }
+
+type Action @entity {
+  id: ID!
+  app: App!
+  user: User!
+  amount: BigInt!
+  type_id: String!
+  token: Contract!
+}
+
+type Mission @entity {
+  id: ID!
+  app: App!
+  user: User!
+  amount: BigInt!
+  type_id: String!
+  token: Contract!
+}
