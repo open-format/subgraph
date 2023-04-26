@@ -80,6 +80,8 @@ type Action @entity {
   amount: BigInt!
   type_id: String!
   token: Contract!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
 }
 
 type Mission @entity {
@@ -89,4 +91,6 @@ type Mission @entity {
   amount: BigInt!
   type_id: String!
   token: Contract!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
 }
