@@ -10,11 +10,11 @@ export function handleReward(event: RewardEvent): void {
     let action = new Action(
       event.transaction.hash.toHexString() + "-" + event.params.id.toString()
     );
+    action.action_id = event.params.id;
     action.app = appAddress.toHex();
     action.amount = event.params.amount;
     action.user = event.params.recipient.toHex();
     action.token = event.params.token.toHex();
-    action.type_id = event.params.id;
     action.createdAt = event.block.timestamp;
     action.createdAtBlock = event.block.number;
 
@@ -23,11 +23,11 @@ export function handleReward(event: RewardEvent): void {
     let mission = new Mission(
       event.transaction.hash.toHexString() + "-" + event.params.id.toString()
     );
+    mission.mission_id = event.params.id;
     mission.app = appAddress.toHex();
     mission.amount = event.params.amount;
     mission.user = event.params.recipient.toHex();
     mission.token = event.params.token.toHex();
-    mission.type_id = event.params.id;
     mission.createdAt = event.block.timestamp;
     mission.createdAtBlock = event.block.number;
     mission.save();

@@ -75,10 +75,10 @@ type User @entity {
 
 type Action @entity {
   id: ID!
+  action_id: String!
   app: App!
   user: User!
   amount: BigInt!
-  type_id: String!
   token: Contract!
   createdAt: BigInt!
   createdAtBlock: BigInt!
@@ -86,10 +86,10 @@ type Action @entity {
 
 type Mission @entity {
   id: ID!
+  mission_id: String!
   app: App!
   user: User!
   amount: BigInt!
-  type_id: String!
   token: Contract!
   createdAt: BigInt!
   createdAtBlock: BigInt!
