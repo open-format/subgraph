@@ -1,7 +1,7 @@
 {
   "network": "matic",
-  "startBlock": 40934153,
+  "startBlock": 42245949,
   "factory": {
-    "address": "0x0a2DcA79a0FB77f706DF2af7541e00543393174D"
+    "address": "0x6377Eb1b6339A558D243D68B0A58DA6aAc7A604F"
   }
 }
