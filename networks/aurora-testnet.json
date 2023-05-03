@@ -1,7 +1,7 @@
 {
   "network": "aurora-testnet",
-  "startBlock": 122308540,
+  "startBlock": 125552844,
   "factory": {
-    "address": "0xCf48E89B7C7f7cE520eAE3DE871d1ed5c242e1A4"
+    "address": "0xA22eeFa2C34C8F1C547ADd3A6E8B6c8562E388aC"
   }
 }
