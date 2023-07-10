@@ -8,7 +8,11 @@ let appAddress = Address.fromString(context.getString("app"));
 export function handleReward(event: RewardEvent): void {
   if (event.params.activityType == "ACTION") {
     let action = new Action(
-      event.transaction.hash.toHexString() + "-" + event.params.id.toString()
+      event.transaction.hash.toHexString() +
+        "-" +
+        event.params.id.toString() +
+        "-" +
+        event.logIndex.toString()
     );
     action.action_id = event.params.id;
     action.app = appAddress.toHex();
