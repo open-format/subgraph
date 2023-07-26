@@ -128,13 +128,19 @@ type User @entity {
 
 type Action @entity {
   id: ID!
-  metadata: String
-  name: String!
+  metadata: ActionMetadata
+  name: String
   star: Star
   user: User!
   xp_rewarded: BigInt!
   createdAt: BigInt!
   createdAtBlock: BigInt!
+}
+
+type ActionMetadata @entity {
+  id: ID!
+  name: String
+  URI: String!
 }
 
 type MissionRewardToken @entity {
