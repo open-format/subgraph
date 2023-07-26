@@ -4,46 +4,35 @@ import {
   dataSource,
   DataSourceContext
 } from "@graphprotocol/graph-ts";
-import {ERC721Base} from "../../generated/templates";
+import {ERC721Base, ERC721LazyMint} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC721FactoryFacet/ERC721Factory";
-import {
-  loadOrCreateContract,
-  loadOrCreateContractMetadata,
-  loadOrCreateUser
-} from "../helpers";
+import {loadOrCreateBadge, loadOrCreateUser} from "../helpers";
 
 let context = dataSource.context();
-let appAddress = Address.fromString(context.getString("app"));
+let star = Address.fromString(context.getString("Star"));
 
 export function handleCreated(event: Created): void {
   let ERC721Context = new DataSourceContext();
 
-  ERC721Context.setString("ERC721Contract", event.params.id.toHex());
-  ERC721Base.createWithContext(event.params.id, ERC721Context);
-
-  let contract = loadOrCreateContract(event.params.id);
-  let contractMetadata = loadOrCreateContractMetadata(event.params.id);
-  let user = loadOrCreateUser(event.params.creator, event);
-
   if (event.params.implementationId.toString() == "LazyMint") {
-    contract.type = "NFTLazyMint";
+    ERC721Context.setString("ERC721ContractLazyMint", event.params.id.toHex());
+    ERC721LazyMint.createWithContext(event.params.id, ERC721Context);
   } else {
-    contract.type = "NFT";
+    ERC721Context.setString("ERC721Contract", event.params.id.toHex());
+    ERC721Base.createWithContext(event.params.id, ERC721Context);
   }
 
-  contract.createdAtBlock = event.block.number;
-  contract.createdAt = event.block.timestamp;
-  contract.owner = user.id;
-  contract.metadata = contractMetadata.id;
-  contract.app = appAddress.toHex();
+  let badge = loadOrCreateBadge(event.params.id, event);
+  let user = loadOrCreateUser(event.params.creator, event);
 
-  contractMetadata.name = event.params.name;
-  contractMetadata.symbol = event.params.symbol;
-  contractMetadata.royaltyBps = BigInt.fromI32(event.params.royaltyBps);
-  contractMetadata.royaltyRecipient = event.params.royaltyRecipient;
-  contractMetadata.totalSupply = BigInt.fromI32(0);
+  badge.name = event.params.name;
+  badge.symbol = event.params.symbol;
+  badge.royaltyBps = BigInt.fromI32(event.params.royaltyBps);
+  badge.royaltyRecipient = event.params.royaltyRecipient;
+  badge.star = star.toHex();
+  badge.totalAvailable = BigInt.fromI32(0);
+  badge.totalClaimed = BigInt.fromI32(0);
 
-  contract.save();
-  contractMetadata.save();
+  badge.save();
   user.save();
 }

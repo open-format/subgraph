@@ -1,20 +1,19 @@
 import {
   Address,
   BigInt,
-  dataSource,
-  DataSourceContext
+  DataSourceContext,
+  dataSource
 } from "@graphprotocol/graph-ts";
 import {ERC20Base} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import {
-  loadOrCreateContract,
-  loadOrCreateContractMetadata,
-  loadOrCreateToken,
+  loadOrCreateFungibleToken,
+  loadOrCreateStar,
   loadOrCreateUser
 } from "../helpers";
 
 let context = dataSource.context();
-let appAddress = Address.fromString(context.getString("app"));
+let starAddress = Address.fromString(context.getString("Star"));
 
 export function handleCreated(event: Created): void {
   let ERC20Context = new DataSourceContext();
@@ -22,26 +21,23 @@ export function handleCreated(event: Created): void {
   ERC20Context.setString("ERC20Contract", event.params.id.toHex());
   ERC20Base.createWithContext(event.params.id, ERC20Context);
 
-  let contract = loadOrCreateContract(event.params.id);
-  let contractMetadata = loadOrCreateContractMetadata(event.params.id);
+  let fungibleToken = loadOrCreateFungibleToken(event.params.id, event);
   let user = loadOrCreateUser(event.params.creator, event);
-  let token = loadOrCreateToken(event.params.id, event);
+  let star = loadOrCreateStar(starAddress, event);
 
-  contract.type = "Token";
-  contract.createdAtBlock = event.block.number;
-  contract.createdAt = event.block.timestamp;
-  contract.owner = event.params.creator.toHex();
-  contract.metadata = contractMetadata.id;
-  contract.app = appAddress.toHex();
+  fungibleToken.name = event.params.name;
+  fungibleToken.symbol = event.params.symbol;
+  fungibleToken.totalSupply = BigInt.fromI32(0);
+  fungibleToken.burntSupply = BigInt.fromI32(0);
 
-  contractMetadata.name = event.params.name;
-  contractMetadata.symbol = event.params.symbol;
-  contractMetadata.totalSupply = BigInt.fromI32(0);
+  fungibleToken.star = star.id;
+  fungibleToken.owner = user.id;
 
-  token.contract = event.params.id.toHex();
+  if (!star.xp_token) {
+    star.xp_token = fungibleToken.id;
+    star.save();
+  }
 
-  contract.save();
-  contractMetadata.save();
+  fungibleToken.save();
   user.save();
-  token.save();
 }
