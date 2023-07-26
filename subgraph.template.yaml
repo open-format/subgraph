@@ -4,29 +4,55 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Factory
+    name: StarFactory
     network: {{network}}
     source:
-    {{#factory.address}}
-      address: "{{factory.address}}"
-    {{/factory.address}}
+    {{#starFactory.address}}
+      address: "{{starFactory.address}}"
+    {{/starFactory.address}}
     {{#startBlock}}
       startBlock: {{startBlock}}
     {{/startBlock}}
-      abi: Factory
+      abi: Star
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - App
+        - Star
       abis:
-        - name: Factory
-          file: ./abis/Factory.json
+        - name: Star
+          file: ./abis/Star.json
+      eventHandlers:
+        - event: Created(address,address,address,string)
+          handler: handleCreated
+      file: ./src/StarFactory.ts
+  - kind: ethereum/contract
+    name: ConstellationFactory
+    network: {{network}}
+    source:
+    {{#constellationFactory.address}}
+      address: "{{constellationFactory.address}}"
+    {{/constellationFactory.address}}
+    {{#startBlock}}
+      startBlock: {{startBlock}}
+    {{/startBlock}}
+      abi: Constellation
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Constellation
+      abis:
+        - name: Constellation
+          file: ./abis/Constellation.json
+        - name: ERC20Base
+          file: ./abis/ERC20Base.json
       eventHandlers:
         - event: Created(address,address,string)
           handler: handleCreated
-      file: ./src/Factory.ts
+      file: ./src/ConstellationFactory.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -69,6 +95,30 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/ERC721Base.ts
+  - name: ERC721LazyMint
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ERC721LazyMint
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: ERC721LazyMint
+          file: ./abis/ERC721LazyMint.json
+      eventHandlers:
+        - event: Minted(address,string)
+          handler: handleMinted
+        - event: BatchMinted(address,uint256,string)
+          handler: handleBatchMinted
+        - event: TokensLazyMinted(indexed uint256,uint256,string,bytes)
+          handler: handleLazyMint
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/ERC721LazyMint.ts
   - name: ERC20FactoryFacet
     kind: ethereum/contract
     network: {{network}}
@@ -106,6 +156,8 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: ContractURIUpdated(string,string)
+          handler: handleContractURIUpdated
       file: ./src/ERC20Base.ts
   - name: RewardsFacet
     kind: ethereum/contract
