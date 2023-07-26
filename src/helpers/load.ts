@@ -1,10 +1,19 @@
 import {Address} from "@graphprotocol/graph-ts";
-import {NFTId} from ".";
-import {NFT} from "../../generated/schema";
+import {BadgeId} from ".";
+import {BadgeToken, Constellation} from "../../generated/schema";
 
-export function loadNFT(contractAddress: Address, tokenId: string): NFT | null {
-  const id = NFTId(contractAddress, tokenId);
-  let _NFT = NFT.load(id);
+export function loadBadgeToken(
+  contractAddress: Address,
+  tokenId: string
+): BadgeToken | null {
+  const id = BadgeId(contractAddress, tokenId);
+  let _BadgeToken = BadgeToken.load(id);
 
-  return _NFT;
+  return _BadgeToken;
+}
+
+export function loadConstellation(
+  constellationAddress: Address
+): Constellation | null {
+  return Constellation.load(constellationAddress.toHex());
 }
