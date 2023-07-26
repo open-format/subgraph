@@ -8,11 +8,6 @@
       },
       {
         "internalType": "address",
-        "name": "_registry",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_globals",
         "type": "address"
       }
@@ -22,12 +17,12 @@
   },
   {
     "inputs": [],
-    "name": "Factory__FailedDeployment",
+    "name": "Constellation_NameAlreadyUsed",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "Factory_nameAlreadyUsed",
+    "name": "Factory__FailedDeployment",
     "type": "error"
   },
   {
@@ -39,6 +34,25 @@
     "inputs": [],
     "name": "Ownable__NotTransitiveOwner",
     "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "constellation",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "app",
+        "type": "address"
+      }
+    ],
+    "name": "AssignedApp",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -87,24 +101,10 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "apps",
-    "outputs": [
-      {
         "internalType": "address",
-        "name": "",
+        "name": "_account",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
         "internalType": "bytes32",
         "name": "_name",
@@ -126,8 +126,42 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_name",
+        "name": "",
         "type": "bytes32"
+      }
+    ],
+    "name": "constellations",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_symbol",
+        "type": "string"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_decimals",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_supply",
+        "type": "uint256"
       }
     ],
     "name": "create",
@@ -138,6 +172,24 @@
         "type": "address"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "createFromExistingToken",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -168,19 +220,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "registry",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -189,19 +228,6 @@
       }
     ],
     "name": "setGlobals",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_registry",
-        "type": "address"
-      }
-    ],
-    "name": "setRegistry",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
