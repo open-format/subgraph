@@ -1,11 +1,12 @@
 import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
-  ERC721Base as ERC721BaseContract,
-  Minted
-} from "../generated/templates/ERC721Base/ERC721Base";
+  ERC721LazyMint,
+  Minted,
+  TokensLazyMinted,
+  Transfer
+} from "../generated/templates/ERC721LazyMint/ERC721LazyMint";
 
-import {Transfer} from "../generated/templates/ERC721Base/ERC721Base";
 import {
   ZERO_ADDRESS,
   loadBadgeToken,
@@ -15,13 +16,17 @@ import {
 } from "./helpers";
 
 let context = dataSource.context();
-let contractAddress = Address.fromString(context.getString("ERC721Contract"));
-const boundContract = ERC721BaseContract.bind(contractAddress);
+let contractAddress = Address.fromString(
+  context.getString("ERC721ContractLazyMint")
+);
+const boundContract = ERC721LazyMint.bind(contractAddress);
 
 export function handleMinted(event: Minted): void {
   const totalSupply = boundContract
     .nextTokenIdToMint()
     .minus(BigInt.fromI32(1));
+
+  let Badge = loadOrCreateBadge(contractAddress, event);
 
   let BadgeToken = loadOrCreateBadgeToken(
     event.address,
@@ -35,6 +40,9 @@ export function handleMinted(event: Minted): void {
   BadgeToken.tokenId = totalSupply;
   BadgeToken.badge = event.address.toHex();
 
+  Badge.totalClaimed = totalSupply.plus(BigInt.fromI32(1));
+
+  Badge.save();
   BadgeToken.save();
   user.save();
 }
@@ -66,11 +74,16 @@ export function handleBatchMinted(event: BatchMinted): void {
   Badge.save();
 }
 
+export function handleLazyMint(event: TokensLazyMinted): void {
+  let badge = loadOrCreateBadge(event.address, event);
+  badge.totalAvailable = event.params.endTokenId.plus(BigInt.fromI32(1));
+  badge.save();
+}
+
 export function handleTransfer(event: Transfer): void {
   let Badge = loadBadgeToken(event.address, event.params.tokenId.toString());
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
-      //@TODO is burntSupply the correct name?
       store.remove("Badge", Badge.id);
     } else {
       Badge.owner = event.params.to.toHex();

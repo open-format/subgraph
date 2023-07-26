@@ -1,13 +1,16 @@
 import {Address, dataSource} from "@graphprotocol/graph-ts";
 import {
+  ContractURIUpdated,
   ERC20Base as ERC20BaseContract,
   Transfer
 } from "../generated/templates/ERC20Base/ERC20Base";
 import {
-  loadOrCreateContractMetadata,
-  loadOrCreateTokenBalance,
-  loadOrCreateUser,
-  ZERO_ADDRESS
+  ZERO_ADDRESS,
+  loadConstellation,
+  loadOrCreateFungibleToken,
+  loadOrCreateFungibleTokenBalance,
+  loadOrCreateFungibleTokenMetadata,
+  loadOrCreateUser
 } from "./helpers";
 
 let context = dataSource.context();
@@ -15,13 +18,13 @@ let contractAddress = Address.fromString(context.getString("ERC20Contract"));
 
 export function handleTransfer(event: Transfer): void {
   const boundContract = ERC20BaseContract.bind(contractAddress);
-  const contractMetadata = loadOrCreateContractMetadata(contractAddress);
+  const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
 
   // sender and receiver User and TokenBalance entities required for Wallet > Wallet transfers
   let sender = loadOrCreateUser(event.params.from, event);
   let receiver = loadOrCreateUser(event.params.to, event);
 
-  let senderTokenBalance = loadOrCreateTokenBalance(
+  let senderTokenBalance = loadOrCreateFungibleTokenBalance(
     contractAddress,
     event.params.from,
     event
@@ -33,7 +36,7 @@ export function handleTransfer(event: Transfer): void {
     Address.fromString(sender.id)
   );
 
-  let receiverTokenBalance = loadOrCreateTokenBalance(
+  let receiverTokenBalance = loadOrCreateFungibleTokenBalance(
     contractAddress,
     event.params.to,
     event
@@ -58,7 +61,7 @@ export function handleTransfer(event: Transfer): void {
     senderTokenBalance.save();
 
     //@TODO is burntSupply the correct name?
-    contractMetadata.burntSupply = contractMetadata.burntSupply.plus(
+    fungibleToken.burntSupply = fungibleToken.burntSupply.plus(
       event.params.value
     );
   } else {
@@ -69,6 +72,25 @@ export function handleTransfer(event: Transfer): void {
     senderTokenBalance.save();
   }
 
-  contractMetadata.totalSupply = boundContract.totalSupply();
-  contractMetadata.save();
+  fungibleToken.totalSupply = boundContract.totalSupply();
+  fungibleToken.save();
+}
+
+export function handleContractURIUpdated(event: ContractURIUpdated): void {
+  const constellation = loadConstellation(contractAddress);
+  const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
+  const fungibleTokenMetadata = loadOrCreateFungibleTokenMetadata(
+    contractAddress,
+    event
+  );
+
+  if (constellation) {
+    constellation.metadata = fungibleTokenMetadata.id;
+    constellation.save();
+  } else {
+    fungibleToken.metadata = fungibleTokenMetadata.id;
+    fungibleToken.save();
+  }
+  fungibleTokenMetadata.URI = event.params.newURI;
+  fungibleTokenMetadata.save();
 }
