@@ -5,14 +5,8 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: StarFactory
-    network: {{network}}
+    network: mainnet
     source:
-    {{#starFactory.address}}
-      address: "{{starFactory.address}}"
-    {{/starFactory.address}}
-    {{#startBlock}}
-      startBlock: {{startBlock}}
-    {{/startBlock}}
       abi: Star
     mapping:
       kind: ethereum/events
@@ -29,14 +23,8 @@ dataSources:
       file: ./src/StarFactory.ts
   - kind: ethereum/contract
     name: ConstellationFactory
-    network: {{network}}
+    network: mainnet
     source:
-    {{#constellationFactory.address}}
-      address: "{{constellationFactory.address}}"
-    {{/constellationFactory.address}}
-    {{#startBlock}}
-      startBlock: {{startBlock}}
-    {{/startBlock}}
       abi: Constellation
     mapping:
       kind: ethereum/events
@@ -55,14 +43,8 @@ dataSources:
       file: ./src/ConstellationFactory.ts
   - kind: ethereum/contract
     name: Rewards
-    network: {{network}}
+    network: mainnet
     source:
-    {{#rewards.address}}
-      address: "{{rewards.address}}"
-    {{/rewards.address}}
-    {{#startBlock}}
-      startBlock: {{startBlock}}
-    {{/startBlock}}
       abi: Rewards
     mapping:
       kind: ethereum/events
@@ -82,7 +64,7 @@ dataSources:
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC721Factory
     mapping:
@@ -101,7 +83,7 @@ templates:
       file: ./src/facet/ERC721Factory.ts
   - name: ERC721Base
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC721Base
     mapping:
@@ -123,7 +105,7 @@ templates:
       file: ./src/ERC721Base.ts
   - name: ERC721LazyMint
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC721LazyMint
     mapping:
@@ -147,7 +129,7 @@ templates:
       file: ./src/ERC721LazyMint.ts
   - name: ERC20FactoryFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC20FactoryFacet
     mapping:
@@ -167,7 +149,7 @@ templates:
       file: ./src/facet/ERC20Factory.ts
   - name: ERC20Base
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC20Base
     mapping:
@@ -187,7 +169,7 @@ templates:
       file: ./src/ERC20Base.ts
   - name: RewardsFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: RewardsFacet
     mapping:
