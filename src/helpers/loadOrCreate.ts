@@ -1,5 +1,6 @@
 import {Address, ethereum} from "@graphprotocol/graph-ts";
 import {
+  ActionMetadata,
   Badge,
   BadgeToken,
   Constellation,
@@ -105,6 +106,17 @@ export function loadOrCreateUser(
   _User.updatedAtBlock = event.block.number;
 
   return _User as User;
+}
+
+export function loadOrCreateActionMetadata(CID: string): ActionMetadata {
+  const id = CID;
+  let _ActionMetadata = ActionMetadata.load(id);
+
+  if (!_ActionMetadata) {
+    _ActionMetadata = new ActionMetadata(id);
+  }
+
+  return _ActionMetadata as ActionMetadata;
 }
 
 export function loadOrCreateFungibleToken(
