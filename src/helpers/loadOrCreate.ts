@@ -1,5 +1,6 @@
-import {Address, ethereum} from "@graphprotocol/graph-ts";
+import {Address, BigInt, Bytes, ethereum} from "@graphprotocol/graph-ts";
 import {
+  Action,
   ActionMetadata,
   Badge,
   BadgeToken,
@@ -7,10 +8,13 @@ import {
   FungibleToken,
   FungibleTokenBalance,
   FungibleTokenMetadata,
+  Mission,
+  MissionFungibleToken,
+  MissionMetadata,
   Star,
   User
 } from "../../generated/schema";
-import {BadgeId, TokenBalanceId} from "./idTemplates";
+import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
 
 export function loadOrCreateStar(
   appAddress: Address,
@@ -108,8 +112,11 @@ export function loadOrCreateUser(
   return _User as User;
 }
 
-export function loadOrCreateActionMetadata(CID: string): ActionMetadata {
-  const id = CID;
+export function loadOrCreateActionMetadata(
+  transactionHash: Bytes,
+  logIndex: BigInt
+): ActionMetadata {
+  const id = ActionId(transactionHash, logIndex);
   let _ActionMetadata = ActionMetadata.load(id);
 
   if (!_ActionMetadata) {
@@ -117,6 +124,67 @@ export function loadOrCreateActionMetadata(CID: string): ActionMetadata {
   }
 
   return _ActionMetadata as ActionMetadata;
+}
+
+export function loadOrCreateAction(
+  transactionHash: Bytes,
+  logIndex: BigInt,
+  event: ethereum.Event
+): Action {
+  const id = ActionId(transactionHash, logIndex);
+  let _Action = Action.load(id);
+
+  if (!_Action) {
+    _Action = new Action(id);
+    _Action.createdAt = event.block.timestamp;
+    _Action.createdAtBlock = event.block.number;
+  }
+
+  return _Action as Action;
+}
+
+export function loadOrCreateMission(
+  transactionHash: Bytes,
+  event: ethereum.Event
+): Mission {
+  const id = transactionHash.toHex();
+  let _Mission = Mission.load(id);
+
+  if (!_Mission) {
+    _Mission = new Mission(id);
+    _Mission.createdAt = event.block.timestamp;
+    _Mission.createdAtBlock = event.block.number;
+  }
+
+  return _Mission as Mission;
+}
+
+export function loadOrCreateMissionFungibleToken(
+  transactionHash: Bytes,
+  tokenAddress: Address
+): MissionFungibleToken {
+  const id = transactionHash.toHex() + "-" + tokenAddress.toHex();
+  let _MissionFungibleToken = MissionFungibleToken.load(id);
+
+  if (!_MissionFungibleToken) {
+    _MissionFungibleToken = new MissionFungibleToken(id);
+  }
+
+  return _MissionFungibleToken as MissionFungibleToken;
+}
+
+export function loadOrCreateMissionMetadata(
+  transactionHash: Bytes,
+  logIndex: BigInt
+): MissionMetadata {
+  const id = MissionId(transactionHash, logIndex);
+  let _MissionMetadata = MissionMetadata.load(id);
+
+  if (!_MissionMetadata) {
+    _MissionMetadata = new MissionMetadata(id);
+  }
+
+  return _MissionMetadata as MissionMetadata;
 }
 
 export function loadOrCreateFungibleToken(
