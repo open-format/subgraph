@@ -17,7 +17,17 @@
   },
   {
     "inputs": [],
+    "name": "Constellation_InvalidToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "Constellation_NameAlreadyUsed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Constellation_NotFoundOrNotOwner",
     "type": "error"
   },
   {
@@ -34,25 +44,6 @@
     "inputs": [],
     "name": "Ownable__NotTransitiveOwner",
     "type": "error"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "constellation",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "app",
-        "type": "address"
-      }
-    ],
-    "name": "AssignedApp",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -96,6 +87,25 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldTokenAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newTokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "UpdatedToken",
     "type": "event"
   },
   {
@@ -176,24 +186,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      }
-    ],
-    "name": "createFromExistingToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "globals",
     "outputs": [
@@ -267,6 +259,29 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_oldTokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newTokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "updateToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
