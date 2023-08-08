@@ -5,15 +5,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: StarFactory
-    network: {{network}}
+    network: mainnet
     source:
-    {{#StarFactory.address}}
-      address: "{{StarFactory.address}}"
-    {{/StarFactory.address}}
-    {{#StarFactory.startBlock}}
-      startBlock: {{StarFactory.startBlock}}
-    {{/StarFactory.startBlock}}
-      abi: StarFactory
+      abi: Star
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -21,23 +15,17 @@ dataSources:
       entities:
         - Star
       abis:
-        - name: StarFactory
-          file: ./abis/StarFactory.json
+        - name: Star
+          file: ./abis/Star.json
       eventHandlers:
         - event: Created(address,address,address,string)
           handler: handleCreated
       file: ./src/StarFactory.ts
   - kind: ethereum/contract
     name: ConstellationFactory
-    network: {{network}}
+    network: mainnet
     source:
-    {{#ConstellationFactory.address}}
-      address: "{{ConstellationFactory.address}}"
-    {{/ConstellationFactory.address}}
-    {{#ConstellationFactory.startBlock}}
-      startBlock: {{ConstellationFactory.startBlock}}
-    {{/ConstellationFactory.startBlock}}
-      abi: ConstellationFactory
+      abi: Constellation
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -45,18 +33,38 @@ dataSources:
       entities:
         - Constellation
       abis:
-        - name: ConstellationFactory
-          file: ./abis/ConstellationFactory.json
+        - name: Constellation
+          file: ./abis/Constellation.json
         - name: ERC20Base
           file: ./abis/ERC20Base.json
       eventHandlers:
         - event: Created(address,address,string)
           handler: handleCreated
       file: ./src/ConstellationFactory.ts
+  - kind: ethereum/contract
+    name: Rewards
+    network: mainnet
+    source:
+      abi: Rewards
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Rewards
+      abis:
+        - name: Rewards
+          file: ./abis/Rewards.json
+      eventHandlers:
+        - event: Action(address,address,uint256,string)
+          handler: handleAction
+        - event: Mission(address,address,uint256,string)
+          handler: handleMission
+      file: ./src/Rewards.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC721Factory
     mapping:
@@ -75,7 +83,7 @@ templates:
       file: ./src/facet/ERC721Factory.ts
   - name: ERC721Base
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC721Base
     mapping:
@@ -97,7 +105,7 @@ templates:
       file: ./src/ERC721Base.ts
   - name: ERC721LazyMint
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC721LazyMint
     mapping:
@@ -121,7 +129,7 @@ templates:
       file: ./src/ERC721LazyMint.ts
   - name: ERC20FactoryFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC20FactoryFacet
     mapping:
@@ -141,7 +149,7 @@ templates:
       file: ./src/facet/ERC20Factory.ts
   - name: ERC20Base
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: ERC20Base
     mapping:
@@ -161,7 +169,7 @@ templates:
       file: ./src/ERC20Base.ts
   - name: RewardsFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: mainnet
     source:
       abi: RewardsFacet
     mapping:
@@ -173,15 +181,19 @@ templates:
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json
-        - name: ERC721Base
-          file: ./abis/ERC721Base.json
       eventHandlers:
-        - event: TokenMinted(address,address,uint256,bytes32,string)
-          handler: handleTokenMinted
-        - event: TokenTransferred(address,address,uint256,bytes32,string)
-          handler: handleTokenTransferred
-        - event: BadgeMinted(address,address,bytes32,string)
-          handler: handleBadgeMinted
-        - event: BadgeTransferred(address,address,uint256,bytes32,string)
-          handler: handleBadgeTransferred
+        - event: Reward(address,address,uint256,string,address,string)
+          handler: handleReward
       file: ./src/facet/RewardsFacet.ts
+  - name: ActionMetadata
+    kind: file/ipfs
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/Rewards.ts
+      handler: handleActionMetadata
+      entities:
+        - ActionMetadata
+      abis:
+        - name: Reward
+          file: ./abis/Rewards.json

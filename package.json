@@ -16,14 +16,16 @@
     "gen:aurora-testnet": "graph codegen subgraph.aurora-testnet.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
     "deploy:local": "graph deploy open-format/mumbai --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
-    "deploy:mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/mumbai subgraph.mumbai.yaml",
-    "deploy:aurora": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/aurora subgraph.aurora.yaml",
-    "deploy:aurora-testnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/aurora-testnet subgraph.aurora-testnet.yaml",
-    "deploy:polygon": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/polygon subgraph.polygon.yaml",
+    "deploy:mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/mumbai-v2 subgraph.mumbai.yaml",
+    "deploy:aurora": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/aurora-v2 subgraph.aurora.yaml",
+    "deploy:aurora-testnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/aurora-testnet-v2 subgraph.aurora-testnet.yaml",
+    "deploy:polygon": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ open-format/polygon-v2 subgraph.polygon.yaml",
     "build": "graph build",
     "auth": "graph auth https://api.thegraph.com/deploy/"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.2",
     "@graphprotocol/graph-cli": "^0.38.0",
     "@graphprotocol/graph-ts": "^0.29.3",
     "mustache": "^4.2.0"

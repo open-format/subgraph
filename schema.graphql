@@ -1,49 +1,44 @@
-type App @entity {
+type Constellation @entity {
   id: ID!
   owner: User!
   name: String!
-  contracts: [Contract!]! @derivedFrom(field: "app")
+  stars: [Star!] @derivedFrom(field: "constellation")
+  rewardToken: FungibleToken!
+  metadata: FungibleTokenMetadata
   createdAt: BigInt!
   createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
 }
 
-type Contract @entity {
+type FungibleTokenMetadata @entity {
   id: ID!
-  type: String!
-  owner: User!
-  metadata: ContractData!
-  nfts: [NFT!] @derivedFrom(field: "contract")
-  token: Token
-  app: App
+  URI: String!
   createdAt: BigInt!
   createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
 }
 
-type ContractData @entity {
+type FungibleToken @entity {
   id: ID!
   name: String!
+  owner: User!
   symbol: String!
+  metadata: FungibleTokenMetadata
+  star: Star
   totalSupply: BigInt!
   burntSupply: BigInt!
-  decimals: BigInt
-  royaltyBps: BigInt
-  royaltyRecipient: Bytes
-}
-
-type NFT @entity {
-  id: ID!
-  tokenId: BigInt!
-  contract: Contract!
-  owner: User!
-  metadataURI: String!
   createdAt: BigInt!
   createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
 }
 
-type TokenBalance @entity {
+type FungibleTokenBalance @entity {
   id: ID!
   user: User!
-  token: Token!
+  token: FungibleToken!
   balance: BigInt!
   createdAt: BigInt!
   createdAtBlock: BigInt!
@@ -51,22 +46,82 @@ type TokenBalance @entity {
   updatedAtBlock: BigInt!
 }
 
-type Token @entity {
+type Star @entity {
   id: ID!
-  balances: [TokenBalance!]! @derivedFrom(field: "token")
-  contract: Contract!
+  name: String!
+  metadata: StarMetadata
+  constellation: Constellation!
+  owner: User!
+  xpToken: FungibleToken
+  badges: [Badge!] @derivedFrom(field: "star")
+  badgeCount: BigInt!
+  badgesAwarded: BigInt!
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
   updatedAtBlock: BigInt!
 }
 
+type StarMetadata @entity {
+  id: ID!
+  name: String!
+  description: String!
+  URI: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
+type BadgeToken @entity {
+  id: ID!
+  tokenId: BigInt!
+  badge: Badge!
+  metadataURI: String!
+  owner: User
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
+}
+
+type CollectedBadge @entity {
+  id: ID!
+  user: User!
+  metadataURI: String!
+}
+
+type Badge @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  tokens: [BadgeToken!] @derivedFrom(field: "badge")
+  star: Star!
+  royaltyBps: BigInt!
+  royaltyRecipient: Bytes!
+  totalAwarded: BigInt!
+  totalAvailable: BigInt!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
+}
+
+# @TODO - Implement IPFS data types
+# type BadgeMetadata @entity {
+#   id: ID!
+#   name: String!
+#   description: String!
+#   image: String!
+#   external_url: String!
+#   animation_url: String!
+#   URI: String!
+#   createdAt: BigInt!
+#   createdAtBlock: BigInt!
+# }
+
 type User @entity {
   id: ID!
-  apps: [App!] @derivedFrom(field: "owner")
-  contracts: [Contract!] @derivedFrom(field: "owner")
-  tokens: [TokenBalance!] @derivedFrom(field: "user")
-  nfts: [NFT!] @derivedFrom(field: "owner")
+  tokenBalances: [FungibleTokenBalance!] @derivedFrom(field: "user")
+  collectedBadges: [BadgeToken!] @derivedFrom(field: "owner")
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
@@ -75,22 +130,40 @@ type User @entity {
 
 type Action @entity {
   id: ID!
-  action_id: String!
-  app: App!
+  metadata: ActionMetadata
+  star: Star
   user: User!
-  amount: BigInt!
-  token: Contract!
+  xp_rewarded: BigInt!
   createdAt: BigInt!
   createdAtBlock: BigInt!
 }
 
+type ActionMetadata @entity {
+  id: ID!
+  name: String
+  URI: String!
+}
+
+type MissionFungibleToken @entity {
+  id: ID!
+  token: FungibleToken!
+  mission: Mission!
+  amount_rewarded: BigInt!
+}
+
+type MissionMetadata @entity {
+  id: ID!
+  name: String
+  URI: String!
+}
+
 type Mission @entity {
   id: ID!
-  mission_id: String!
-  app: App!
+  metadata: MissionMetadata
+  star: Star
   user: User!
-  amount: BigInt!
-  token: Contract!
+  badges: [BadgeToken!]!
+  tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
   createdAt: BigInt!
   createdAtBlock: BigInt!
 }

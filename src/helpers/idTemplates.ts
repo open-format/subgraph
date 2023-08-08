@@ -1,7 +1,15 @@
-import {Address} from "@graphprotocol/graph-ts";
+import {Address, BigInt, Bytes} from "@graphprotocol/graph-ts";
 
-export function NFTId(contractAddress: Address, tokenId: string): string {
+export function BadgeId(contractAddress: Address, tokenId: string): string {
   return contractAddress.toHex() + "-" + tokenId;
+}
+
+export function ActionId(transactionHash: Bytes, logIndex: BigInt): string {
+  return transactionHash.toHex() + "-" + logIndex.toHex();
+}
+
+export function MissionId(transactionHash: Bytes, logIndex: BigInt): string {
+  return transactionHash.toHex() + "-" + logIndex.toHex();
 }
 
 export function TokenBalanceId(

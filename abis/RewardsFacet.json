@@ -11,8 +11,86 @@
   },
   {
     "inputs": [],
+    "name": "RewardsFacet_InsufficientBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RewardsFacet_NotAuthorized",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "SafeOwnable__NotNomineeOwner",
     "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "BadgeMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "BadgeTransferred",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -45,7 +123,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -56,24 +134,55 @@
       },
       {
         "indexed": false,
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "id",
-        "type": "string"
+        "type": "bytes32"
       },
       {
         "indexed": false,
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "TokenMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
-        "name": "appId",
+        "name": "token",
         "type": "address"
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
-        "name": "activityType",
+        "name": "uri",
         "type": "string"
       }
     ],
-    "name": "Reward",
+    "name": "TokenTransferred",
     "type": "event"
   },
   {
@@ -92,7 +201,7 @@
       },
       {
         "internalType": "address",
-        "name": "_recipient",
+        "name": "_to",
         "type": "address"
       },
       {
@@ -101,18 +210,13 @@
         "type": "uint256"
       },
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "_id",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "_appId",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "internalType": "string",
-        "name": "_activityType",
+        "name": "_uri",
         "type": "string"
       }
     ],
@@ -130,7 +234,7 @@
       },
       {
         "internalType": "address",
-        "name": "_recipient",
+        "name": "_to",
         "type": "address"
       },
       {
@@ -139,18 +243,13 @@
         "type": "string"
       },
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "_id",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "_appId",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "internalType": "string",
-        "name": "_activityType",
+        "name": "_uri",
         "type": "string"
       }
     ],
@@ -218,7 +317,7 @@
       },
       {
         "internalType": "address",
-        "name": "_recipient",
+        "name": "_to",
         "type": "address"
       },
       {
@@ -227,22 +326,55 @@
         "type": "uint256"
       },
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "_id",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "_appId",
-        "type": "address"
+        "type": "bytes32"
       },
       {
         "internalType": "string",
-        "name": "_activityType",
+        "name": "_uri",
         "type": "string"
       }
     ],
     "name": "transferERC20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_holder",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "_uri",
+        "type": "string"
+      }
+    ],
+    "name": "transferERC721",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

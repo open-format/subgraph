@@ -1,16 +1,14 @@
 import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
-  ERC721Base as ERC721BaseContract,
-  Minted
-} from "../generated/templates/ERC721Base/ERC721Base";
+  ERC721LazyMint,
+  Minted,
+  TokensLazyMinted,
+  Transfer
+} from "../generated/templates/ERC721LazyMint/ERC721LazyMint";
 
-import {Star} from "../generated/schema";
-import {Transfer} from "../generated/templates/ERC721Base/ERC721Base";
 import {
-  One,
   ZERO_ADDRESS,
-  loadBadge,
   loadBadgeToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
@@ -18,39 +16,36 @@ import {
 } from "./helpers";
 
 let context = dataSource.context();
-let contractAddress = Address.fromString(context.getString("ERC721Contract"));
-const boundContract = ERC721BaseContract.bind(contractAddress);
+let contractAddress = Address.fromString(
+  context.getString("ERC721ContractLazyMint")
+);
+const boundContract = ERC721LazyMint.bind(contractAddress);
 
 export function handleMinted(event: Minted): void {
-  const tokenId = boundContract.nextTokenIdToMint().minus(One);
+  const totalSupply = boundContract
+    .nextTokenIdToMint()
+    .minus(BigInt.fromI32(1));
 
-  let badgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
+  let Badge = loadOrCreateBadge(contractAddress, event);
 
-  let badge = loadBadge(event.address);
-
-  if (badge) {
-    let star = Star.load(badge.star);
-    if (star) {
-      star.badgesAwarded = tokenId.plus(One);
-      star.save();
-    }
-  }
-
+  let BadgeToken = loadOrCreateBadgeToken(event.address, totalSupply, event);
   let user = loadOrCreateUser(event.params.to, event);
 
-  badgeToken.owner = user.id;
-  badgeToken.metadataURI = event.params.tokenURI;
-  badgeToken.tokenId = tokenId;
-  badgeToken.badge = event.address.toHex();
+  BadgeToken.owner = user.id;
+  BadgeToken.metadataURI = event.params.tokenURI;
+  BadgeToken.tokenId = totalSupply;
+  BadgeToken.badge = event.address.toHex();
 
-  badgeToken.save();
+  Badge.totalAwarded = totalSupply.plus(BigInt.fromI32(1));
+
+  Badge.save();
+  BadgeToken.save();
   user.save();
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
   let user = loadOrCreateUser(event.params.to, event);
-  let badge = loadOrCreateBadge(contractAddress, event);
-  let star = Star.load(badge.star);
+  let Badge = loadOrCreateBadge(contractAddress, event);
 
   const totalSupplyBeforeMint = boundContract
     .totalSupply()
@@ -67,13 +62,13 @@ export function handleBatchMinted(event: BatchMinted): void {
     BadgeToken.save();
   }
 
-  badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
+  Badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
+  Badge.save();
+}
 
-  if (star) {
-    star.badgesAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
-    star.save();
-  }
-
+export function handleLazyMint(event: TokensLazyMinted): void {
+  let badge = loadOrCreateBadge(event.address, event);
+  badge.totalAvailable = event.params.endTokenId.plus(BigInt.fromI32(1));
   badge.save();
 }
 
@@ -81,7 +76,6 @@ export function handleTransfer(event: Transfer): void {
   let Badge = loadBadgeToken(event.address, event.params.tokenId.toString());
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
-      //@TODO is burntSupply the correct name?
       store.remove("Badge", Badge.id);
     } else {
       Badge.owner = event.params.to.toHex();
