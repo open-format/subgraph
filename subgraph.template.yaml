@@ -7,13 +7,13 @@ dataSources:
     name: StarFactory
     network: {{network}}
     source:
-    {{#starFactory.address}}
-      address: "{{starFactory.address}}"
-    {{/starFactory.address}}
-    {{#startBlock}}
-      startBlock: {{startBlock}}
-    {{/startBlock}}
-      abi: Star
+    {{#StarFactory.address}}
+      address: "{{StarFactory.address}}"
+    {{/StarFactory.address}}
+    {{#StarFactory.startBlock}}
+      startBlock: {{StarFactory.startBlock}}
+    {{/StarFactory.startBlock}}
+      abi: StarFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -21,8 +21,8 @@ dataSources:
       entities:
         - Star
       abis:
-        - name: Star
-          file: ./abis/Star.json
+        - name: StarFactory
+          file: ./abis/StarFactory.json
       eventHandlers:
         - event: Created(address,address,address,string)
           handler: handleCreated
@@ -31,13 +31,13 @@ dataSources:
     name: ConstellationFactory
     network: {{network}}
     source:
-    {{#constellationFactory.address}}
-      address: "{{constellationFactory.address}}"
-    {{/constellationFactory.address}}
-    {{#startBlock}}
-      startBlock: {{startBlock}}
-    {{/startBlock}}
-      abi: Constellation
+    {{#ConstellationFactory.address}}
+      address: "{{ConstellationFactory.address}}"
+    {{/ConstellationFactory.address}}
+    {{#ConstellationFactory.startBlock}}
+      startBlock: {{ConstellationFactory.startBlock}}
+    {{/ConstellationFactory.startBlock}}
+      abi: ConstellationFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -45,40 +45,14 @@ dataSources:
       entities:
         - Constellation
       abis:
-        - name: Constellation
-          file: ./abis/Constellation.json
+        - name: ConstellationFactory
+          file: ./abis/ConstellationFactory.json
         - name: ERC20Base
           file: ./abis/ERC20Base.json
       eventHandlers:
         - event: Created(address,address,string)
           handler: handleCreated
       file: ./src/ConstellationFactory.ts
-  - kind: ethereum/contract
-    name: Rewards
-    network: {{network}}
-    source:
-    {{#rewards.address}}
-      address: "{{rewards.address}}"
-    {{/rewards.address}}
-    {{#startBlock}}
-      startBlock: {{startBlock}}
-    {{/startBlock}}
-      abi: Rewards
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Rewards
-      abis:
-        - name: Rewards
-          file: ./abis/Rewards.json
-      eventHandlers:
-        - event: Action(address,address,uint256,string)
-          handler: handleAction
-        - event: Mission(address,address,uint256,string)
-          handler: handleMission
-      file: ./src/Rewards.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -199,19 +173,15 @@ templates:
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
       eventHandlers:
-        - event: Reward(address,address,uint256,string,address,string)
-          handler: handleReward
+        - event: TokenMinted(address,address,uint256,bytes32,string)
+          handler: handleTokenMinted
+        - event: TokenTransferred(address,address,uint256,bytes32,string)
+          handler: handleTokenTransferred
+        - event: BadgeMinted(address,address,bytes32,string)
+          handler: handleBadgeMinted
+        - event: BadgeTransferred(address,address,uint256,bytes32,string)
+          handler: handleBadgeTransferred
       file: ./src/facet/RewardsFacet.ts
-  - name: ActionMetadata
-    kind: file/ipfs
-    mapping:
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      file: ./src/Rewards.ts
-      handler: handleActionMetadata
-      entities:
-        - ActionMetadata
-      abis:
-        - name: Reward
-          file: ./abis/Rewards.json
