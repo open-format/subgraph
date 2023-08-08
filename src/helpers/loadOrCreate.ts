@@ -75,16 +75,17 @@ export function loadOrCreateBadge(
 
 export function loadOrCreateBadgeToken(
   contractAddress: Address,
-  tokenId: string,
+  tokenId: BigInt,
   event: ethereum.Event
 ): BadgeToken {
-  const id = BadgeId(contractAddress, tokenId);
+  const id = BadgeId(contractAddress, tokenId.toHex());
   let _BadgeToken = BadgeToken.load(id);
 
   if (!_BadgeToken) {
     _BadgeToken = new BadgeToken(id);
     _BadgeToken.createdAt = event.block.timestamp;
     _BadgeToken.createdAtBlock = event.block.number;
+    _BadgeToken.tokenId = tokenId;
   }
 
   _BadgeToken.updatedAt = event.block.timestamp;
@@ -154,6 +155,7 @@ export function loadOrCreateMission(
     _Mission = new Mission(id);
     _Mission.createdAt = event.block.timestamp;
     _Mission.createdAtBlock = event.block.number;
+    _Mission.badges = [];
   }
 
   return _Mission as Mission;
