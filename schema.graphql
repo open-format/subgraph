@@ -3,7 +3,7 @@ type Constellation @entity {
   owner: User!
   name: String!
   stars: [Star!] @derivedFrom(field: "constellation")
-  reward_token: FungibleToken!
+  rewardToken: FungibleToken!
   metadata: FungibleTokenMetadata
   createdAt: BigInt!
   createdAtBlock: BigInt!
@@ -52,8 +52,10 @@ type Star @entity {
   metadata: StarMetadata
   constellation: Constellation!
   owner: User!
-  xp_token: FungibleToken
+  xpToken: FungibleToken
   badges: [Badge!] @derivedFrom(field: "star")
+  badgeCount: BigInt!
+  badgesAwarded: BigInt!
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
@@ -95,8 +97,8 @@ type Badge @entity {
   star: Star!
   royaltyBps: BigInt!
   royaltyRecipient: Bytes!
+  totalAwarded: BigInt!
   totalAvailable: BigInt!
-  totalClaimed: BigInt!
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
@@ -118,8 +120,8 @@ type Badge @entity {
 
 type User @entity {
   id: ID!
-  token_balances: [FungibleTokenBalance!] @derivedFrom(field: "user")
-  collected_badges: [BadgeToken!] @derivedFrom(field: "owner")
+  tokenBalances: [FungibleTokenBalance!] @derivedFrom(field: "user")
+  collectedBadges: [BadgeToken!] @derivedFrom(field: "owner")
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
@@ -129,7 +131,6 @@ type User @entity {
 type Action @entity {
   id: ID!
   metadata: ActionMetadata
-  name: String
   star: Star
   user: User!
   xp_rewarded: BigInt!
@@ -143,20 +144,26 @@ type ActionMetadata @entity {
   URI: String!
 }
 
-type MissionRewardToken @entity {
+type MissionFungibleToken @entity {
   id: ID!
-  token: [FungibleToken!]
+  token: FungibleToken!
+  mission: Mission!
   amount_rewarded: BigInt!
+}
+
+type MissionMetadata @entity {
+  id: ID!
+  name: String
+  URI: String!
 }
 
 type Mission @entity {
   id: ID!
-  metadata: String
-  name: String!
+  metadata: MissionMetadata
   star: Star
   user: User!
-  badges: [BadgeToken!]
-  tokens: [MissionRewardToken!]
+  badges: [BadgeToken!]!
+  tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
   createdAt: BigInt!
   createdAtBlock: BigInt!
 }
