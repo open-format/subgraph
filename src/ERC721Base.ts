@@ -5,9 +5,12 @@ import {
   Minted
 } from "../generated/templates/ERC721Base/ERC721Base";
 
+import {Star} from "../generated/schema";
 import {Transfer} from "../generated/templates/ERC721Base/ERC721Base";
 import {
+  One,
   ZERO_ADDRESS,
+  loadBadge,
   loadBadgeToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
@@ -19,29 +22,35 @@ let contractAddress = Address.fromString(context.getString("ERC721Contract"));
 const boundContract = ERC721BaseContract.bind(contractAddress);
 
 export function handleMinted(event: Minted): void {
-  const totalSupply = boundContract
-    .nextTokenIdToMint()
-    .minus(BigInt.fromI32(1));
+  const tokenId = boundContract.nextTokenIdToMint().minus(One);
 
-  let BadgeToken = loadOrCreateBadgeToken(
-    event.address,
-    totalSupply.toString(),
-    event
-  );
+  let badgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
+
+  let badge = loadBadge(event.address);
+
+  if (badge) {
+    let star = Star.load(badge.star);
+    if (star) {
+      star.badgesAwarded = tokenId.plus(One);
+      star.save();
+    }
+  }
+
   let user = loadOrCreateUser(event.params.to, event);
 
-  BadgeToken.owner = user.id;
-  BadgeToken.metadataURI = event.params.tokenURI;
-  BadgeToken.tokenId = totalSupply;
-  BadgeToken.badge = event.address.toHex();
+  badgeToken.owner = user.id;
+  badgeToken.metadataURI = event.params.tokenURI;
+  badgeToken.tokenId = tokenId;
+  badgeToken.badge = event.address.toHex();
 
-  BadgeToken.save();
+  badgeToken.save();
   user.save();
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
   let user = loadOrCreateUser(event.params.to, event);
-  let Badge = loadOrCreateBadge(contractAddress, event);
+  let badge = loadOrCreateBadge(contractAddress, event);
+  let star = Star.load(badge.star);
 
   const totalSupplyBeforeMint = boundContract
     .totalSupply()
@@ -50,11 +59,7 @@ export function handleBatchMinted(event: BatchMinted): void {
   for (let i = 0; i < event.params.quantity.toI32(); i++) {
     const tokenId = totalSupplyBeforeMint.plus(BigInt.fromI32(i));
 
-    let BadgeToken = loadOrCreateBadgeToken(
-      event.address,
-      tokenId.toString(),
-      event
-    );
+    let BadgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
     BadgeToken.owner = user.id;
     BadgeToken.metadataURI = event.params.baseURI;
     BadgeToken.tokenId = tokenId;
@@ -62,8 +67,14 @@ export function handleBatchMinted(event: BatchMinted): void {
     BadgeToken.save();
   }
 
-  Badge.totalClaimed = totalSupplyBeforeMint.plus(event.params.quantity);
-  Badge.save();
+  badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
+
+  if (star) {
+    star.badgesAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
+    star.save();
+  }
+
+  badge.save();
 }
 
 export function handleTransfer(event: Transfer): void {

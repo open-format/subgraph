@@ -28,11 +28,7 @@ export function handleMinted(event: Minted): void {
 
   let Badge = loadOrCreateBadge(contractAddress, event);
 
-  let BadgeToken = loadOrCreateBadgeToken(
-    event.address,
-    totalSupply.toString(),
-    event
-  );
+  let BadgeToken = loadOrCreateBadgeToken(event.address, totalSupply, event);
   let user = loadOrCreateUser(event.params.to, event);
 
   BadgeToken.owner = user.id;
@@ -40,7 +36,7 @@ export function handleMinted(event: Minted): void {
   BadgeToken.tokenId = totalSupply;
   BadgeToken.badge = event.address.toHex();
 
-  Badge.totalClaimed = totalSupply.plus(BigInt.fromI32(1));
+  Badge.totalAwarded = totalSupply.plus(BigInt.fromI32(1));
 
   Badge.save();
   BadgeToken.save();
@@ -58,11 +54,7 @@ export function handleBatchMinted(event: BatchMinted): void {
   for (let i = 0; i < event.params.quantity.toI32(); i++) {
     const tokenId = totalSupplyBeforeMint.plus(BigInt.fromI32(i));
 
-    let BadgeToken = loadOrCreateBadgeToken(
-      event.address,
-      tokenId.toString(),
-      event
-    );
+    let BadgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
     BadgeToken.owner = user.id;
     BadgeToken.metadataURI = event.params.baseURI;
     BadgeToken.tokenId = tokenId;
@@ -70,7 +62,7 @@ export function handleBatchMinted(event: BatchMinted): void {
     BadgeToken.save();
   }
 
-  Badge.totalClaimed = totalSupplyBeforeMint.plus(event.params.quantity);
+  Badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
   Badge.save();
 }
 

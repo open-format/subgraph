@@ -33,8 +33,8 @@ export function handleCreated(event: Created): void {
   fungibleToken.star = star.id;
   fungibleToken.owner = user.id;
 
-  if (!star.xp_token) {
-    star.xp_token = fungibleToken.id;
+  if (!star.xpToken) {
+    star.xpToken = fungibleToken.id;
     star.save();
   }
 

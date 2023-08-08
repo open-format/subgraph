@@ -29,7 +29,7 @@ export function handleCreated(event: Created): void {
   rewardToken.burntSupply = BigInt.fromU32(0);
 
   constellation.owner = user.id;
-  constellation.reward_token = rewardToken.id;
+  constellation.rewardToken = rewardToken.id;
   constellation.name = event.params.name;
   constellation.updatedAt = event.block.timestamp;
   constellation.updatedAtBlock = event.block.number;
