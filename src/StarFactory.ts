@@ -1,5 +1,5 @@
 import {DataSourceContext} from "@graphprotocol/graph-ts";
-import {Created} from "../generated/StarFactory/Star";
+import {Created} from "../generated/StarFactory/StarFactory";
 import {
   ERC20FactoryFacet,
   ERC721FactoryFacet,

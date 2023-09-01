@@ -1,5 +1,5 @@
 import {BigInt, DataSourceContext} from "@graphprotocol/graph-ts";
-import {Created} from "../generated/ConstellationFactory/Constellation";
+import {Created} from "../generated/ConstellationFactory/ConstellationFactory";
 import {ERC20Base as ERC20Contract} from "../generated/ConstellationFactory/ERC20Base";
 import {ERC20Base} from "../generated/templates";
 import {
