@@ -4,7 +4,7 @@
 
 This major release introduces new mappings, enhancements, and improvements to the subgraph build with The Graph. We focused on mapping OPENFORMAT contracts, including ERC721 and ERC20 contract mappings.
 
-# ADDED
+### ADDED
 
 **ERC721 Mappings**: Implementation of mappings for ERC721 tokens, enabling advanced querying capabilities for NFTs.
 
