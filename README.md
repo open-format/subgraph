@@ -22,13 +22,13 @@ We have three subgraph deployed on Polygon Mumbai, Polygon Mainnet, Aurora Mainn
 
 ## Examples
 
-Get all apps:
+Get all constellations:
 
-[Live example](https://api.thegraph.com/subgraphs/name/open-format/mumbai/graphql?query=query+getAllApps+%7B%0A++apps+%7B%0A++++id%0A++++name%0A++++owner+%7B%0A++++++id%0A++++%7D%0A++%7D%0A%7D)
+[Live example](https://api.thegraph.com/subgraphs/name/open-format/mumbai-v2/graphql?query=%7B%0A++constellations+%7B%0A++++id%0A++++name%0A++++owner+%7B%0A++++++id%0A++++%7D%0A++%7D%0A%7D&variables=%22%7B%5Cn++%5C%22constellation%5C%22%3A+%5C%220x8a19c98762a3fb129ed82f01f4397b351216e7ce%5C%22%5Cn%7D%22)
 
 ```graphql
-query getAllApps {
-  apps {
+query getAllConstellations {
+  constellations {
     id
     name
     owner {
@@ -38,40 +38,34 @@ query getAllApps {
 }
 ```
 
-Get all contracts for a given app:
+Get all stars for a given constellation:
 
-[Live example](https://api.thegraph.com/subgraphs/name/open-format/mumbai/graphql?query=query+getAllAppContracts+%7B%0A++contracts%28where%3A+%7Bapp%3A+%220xfc76eb5fc23b9e1d46546e6eefab07666937c276%22%7D%29%7B%0A++++id%0A++++type%0A++++metadata+%7B%0A++++++name%0A++++++totalSupply%0A++++%7D%0A++%7D%0A%7D)
+[Live example](https://api.thegraph.com/subgraphs/name/open-format/mumbai-v2/graphql?query=query+getAllConstellationStars+%7B%0A++stars%28where%3A+%7Bconstellation%3A+%220x7087e19982a30de8d2179ca9fc76d0b625564a00%22%7D%29+%7B%0A++++id%0A++++name%0A++++xpToken+%7B%0A++++++id%0A++++%7D%0A++%7D%0A%7D&variables=%22%7B%5Cn++%5C%22constellation%5C%22%3A+%5C%220x8a19c98762a3fb129ed82f01f4397b351216e7ce%5C%22%5Cn%7D%22&operationName=getAllConstellationStars)
 
 ```graphql
-query getAllAppContracts {
-  contracts(where: {app: "0xfc76eb5fc23b9e1d46546e6eefab07666937c276"}) {
+query getAllConstellationStars {
+  stars(where: {constellation: "0x7087e19982a30de8d2179ca9fc76d0b625564a00"}) {
     id
-    type
-    metadata {
-      name
-      totalSupply
+    name
+    xpToken {
+      id
     }
   }
 }
 ```
 
-Get all token balances for a given user:
+Get all token balances and collected badges for a given user:
 
-[Live example](https://api.thegraph.com/subgraphs/name/open-format/mumbai/graphql?query=query+getAllUserTokens+%7B%0A++user%28id%3A+%220xcb9094b7bd910b1cd3943aa7d04b8b44bf17aa57%22%29+%7B%0A++++id%0A++++nfts+%7B%0A++++++id%0A++++++tokenId%0A++++++metadataURI%0A++++%7D%0A++++tokens+%7B%0A++++++token+%7B%0A++++++++id%0A++++++%7D%0A++++++balance%0A++++%7D%0A++%7D%0A%7D)
+[Live example](https://api.thegraph.com/subgraphs/name/open-format/mumbai-v2/graphql?query=query+getAllUserTokens+%7B%0A++user%28id%3A+%220x03755352654d73da06756077dd7f040adce3fd58%22%29+%7B%0A++++id%0A++++collectedBadges+%7B%0A++++++id%0A++++%7D%0A++++tokenBalances+%7B%0A++++++balance%0A++++%7D%0A++%7D%0A%7D&variables=%22%7B%5Cn++%5C%22constellation%5C%22%3A+%5C%220x8a19c98762a3fb129ed82f01f4397b351216e7ce%5C%22%5Cn%7D%22&operationName=getAllUserTokens)
 
 ```graphql
 query getAllUserTokens {
-  user(id: "0xcb9094b7bd910b1cd3943aa7d04b8b44bf17aa57") {
+  user(id: "0x03755352654d73da06756077dd7f040adce3fd58") {
     id
-    nfts {
+    collectedBadges {
       id
-      tokenId
-      metadataURI
     }
-    tokens {
-      token {
-        id
-      }
+    tokenBalances {
       balance
     }
   }
