@@ -4,7 +4,7 @@ import {
   ERC721LazyMint,
   Minted,
   TokensLazyMinted,
-  Transfer
+  Transfer,
 } from "../generated/templates/ERC721LazyMint/ERC721LazyMint";
 
 import {
@@ -12,7 +12,7 @@ import {
   loadBadgeToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
-  loadOrCreateUser
+  loadOrCreateUser,
 } from "./helpers";
 
 let context = dataSource.context();
@@ -73,7 +73,7 @@ export function handleLazyMint(event: TokensLazyMinted): void {
 }
 
 export function handleTransfer(event: Transfer): void {
-  let Badge = loadBadgeToken(event.address, event.params.tokenId.toString());
+  let Badge = loadBadgeToken(event.address, event.params.tokenId);
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
       store.remove("Badge", Badge.id);
