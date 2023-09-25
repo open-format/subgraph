@@ -1,5 +1,6 @@
 import {Address, BigInt, Bytes, ethereum} from "@graphprotocol/graph-ts";
 import {
+  AccessKey,
   Action,
   ActionMetadata,
   Badge,
@@ -12,7 +13,7 @@ import {
   MissionFungibleToken,
   MissionMetadata,
   Star,
-  User
+  User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
 
@@ -264,4 +265,23 @@ export function loadOrCreateFungibleTokenBalance(
   _FungibleTokenBalance.updatedAtBlock = event.block.number;
 
   return _FungibleTokenBalance as FungibleTokenBalance;
+}
+
+export function loadOrCreateAccessKey(
+  tokenId: BigInt,
+  event: ethereum.Event
+): AccessKey {
+  const id = tokenId.toHex();
+  let _AccessKey = AccessKey.load(id);
+
+  if (!_AccessKey) {
+    _AccessKey = new AccessKey(id);
+    _AccessKey.createdAt = event.block.timestamp;
+    _AccessKey.createdAtBlock = event.block.number;
+  }
+
+  _AccessKey.updatedAt = event.block.timestamp;
+  _AccessKey.updatedAtBlock = event.block.number;
+
+  return _AccessKey as AccessKey;
 }
