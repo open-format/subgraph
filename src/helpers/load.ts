@@ -1,4 +1,4 @@
-import {Address} from "@graphprotocol/graph-ts";
+import {Address, BigInt} from "@graphprotocol/graph-ts";
 import {BadgeId} from ".";
 import {
   ActionMetadata,
@@ -7,14 +7,14 @@ import {
   Constellation,
   FungibleToken,
   MissionMetadata,
-  Star
+  Star,
 } from "../../generated/schema";
 
 export function loadBadgeToken(
   contractAddress: Address,
-  tokenId: string
+  tokenId: BigInt
 ): BadgeToken | null {
-  const id = BadgeId(contractAddress, tokenId);
+  const id = BadgeId(contractAddress, tokenId.toHex());
   let _BadgeToken = BadgeToken.load(id);
 
   return _BadgeToken;
