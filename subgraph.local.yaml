@@ -7,7 +7,7 @@ dataSources:
     name: StarFactory
     network: mainnet
     source:
-      abi: Star
+      abi: StarFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -15,8 +15,8 @@ dataSources:
       entities:
         - Star
       abis:
-        - name: Star
-          file: ./abis/Star.json
+        - name: StarFactory
+          file: ./abis/StarFactory.json
       eventHandlers:
         - event: Created(address,address,address,string)
           handler: handleCreated
@@ -25,7 +25,7 @@ dataSources:
     name: ConstellationFactory
     network: mainnet
     source:
-      abi: Constellation
+      abi: ConstellationFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,8 +33,8 @@ dataSources:
       entities:
         - Constellation
       abis:
-        - name: Constellation
-          file: ./abis/Constellation.json
+        - name: ConstellationFactory
+          file: ./abis/ConstellationFactory.json
         - name: ERC20Base
           file: ./abis/ERC20Base.json
       eventHandlers:
@@ -42,25 +42,24 @@ dataSources:
           handler: handleCreated
       file: ./src/ConstellationFactory.ts
   - kind: ethereum/contract
-    name: Rewards
+    name: AccessKey
     network: mainnet
     source:
-      abi: Rewards
+      address: "0x44b6317365fb117c540dccfd29348f94d5bbffdc"
+      abi: ERC721Base
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Rewards
+        - AccessKey
       abis:
-        - name: Rewards
-          file: ./abis/Rewards.json
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
       eventHandlers:
-        - event: Action(address,address,uint256,string)
-          handler: handleAction
-        - event: Mission(address,address,uint256,string)
-          handler: handleMission
-      file: ./src/Rewards.ts
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/AccessKey.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -181,19 +180,15 @@ templates:
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
       eventHandlers:
-        - event: Reward(address,address,uint256,string,address,string)
-          handler: handleReward
+        - event: TokenMinted(address,address,uint256,bytes32,string)
+          handler: handleTokenMinted
+        - event: TokenTransferred(address,address,uint256,bytes32,string)
+          handler: handleTokenTransferred
+        - event: BadgeMinted(address,address,bytes32,string)
+          handler: handleBadgeMinted
+        - event: BadgeTransferred(address,address,uint256,bytes32,string)
+          handler: handleBadgeTransferred
       file: ./src/facet/RewardsFacet.ts
-  - name: ActionMetadata
-    kind: file/ipfs
-    mapping:
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      file: ./src/Rewards.ts
-      handler: handleActionMetadata
-      entities:
-        - ActionMetadata
-      abis:
-        - name: Reward
-          file: ./abis/Rewards.json
