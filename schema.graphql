@@ -54,6 +54,7 @@ type Star @entity {
   owner: User!
   xpToken: FungibleToken
   badges: [Badge!] @derivedFrom(field: "star")
+  stats: StarStats!
   badgeCount: BigInt!
   badgesAwarded: BigInt!
   createdAt: BigInt!
@@ -166,4 +167,20 @@ type Mission @entity {
   tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
   createdAt: BigInt!
   createdAtBlock: BigInt!
+}
+
+type StarStats @entity {
+  id: ID!
+  star: Star!
+  uniqueUsers: [User!]
+  uniqueUsersCount: BigInt!
+  totalXPAwarded: BigInt!
+  totalActionsComplete: BigInt!
+  totalMissionsComplete: BigInt!
+  totalRewardTokensAwarded: BigInt!
+  totalBadgesAwarded: BigInt!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
 }
