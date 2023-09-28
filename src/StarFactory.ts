@@ -3,9 +3,14 @@ import {Created} from "../generated/StarFactory/StarFactory";
 import {
   ERC20FactoryFacet,
   ERC721FactoryFacet,
-  RewardsFacet
+  RewardsFacet,
 } from "../generated/templates";
-import {Zero, loadOrCreateStar, loadOrCreateUser} from "./helpers";
+import {
+  Zero,
+  loadOrCreateStar,
+  loadOrCreateStarStats,
+  loadOrCreateUser,
+} from "./helpers";
 
 export function handleCreated(event: Created): void {
   let context = new DataSourceContext();
@@ -17,13 +22,17 @@ export function handleCreated(event: Created): void {
 
   let star = loadOrCreateStar(event.params.id, event);
   let user = loadOrCreateUser(event.params.owner, event);
+  let starStats = loadOrCreateStarStats(event.params.id, event);
 
   star.owner = user.id;
   star.constellation = event.params.constellation.toHex();
   star.name = event.params.name;
   star.badgeCount = Zero;
   star.badgesAwarded = Zero;
+  star.stats = starStats.id;
+  starStats.star = star.id;
 
+  starStats.save();
   star.save();
   user.save();
 }
