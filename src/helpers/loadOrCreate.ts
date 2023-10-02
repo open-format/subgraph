@@ -13,6 +13,7 @@ import {
   MissionFungibleToken,
   MissionMetadata,
   Star,
+  StarStats,
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
@@ -284,4 +285,29 @@ export function loadOrCreateAccessKey(
   _AccessKey.updatedAtBlock = event.block.number;
 
   return _AccessKey as AccessKey;
+}
+
+export function loadOrCreateStarStats(
+  starId: Address,
+  event: ethereum.Event
+): StarStats {
+  const id = starId.toHex();
+  let _StarStats = StarStats.load(id);
+
+  if (!_StarStats) {
+    _StarStats = new StarStats(id);
+    _StarStats.createdAt = event.block.timestamp;
+    _StarStats.createdAtBlock = event.block.number;
+    _StarStats.totalActionsComplete = BigInt.fromI32(0);
+    _StarStats.totalMissionsComplete = BigInt.fromI32(0);
+    _StarStats.totalRewardTokensAwarded = BigInt.fromI32(0);
+    _StarStats.totalBadgesAwarded = BigInt.fromI32(0);
+    _StarStats.totalXPAwarded = BigInt.fromI32(0);
+    _StarStats.uniqueUsersCount = BigInt.fromI32(0);
+  }
+
+  _StarStats.updatedAt = event.block.timestamp;
+  _StarStats.updatedAtBlock = event.block.number;
+
+  return _StarStats as StarStats;
 }
