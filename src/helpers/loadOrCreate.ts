@@ -272,7 +272,7 @@ export function loadOrCreateAccessKey(
   tokenId: BigInt,
   event: ethereum.Event
 ): AccessKey {
-  const id = tokenId.toHex();
+  const id = tokenId.toString();
   let _AccessKey = AccessKey.load(id);
 
   if (!_AccessKey) {
