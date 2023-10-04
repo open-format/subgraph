@@ -159,10 +159,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
     event.logIndex
   );
 
-  let missionBadge = loadBadgeToken(
-    event.params.token,
-    event.params.tokenId.toHex()
-  );
+  let missionBadge = loadBadgeToken(event.params.token, event.params.tokenId);
 
   let user = loadOrCreateUser(event.params.to, event);
   missionMetadata.name = event.params.id.toString();

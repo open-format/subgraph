@@ -169,6 +169,16 @@ type Mission @entity {
   createdAtBlock: BigInt!
 }
 
+type AccessKey @entity {
+  id: ID!
+  currentOwner: User!
+  originalOwner: User!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
+}
+
 type StarStats @entity {
   id: ID!
   star: Star!

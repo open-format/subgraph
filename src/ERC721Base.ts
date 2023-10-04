@@ -2,7 +2,7 @@ import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
   ERC721Base as ERC721BaseContract,
-  Minted
+  Minted,
 } from "../generated/templates/ERC721Base/ERC721Base";
 
 import {Star} from "../generated/schema";
@@ -14,7 +14,7 @@ import {
   loadBadgeToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
-  loadOrCreateUser
+  loadOrCreateUser,
 } from "./helpers";
 
 let context = dataSource.context();
@@ -78,13 +78,14 @@ export function handleBatchMinted(event: BatchMinted): void {
 }
 
 export function handleTransfer(event: Transfer): void {
-  let Badge = loadBadgeToken(event.address, event.params.tokenId.toString());
+  let Badge = loadBadgeToken(event.address, event.params.tokenId);
+  let user = loadOrCreateUser(event.params.to, event);
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
       //@TODO is burntSupply the correct name?
       store.remove("Badge", Badge.id);
     } else {
-      Badge.owner = event.params.to.toHex();
+      Badge.owner = user.id;
       Badge.save();
     }
   }
