@@ -120,13 +120,27 @@ export function handleBadgeMinted(event: BadgeMinted): void {
     event.transaction.hash,
     event.logIndex
   );
-
-  let tokenId = boundContract.totalSupply().minus(BigInt.fromI32(1));
-
-  let missionBadge = loadOrCreateBadgeToken(event.params.token, tokenId, event);
-
   let user = loadOrCreateUser(event.params.to, event);
   let starStats = loadOrCreateStarStats(starAddress, event);
+  let totalSupply = boundContract.totalSupply();
+  let quantity = event.params.quantity;
+  let missionBadges = mission.badges;
+
+  for (let i = 0; i < quantity.toI32(); i++) {
+    let tokenId = totalSupply.minus(quantity).plus(BigInt.fromI32(i));
+    let missionBadge = loadOrCreateBadgeToken(
+      event.params.token,
+      tokenId,
+      event
+    );
+
+    missionBadge.badge = event.params.token.toHex();
+    missionBadge.metadataURI = event.params.uri;
+    missionBadge.owner = user.id;
+    missionBadge.save();
+
+    missionBadges.push(missionBadge.id);
+  }
 
   missionMetadata.name = event.params.id.toString();
   missionMetadata.URI = event.params.uri;
@@ -134,18 +148,9 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   mission.user = user.id;
   mission.star = starAddress.toHex();
   mission.metadata = missionMetadata.id;
-
-  let missionBadges = mission.badges;
-  missionBadges.push(missionBadge.id);
   mission.badges = missionBadges;
 
-  missionBadge.badge = event.params.token.toHex();
-  missionBadge.metadataURI = event.params.uri;
-  missionBadge.owner = user.id;
-
-  starStats.totalBadgesAwarded = starStats.totalBadgesAwarded.plus(
-    BigInt.fromI32(1)
-  );
+  starStats.totalBadgesAwarded = starStats.totalBadgesAwarded.plus(quantity);
 
   starStats.save();
   missionMetadata.save();
