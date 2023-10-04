@@ -35,6 +35,12 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "quantity",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "to",
         "type": "address"
@@ -238,8 +244,13 @@
         "type": "address"
       },
       {
+        "internalType": "uint256",
+        "name": "_quantity",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
-        "name": "_tokenURI",
+        "name": "_baseURI",
         "type": "string"
       },
       {
