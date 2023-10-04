@@ -204,7 +204,7 @@ templates:
           handler: handleTokenMinted
         - event: TokenTransferred(address,address,uint256,bytes32,string)
           handler: handleTokenTransferred
-        - event: BadgeMinted(address,address,bytes32,string)
+        - event: BadgeMinted(address,uint256,address,bytes32,string)
           handler: handleBadgeMinted
         - event: BadgeTransferred(address,address,uint256,bytes32,string)
           handler: handleBadgeTransferred
