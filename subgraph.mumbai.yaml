@@ -45,6 +45,26 @@ dataSources:
         - event: Created(address,address,string)
           handler: handleCreated
       file: ./src/ConstellationFactory.ts
+  - kind: ethereum/contract
+    name: AccessKey
+    network: mumbai
+    source:
+      address: "0xf5af05cccc34f1ada59a7e4081e5f50f5e5747a2"
+      startBlock: 40831050
+      abi: ERC721Base
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AccessKey
+      abis:
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/AccessKey.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -172,7 +192,7 @@ templates:
           handler: handleTokenMinted
         - event: TokenTransferred(address,address,uint256,bytes32,string)
           handler: handleTokenTransferred
-        - event: BadgeMinted(address,address,bytes32,string)
+        - event: BadgeMinted(address,uint256,address,bytes32,string)
           handler: handleBadgeMinted
         - event: BadgeTransferred(address,address,uint256,bytes32,string)
           handler: handleBadgeTransferred
