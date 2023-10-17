@@ -1,6 +1,7 @@
-import {Address, BigInt} from "@graphprotocol/graph-ts";
-import {BadgeId} from ".";
+import {Address, BigInt, Bytes} from "@graphprotocol/graph-ts";
+import {ActionId, BadgeId} from ".";
 import {
+  Action,
   ActionMetadata,
   Badge,
   BadgeToken,
@@ -20,6 +21,13 @@ export function loadBadgeToken(
   return _BadgeToken;
 }
 
+export function loadAction(
+  transactionHash: Bytes,
+  actionId: Bytes
+): Action | null {
+  const id = ActionId(transactionHash, actionId);
+  return Action.load(id);
+}
 export function loadBadge(contractAddress: Address): Badge | null {
   return Badge.load(contractAddress.toHex());
 }

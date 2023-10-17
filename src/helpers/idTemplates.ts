@@ -8,8 +8,8 @@ export function ActionId(transactionHash: Bytes, logIndex: BigInt): string {
   return transactionHash.toHex() + "-" + logIndex.toHex();
 }
 
-export function MissionId(transactionHash: Bytes, logIndex: BigInt): string {
-  return transactionHash.toHex() + "-" + logIndex.toHex();
+export function MissionId(transactionHash: Bytes, missionId: Bytes): string {
+  return transactionHash.toHex() + "-" + missionId.toHex();
 }
 
 export function TokenBalanceId(
