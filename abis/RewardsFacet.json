@@ -53,6 +53,12 @@
       },
       {
         "indexed": false,
+        "internalType": "bytes32",
+        "name": "activityType",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "uri",
         "type": "string"
@@ -86,6 +92,12 @@
         "indexed": false,
         "internalType": "bytes32",
         "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "activityType",
         "type": "bytes32"
       },
       {
@@ -146,6 +158,12 @@
       },
       {
         "indexed": false,
+        "internalType": "bytes32",
+        "name": "activityType",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "uri",
         "type": "string"
@@ -179,6 +197,12 @@
         "indexed": false,
         "internalType": "bytes32",
         "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "activityType",
         "type": "bytes32"
       },
       {
@@ -221,6 +245,11 @@
         "type": "bytes32"
       },
       {
+        "internalType": "bytes32",
+        "name": "_activityType",
+        "type": "bytes32"
+      },
+      {
         "internalType": "string",
         "name": "_uri",
         "type": "string"
@@ -256,6 +285,11 @@
       {
         "internalType": "bytes32",
         "name": "_id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_activityType",
         "type": "bytes32"
       },
       {
@@ -318,11 +352,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_holder",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_token",
         "type": "address"
       },
@@ -339,6 +368,11 @@
       {
         "internalType": "bytes32",
         "name": "_id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_activityType",
         "type": "bytes32"
       },
       {
@@ -361,11 +395,6 @@
       },
       {
         "internalType": "address",
-        "name": "_holder",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_to",
         "type": "address"
       },
@@ -377,6 +406,11 @@
       {
         "internalType": "bytes32",
         "name": "_id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_activityType",
         "type": "bytes32"
       },
       {
