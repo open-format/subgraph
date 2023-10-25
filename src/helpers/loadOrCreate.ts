@@ -148,9 +148,10 @@ export function loadOrCreateAction(
 
 export function loadOrCreateMission(
   transactionHash: Bytes,
+  actionId: Bytes,
   event: ethereum.Event
 ): Mission {
-  const id = transactionHash.toHex();
+  const id = MissionId(transactionHash, actionId);
   let _Mission = Mission.load(id);
 
   if (!_Mission) {
@@ -165,9 +166,15 @@ export function loadOrCreateMission(
 
 export function loadOrCreateMissionFungibleToken(
   transactionHash: Bytes,
+  missionId: Bytes,
   tokenAddress: Address
 ): MissionFungibleToken {
-  const id = transactionHash.toHex() + "-" + tokenAddress.toHex();
+  const id =
+    transactionHash.toHex() +
+    "-" +
+    missionId.toHex() +
+    "-" +
+    tokenAddress.toHex();
   let _MissionFungibleToken = MissionFungibleToken.load(id);
 
   if (!_MissionFungibleToken) {
@@ -179,9 +186,9 @@ export function loadOrCreateMissionFungibleToken(
 
 export function loadOrCreateMissionMetadata(
   transactionHash: Bytes,
-  logIndex: BigInt
+  actionId: Bytes
 ): MissionMetadata {
-  const id = MissionId(transactionHash, logIndex);
+  const id = MissionId(transactionHash, actionId);
   let _MissionMetadata = MissionMetadata.load(id);
 
   if (!_MissionMetadata) {
