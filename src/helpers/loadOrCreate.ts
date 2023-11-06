@@ -109,24 +109,27 @@ export function loadOrCreateUser(
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
 
-    let stats = Stats.load("STATS_SINGLETON");
-
-    // If the Stats entity doesn't exist, create it and set uniqueUsers to 1.
-    if (!stats) {
-      stats = new Stats("STATS_SINGLETON");
-      stats.uniqueUsers = BigInt.fromI32(1);
-    } else {
-      // If the Stats entity exists, increment uniqueUsers.
-      stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
-    }
-
-    stats.save();
+    let stats = loadOrCreateStats();
+    stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
   }
 
   _User.updatedAt = event.block.timestamp;
   _User.updatedAtBlock = event.block.number;
 
   return _User as User;
+}
+
+export function loadOrCreateStats(): Stats {
+  let stats = Stats.load("STATS_SINGLETON");
+
+  // If the Stats entity doesn't exist, create it and set uniqueUsers to 1.
+  if (!stats) {
+    stats = new Stats("STATS_SINGLETON");
+    stats.uniqueUsers = BigInt.fromI32(0);
+    stats.save();
+  }
+
+  return stats as Stats;
 }
 
 export function loadOrCreateActionMetadata(
