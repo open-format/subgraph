@@ -111,6 +111,7 @@ export function loadOrCreateUser(
 
     let stats = loadOrCreateStats();
     stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
+    stats.save();
   }
 
   _User.updatedAt = event.block.timestamp;
