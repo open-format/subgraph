@@ -109,9 +109,13 @@ export function loadOrCreateUser(
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
 
-    let stats = loadOrCreateStats();
-    stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
-    stats.save();
+    const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+    if (_User.id != ZERO_ADDRESS) {
+      let stats = loadOrCreateStats();
+      stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
+      stats.save();
+    }
   }
 
   _User.updatedAt = event.block.timestamp;
