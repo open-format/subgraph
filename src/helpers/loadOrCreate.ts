@@ -123,7 +123,7 @@ export function loadOrCreateUser(
 export function loadOrCreateStats(): Stats {
   let stats = Stats.load("STATS_SINGLETON");
 
-  // If the Stats entity doesn't exist, create it and set uniqueUsers to 1.
+  // If the Stats entity doesn't exist, create it and set uniqueUsers to 0.
   if (!stats) {
     stats = new Stats("STATS_SINGLETON");
     stats.uniqueUsers = BigInt.fromI32(0);
