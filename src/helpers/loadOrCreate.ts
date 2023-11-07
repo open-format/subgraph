@@ -14,6 +14,7 @@ import {
   MissionMetadata,
   Star,
   StarStats,
+  Stats,
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
@@ -107,12 +108,33 @@ export function loadOrCreateUser(
     _User = new User(id);
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
+
+    const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+    if (_User.id != ZERO_ADDRESS) {
+      let stats = loadOrCreateStats();
+      stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
+      stats.save();
+    }
   }
 
   _User.updatedAt = event.block.timestamp;
   _User.updatedAtBlock = event.block.number;
 
   return _User as User;
+}
+
+export function loadOrCreateStats(): Stats {
+  let stats = Stats.load("STATS_SINGLETON");
+
+  // If the Stats entity doesn't exist, create it and set uniqueUsers to 0.
+  if (!stats) {
+    stats = new Stats("STATS_SINGLETON");
+    stats.uniqueUsers = BigInt.fromI32(0);
+    stats.save();
+  }
+
+  return stats as Stats;
 }
 
 export function loadOrCreateActionMetadata(

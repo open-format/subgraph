@@ -194,3 +194,8 @@ type StarStats @entity {
   updatedAt: BigInt!
   updatedAtBlock: BigInt!
 }
+
+type Stats @entity {
+  id: ID!
+  uniqueUsers: BigInt!
+}
