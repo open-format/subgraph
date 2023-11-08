@@ -51,9 +51,7 @@ export function handleTokenMinted(event: TokenMinted): void {
     starStats.totalXPAwarded = starStats.totalXPAwarded.plus(
       action.xp_rewarded
     );
-    starStats.totalActionsComplete = starStats.totalActionsComplete.plus(
-      BigInt.fromI32(1)
-    );
+    starStats.totalActionsComplete = starStats.totalActionsComplete.plus(One);
 
     if (starStats.uniqueUsers == null) {
       starStats.uniqueUsers = new Array<string>();
@@ -64,9 +62,7 @@ export function handleTokenMinted(event: TokenMinted): void {
 
     if (uniqueUsers.indexOf(user.id) == -1) {
       uniqueUsers.push(user.id);
-      starStats.uniqueUsersCount = starStats.uniqueUsersCount.plus(
-        BigInt.fromI32(1)
-      );
+      starStats.uniqueUsersCount = starStats.uniqueUsersCount.plus(One);
     }
 
     starStats.uniqueUsers = uniqueUsers;
@@ -116,9 +112,7 @@ export function handleTokenMinted(event: TokenMinted): void {
     user.save();
 
     // Increment Mission Transactions
-    stats.MissionTransactions = stats.MissionTransactions.plus(
-      BigInt.fromI32(1)
-    );
+    stats.MissionTransactions = stats.MissionTransactions.plus(One);
     stats.save();
     log.debug("*** MissionTransactions: MissionTransactions: {}", [
       stats.MissionTransactions.toString(),
@@ -167,9 +161,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   missionFungibleToken.save();
   missionMetadata.save();
 
-  starStats.totalMissionsComplete = starStats.totalMissionsComplete.plus(
-    BigInt.fromI32(1)
-  );
+  starStats.totalMissionsComplete = starStats.totalMissionsComplete.plus(One);
 
   starStats.totalRewardTokensAwarded = starStats.totalRewardTokensAwarded.plus(
     event.params.amount
@@ -187,9 +179,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   ]);
 
   // Increment Tokens Transferred by reward
-  stats.TokensTransferredRewards = stats.TokensTransferredRewards.plus(
-    BigInt.fromI32(1)
-  );
+  stats.TokensTransferredRewards = stats.TokensTransferredRewards.plus(One);
   stats.save();
   log.debug("*** TokensTransferredRewards: TokensTransferredRewards: {}", [
     stats.TokensTransferredRewards.toString(),
@@ -302,9 +292,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   ]);
 
   // Increment Badges Transferred by reward
-  stats.BadgesTransferredRewards = stats.BadgesTransferredRewards.plus(
-    BigInt.fromI32(1)
-  );
+  stats.BadgesTransferredRewards = stats.BadgesTransferredRewards.plus(One);
   stats.save();
   log.debug("*** BadgesTransferredRewards: BadgesTransferredRewards: {}", [
     stats.BadgesTransferredRewards.toString(),

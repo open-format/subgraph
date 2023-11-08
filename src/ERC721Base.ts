@@ -49,9 +49,7 @@ export function handleMinted(event: Minted): void {
 
   // Increment badges minted
   let stats = loadOrCreateStats();
-  stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
-    BigInt.fromI32(1)
-  );
+  stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(One);
   stats.save();
   log.debug("*** BadgesMintedTransactions: BadgesMintedTransactions: {}", [
     stats.BadgesMintedTransactions.toString(),
@@ -79,9 +77,7 @@ export function handleBatchMinted(event: BatchMinted): void {
 
     // Increment badges minted
     let stats = loadOrCreateStats();
-    stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
-      BigInt.fromI32(1)
-    );
+    stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(One);
     stats.save();
     log.debug("*** BadgesMintedTransactions: BadgesMintedTransactions: {}", [
       stats.BadgesMintedTransactions.toString(),

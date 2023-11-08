@@ -77,9 +77,7 @@ export function loadOrCreateBadge(
     _badge.createdAtBlock = event.block.number;
     /* @TODO We do this in src/ERC721Base.ts
     let stats = loadOrCreateStats();
-    stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
-      BigInt.fromI32(1)
-    );
+    stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(One);
     stats.save();
     */
   }
@@ -114,9 +112,7 @@ export function loadOrCreateBadgeToken(
     if (_BadgeToken.id != ZERO_ADDRESS) {
       // Increment badges minted
       let stats = loadOrCreateStats();
-      stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
-        BigInt.fromI32(1)
-      );
+      stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(One);
       stats.save();
       log.debug("*** BadgesMintedTransactions: BadgesMintedTransactions: {}", [
         stats.BadgesMintedTransactions.toString(),

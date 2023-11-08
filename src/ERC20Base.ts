@@ -60,9 +60,7 @@ export function handleTransfer(event: Transfer): void {
     receiverTokenBalance.save();
     // Increment tokens minted
     let stats = loadOrCreateStats();
-    stats.TokensMintedTransactions = stats.TokensMintedTransactions.plus(
-      BigInt.fromI32(1)
-    );
+    stats.TokensMintedTransactions = stats.TokensMintedTransactions.plus(One);
     stats.save();
     log.debug("*** Tokens Minted: TokensMintedTransactions: {}", [
       stats.TokensMintedTransactions.toString(),
