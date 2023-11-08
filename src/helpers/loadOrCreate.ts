@@ -102,11 +102,6 @@ export function loadOrCreateBadgeToken(
     _BadgeToken.createdAtBlock = event.block.number;
     _BadgeToken.tokenId = tokenId;
 
-    /*
-      @TODO we could increment here, if we are counting the actual badges minted. 
-      If we are countibng the transactions including ones which will have no effect (the badge has already been minted)
-      we increment in the ERC721BASE class, as in this commit
-    
     const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
     if (_BadgeToken.id != ZERO_ADDRESS) {
@@ -118,7 +113,6 @@ export function loadOrCreateBadgeToken(
         stats.BadgesMintedTransactions.toString(),
       ]);
     }
-    */
   }
 
   _BadgeToken.updatedAt = event.block.timestamp;
