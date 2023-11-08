@@ -1,4 +1,4 @@
-import {Address, BigInt, dataSource} from "@graphprotocol/graph-ts";
+import {Address, BigInt, dataSource, log} from "@graphprotocol/graph-ts";
 import {ERC721Base as BadgeContract} from "../../generated/templates/ERC721Base/ERC721Base";
 import {
   BadgeMinted,
@@ -15,6 +15,7 @@ import {
   loadOrCreateMissionFungibleToken,
   loadOrCreateMissionMetadata,
   loadOrCreateStarStats,
+  loadOrCreateStats,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
 
@@ -23,6 +24,7 @@ let starAddress = Address.fromString(context.getString("Star"));
 
 export function handleTokenMinted(event: TokenMinted): void {
   let user = loadOrCreateUser(event.params.to, event);
+  let stats = loadOrCreateStats();
 
   if (event.params.activityType.toString() == "ACTION") {
     let action = loadOrCreateAction(
@@ -72,6 +74,13 @@ export function handleTokenMinted(event: TokenMinted): void {
     actionMetadata.save();
     action.save();
     starStats.save();
+
+    // Increment Action Transactions
+    stats.ActionTransactions = stats.ActionTransactions.plus(BigInt.fromI32(1));
+    stats.save();
+    log.debug("*** ActionTransactions: ActionTransactions: {}", [
+      stats.ActionTransactions.toString(),
+    ]);
   } else {
     let mission = loadOrCreateMission(
       event.transaction.hash,
@@ -105,7 +114,23 @@ export function handleTokenMinted(event: TokenMinted): void {
     missionMetadata.save();
 
     user.save();
+
+    // Increment Mission Transactions
+    stats.MissionTransactions = stats.MissionTransactions.plus(
+      BigInt.fromI32(1)
+    );
+    stats.save();
+    log.debug("*** MissionTransactions: MissionTransactions: {}", [
+      stats.MissionTransactions.toString(),
+    ]);
   }
+
+  // Increment Tokens Minted by reward
+  stats.TokensMintedRewards = stats.TokensMintedRewards.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** TokensMintedRewards: TokensMintedRewards: {}", [
+    stats.TokensMintedRewards.toString(),
+  ]);
 }
 export function handleTokenTransferred(event: TokenTransferred): void {
   let mission = loadOrCreateMission(
@@ -152,6 +177,23 @@ export function handleTokenTransferred(event: TokenTransferred): void {
 
   mission.save();
   starStats.save();
+
+  // Increment Mission Transactions
+  let stats = loadOrCreateStats();
+  stats.MissionTransactions = stats.MissionTransactions.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** MissionTransactions: MissionTransactions: {}", [
+    stats.MissionTransactions.toString(),
+  ]);
+
+  // Increment Tokens Transferred by reward
+  stats.TokensTransferredRewards = stats.TokensTransferredRewards.plus(
+    BigInt.fromI32(1)
+  );
+  stats.save();
+  log.debug("*** TokensTransferredRewards: TokensTransferredRewards: {}", [
+    stats.TokensTransferredRewards.toString(),
+  ]);
 }
 export function handleBadgeMinted(event: BadgeMinted): void {
   let mission = loadOrCreateMission(
@@ -204,6 +246,21 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   starStats.save();
   missionMetadata.save();
   mission.save();
+
+  // Increment Mission Transactions
+  let stats = loadOrCreateStats();
+  stats.MissionTransactions = stats.MissionTransactions.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** MissionTransactions: MissionTransactions: {}", [
+    stats.MissionTransactions.toString(),
+  ]);
+
+  // Increment Badges Minted by reward
+  stats.BadgesMintedRewards = stats.BadgesMintedRewards.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** BadgesMintedRewards: BadgesMintedRewards: {}", [
+    stats.BadgesMintedRewards.toString(),
+  ]);
 }
 export function handleBadgeTransferred(event: BadgeTransferred): void {
   let mission = loadOrCreateMission(
@@ -235,4 +292,21 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
 
   missionMetadata.save();
   mission.save();
+
+  // Increment Mission Transactions
+  let stats = loadOrCreateStats();
+  stats.MissionTransactions = stats.MissionTransactions.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** MissionTransactions: MissionTransactions: {}", [
+    stats.MissionTransactions.toString(),
+  ]);
+
+  // Increment Badges Transferred by reward
+  stats.BadgesTransferredRewards = stats.BadgesTransferredRewards.plus(
+    BigInt.fromI32(1)
+  );
+  stats.save();
+  log.debug("*** BadgesTransferredRewards: BadgesTransferredRewards: {}", [
+    stats.BadgesTransferredRewards.toString(),
+  ]);
 }

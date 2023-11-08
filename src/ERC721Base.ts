@@ -1,4 +1,4 @@
-import {Address, BigInt, dataSource, store} from "@graphprotocol/graph-ts";
+import {Address, BigInt, dataSource, store, log} from "@graphprotocol/graph-ts";
 import {
   BatchMinted,
   ERC721Base as ERC721BaseContract,
@@ -14,6 +14,7 @@ import {
   loadBadgeToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
+  loadOrCreateStats,
   loadOrCreateUser,
 } from "./helpers";
 
@@ -45,6 +46,16 @@ export function handleMinted(event: Minted): void {
 
   badgeToken.save();
   user.save();
+
+  // Increment badges minted
+  let stats = loadOrCreateStats();
+  stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
+    BigInt.fromI32(1)
+  );
+  stats.save();
+  log.debug("*** BadgesMintedTransactions: BadgesMintedTransactions: {}", [
+    stats.BadgesMintedTransactions.toString(),
+  ]);
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
@@ -65,6 +76,16 @@ export function handleBatchMinted(event: BatchMinted): void {
     BadgeToken.tokenId = tokenId;
     BadgeToken.badge = event.address.toHex();
     BadgeToken.save();
+
+    // Increment badges minted
+    let stats = loadOrCreateStats();
+    stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
+      BigInt.fromI32(1)
+    );
+    stats.save();
+    log.debug("*** BadgesMintedTransactions: BadgesMintedTransactions: {}", [
+      stats.BadgesMintedTransactions.toString(),
+    ]);
   }
 
   badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
@@ -87,6 +108,15 @@ export function handleTransfer(event: Transfer): void {
     } else {
       Badge.owner = user.id;
       Badge.save();
+      // Increment badges transferred
+      let stats = loadOrCreateStats();
+      stats.BadgesTransferredTransactions =
+        stats.BadgesTransferredTransactions.plus(BigInt.fromI32(1));
+      stats.save();
+      log.debug(
+        "*** BadgesTransferredTransactions: BadgesTransferredTransactions: {}",
+        [stats.BadgesTransferredTransactions.toString()]
+      );
     }
   }
 }

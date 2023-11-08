@@ -2,16 +2,18 @@ import {
   Address,
   BigInt,
   dataSource,
-  DataSourceContext
+  DataSourceContext,
+  log,
 } from "@graphprotocol/graph-ts";
 import {ERC721Base, ERC721LazyMint} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import {
   loadOrCreateBadge,
   loadOrCreateStar,
+  loadOrCreateStats,
   loadOrCreateUser,
   One,
-  Zero
+  Zero,
 } from "../helpers";
 
 let context = dataSource.context();
@@ -45,4 +47,10 @@ export function handleCreated(event: Created): void {
   star.save();
   badge.save();
   user.save();
+
+  // Increment ERC721 Count
+  let stats = loadOrCreateStats();
+  stats.ERC721Count = stats.ERC721Count.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** ERC721Count: ERC721Count: {}", [stats.ERC721Count.toString()]);
 }

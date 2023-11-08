@@ -198,4 +198,21 @@ type StarStats @entity {
 type Stats @entity {
   id: ID!
   uniqueUsers: BigInt!
+  constellationCount: BigInt!
+  starCount: BigInt!
+  ERC721Count: BigInt!
+  ERC20Count: BigInt!
+  # Base Contract counting all
+  TokensMintedTransactions: BigInt!
+  TokensTransferredTransactions: BigInt!
+  BadgesMintedTransactions: BigInt!
+  BadgesTransferredTransactions: BigInt!
+  # From Rewards contract (RewardsFacet.ts) counting only those triggered by a reward
+  TokensMintedRewards: BigInt!
+  TokensTransferredRewards: BigInt!
+  BadgesMintedRewards: BigInt!
+  BadgesTransferredRewards: BigInt!
+  #
+  ActionTransactions: BigInt!
+  MissionTransactions: BigInt!
 }

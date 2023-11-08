@@ -1,8 +1,8 @@
-import {Address, dataSource} from "@graphprotocol/graph-ts";
+import {Address, dataSource, BigInt, log} from "@graphprotocol/graph-ts";
 import {
   ContractURIUpdated,
   ERC20Base as ERC20BaseContract,
-  Transfer
+  Transfer,
 } from "../generated/templates/ERC20Base/ERC20Base";
 import {
   ZERO_ADDRESS,
@@ -10,7 +10,8 @@ import {
   loadOrCreateFungibleToken,
   loadOrCreateFungibleTokenBalance,
   loadOrCreateFungibleTokenMetadata,
-  loadOrCreateUser
+  loadOrCreateStats,
+  loadOrCreateUser,
 } from "./helpers";
 
 let context = dataSource.context();
@@ -56,6 +57,15 @@ export function handleTransfer(event: Transfer): void {
   if (isMinted) {
     receiver.save();
     receiverTokenBalance.save();
+    // Increment tokens minted
+    let stats = loadOrCreateStats();
+    stats.TokensMintedTransactions = stats.TokensMintedTransactions.plus(
+      BigInt.fromI32(1)
+    );
+    stats.save();
+    log.debug("*** Tokens Minted: TokensMintedTransactions: {}", [
+      stats.TokensMintedTransactions.toString(),
+    ]);
   } else if (isBurned) {
     sender.save();
     senderTokenBalance.save();
@@ -70,6 +80,15 @@ export function handleTransfer(event: Transfer): void {
 
     receiverTokenBalance.save();
     senderTokenBalance.save();
+
+    // Increment tokens transferred
+    let stats = loadOrCreateStats();
+    stats.TokensTransferredTransactions =
+      stats.TokensTransferredTransactions.plus(BigInt.fromI32(1));
+    stats.save();
+    log.debug("*** Tokens Transferred: TokensTransferredTransactions: {}", [
+      stats.TokensTransferredTransactions.toString(),
+    ]);
   }
 
   fungibleToken.totalSupply = boundContract.totalSupply();

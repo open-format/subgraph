@@ -1,4 +1,4 @@
-import {Address, BigInt, Bytes, ethereum} from "@graphprotocol/graph-ts";
+import {Address, BigInt, Bytes, ethereum, log} from "@graphprotocol/graph-ts";
 import {
   AccessKey,
   Action,
@@ -30,6 +30,9 @@ export function loadOrCreateStar(
     _star = new Star(id);
     _star.createdAt = event.block.timestamp;
     _star.createdAtBlock = event.block.number;
+    let stats = loadOrCreateStats();
+    stats.starCount = stats.starCount.plus(BigInt.fromI32(1));
+    stats.save();
   }
 
   _star.updatedAt = event.block.timestamp;
@@ -49,6 +52,9 @@ export function loadOrCreateConstellation(
     _constellation = new Constellation(id);
     _constellation.createdAt = event.block.timestamp;
     _constellation.createdAtBlock = event.block.number;
+    let stats = loadOrCreateStats();
+    stats.constellationCount = stats.constellationCount.plus(BigInt.fromI32(1));
+    stats.save();
   }
 
   _constellation.updatedAt = event.block.timestamp;
@@ -68,6 +74,13 @@ export function loadOrCreateBadge(
     _badge = new Badge(id);
     _badge.createdAt = event.block.timestamp;
     _badge.createdAtBlock = event.block.number;
+    /* @TODO We do this in src/ERC721Base.ts
+    let stats = loadOrCreateStats();
+    stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
+      BigInt.fromI32(1)
+    );
+    stats.save();
+    */
   }
 
   _badge.updatedAt = event.block.timestamp;
@@ -89,6 +102,26 @@ export function loadOrCreateBadgeToken(
     _BadgeToken.createdAt = event.block.timestamp;
     _BadgeToken.createdAtBlock = event.block.number;
     _BadgeToken.tokenId = tokenId;
+
+    /*
+      @TODO we could increment here, if we are counting the actual badges minted. 
+      If we are countibng the transactions including ones which will have no effect (the badge has already been minted)
+      we increment in the ERC721BASE class, as in this commit
+    
+    const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+    if (_BadgeToken.id != ZERO_ADDRESS) {
+      // Increment badges minted
+      let stats = loadOrCreateStats();
+      stats.BadgesMintedTransactions = stats.BadgesMintedTransactions.plus(
+        BigInt.fromI32(1)
+      );
+      stats.save();
+      log.debug("*** BadgesMintedTransactions: BadgesMintedTransactions: {}", [
+        stats.BadgesMintedTransactions.toString(),
+      ]);
+    }
+    */
   }
 
   _BadgeToken.updatedAt = event.block.timestamp;
@@ -113,7 +146,14 @@ export function loadOrCreateUser(
 
     if (_User.id != ZERO_ADDRESS) {
       let stats = loadOrCreateStats();
+      log.debug("*** loadOrCreateUser doesn't exist: id: {}, uniqueUser: {}", [
+        id,
+        stats.uniqueUsers.toString(),
+      ]);
       stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
+      log.debug("*** loadOrCreateUser New Unique Users: uniqueUsers: {}", [
+        stats.uniqueUsers.toString(),
+      ]);
       stats.save();
     }
   }
@@ -127,10 +167,25 @@ export function loadOrCreateUser(
 export function loadOrCreateStats(): Stats {
   let stats = Stats.load("STATS_SINGLETON");
 
-  // If the Stats entity doesn't exist, create it and set uniqueUsers to 0.
+  // If the Stats entity doesn't exist, create it and set all couts to 0.
   if (!stats) {
     stats = new Stats("STATS_SINGLETON");
     stats.uniqueUsers = BigInt.fromI32(0);
+    stats.constellationCount = BigInt.fromI32(0);
+    stats.starCount = BigInt.fromI32(0);
+    stats.ERC721Count = BigInt.fromI32(0);
+    stats.ERC20Count = BigInt.fromI32(0);
+    stats.TokensMintedTransactions = BigInt.fromI32(0);
+    stats.TokensTransferredTransactions = BigInt.fromI32(0);
+    stats.BadgesMintedTransactions = BigInt.fromI32(0);
+    stats.BadgesTransferredTransactions = BigInt.fromI32(0);
+    stats.TokensMintedRewards = BigInt.fromI32(0);
+    stats.TokensTransferredRewards = BigInt.fromI32(0);
+    stats.BadgesMintedRewards = BigInt.fromI32(0);
+    stats.BadgesTransferredRewards = BigInt.fromI32(0);
+
+    stats.ActionTransactions = BigInt.fromI32(0);
+    stats.MissionTransactions = BigInt.fromI32(0);
     stats.save();
   }
 

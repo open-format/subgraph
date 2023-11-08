@@ -2,14 +2,16 @@ import {
   Address,
   BigInt,
   DataSourceContext,
-  dataSource
+  dataSource,
+  log,
 } from "@graphprotocol/graph-ts";
 import {ERC20Base} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import {
   loadOrCreateFungibleToken,
   loadOrCreateStar,
-  loadOrCreateUser
+  loadOrCreateStats,
+  loadOrCreateUser,
 } from "../helpers";
 
 let context = dataSource.context();
@@ -40,4 +42,10 @@ export function handleCreated(event: Created): void {
 
   fungibleToken.save();
   user.save();
+
+  // Increment ERC20 Count
+  let stats = loadOrCreateStats();
+  stats.ERC20Count = stats.ERC20Count.plus(BigInt.fromI32(1));
+  stats.save();
+  log.debug("*** ERC20Count: ERC20Count: {}", [stats.ERC20Count.toString()]);
 }
