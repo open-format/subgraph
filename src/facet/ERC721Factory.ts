@@ -50,7 +50,7 @@ export function handleCreated(event: Created): void {
 
   // Increment ERC721 Count
   let stats = loadOrCreateStats();
-  stats.ERC721Count = stats.ERC721Count.plus(BigInt.fromI32(1));
+  stats.ERC721Count = stats.ERC721Count.plus(One);
   stats.save();
   log.debug("*** ERC721Count: ERC721Count: {}", [stats.ERC721Count.toString()]);
 }

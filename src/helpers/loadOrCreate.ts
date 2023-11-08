@@ -18,6 +18,7 @@ import {
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
+import {One} from "../helpers";
 
 export function loadOrCreateStar(
   appAddress: Address,
@@ -31,7 +32,7 @@ export function loadOrCreateStar(
     _star.createdAt = event.block.timestamp;
     _star.createdAtBlock = event.block.number;
     let stats = loadOrCreateStats();
-    stats.starCount = stats.starCount.plus(BigInt.fromI32(1));
+    stats.starCount = stats.starCount.plus(One);
     stats.save();
   }
 
@@ -53,7 +54,7 @@ export function loadOrCreateConstellation(
     _constellation.createdAt = event.block.timestamp;
     _constellation.createdAtBlock = event.block.number;
     let stats = loadOrCreateStats();
-    stats.constellationCount = stats.constellationCount.plus(BigInt.fromI32(1));
+    stats.constellationCount = stats.constellationCount.plus(One);
     stats.save();
   }
 
@@ -150,7 +151,7 @@ export function loadOrCreateUser(
         id,
         stats.uniqueUsers.toString(),
       ]);
-      stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
+      stats.uniqueUsers = stats.uniqueUsers.plus(One);
       log.debug("*** loadOrCreateUser New Unique Users: uniqueUsers: {}", [
         stats.uniqueUsers.toString(),
       ]);

@@ -111,7 +111,7 @@ export function handleTransfer(event: Transfer): void {
       // Increment badges transferred
       let stats = loadOrCreateStats();
       stats.BadgesTransferredTransactions =
-        stats.BadgesTransferredTransactions.plus(BigInt.fromI32(1));
+        stats.BadgesTransferredTransactions.plus(One);
       stats.save();
       log.debug(
         "*** BadgesTransferredTransactions: BadgesTransferredTransactions: {}",

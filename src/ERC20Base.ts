@@ -12,6 +12,7 @@ import {
   loadOrCreateFungibleTokenMetadata,
   loadOrCreateStats,
   loadOrCreateUser,
+  One,
 } from "./helpers";
 
 let context = dataSource.context();
@@ -84,7 +85,7 @@ export function handleTransfer(event: Transfer): void {
     // Increment tokens transferred
     let stats = loadOrCreateStats();
     stats.TokensTransferredTransactions =
-      stats.TokensTransferredTransactions.plus(BigInt.fromI32(1));
+      stats.TokensTransferredTransactions.plus(One);
     stats.save();
     log.debug("*** Tokens Transferred: TokensTransferredTransactions: {}", [
       stats.TokensTransferredTransactions.toString(),

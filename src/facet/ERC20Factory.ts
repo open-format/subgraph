@@ -12,6 +12,7 @@ import {
   loadOrCreateStar,
   loadOrCreateStats,
   loadOrCreateUser,
+  One,
 } from "../helpers";
 
 let context = dataSource.context();
@@ -45,7 +46,7 @@ export function handleCreated(event: Created): void {
 
   // Increment ERC20 Count
   let stats = loadOrCreateStats();
-  stats.ERC20Count = stats.ERC20Count.plus(BigInt.fromI32(1));
+  stats.ERC20Count = stats.ERC20Count.plus(One);
   stats.save();
   log.debug("*** ERC20Count: ERC20Count: {}", [stats.ERC20Count.toString()]);
 }
