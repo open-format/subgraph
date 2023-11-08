@@ -18,7 +18,7 @@ import {
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
-import {One} from "../helpers";
+import {Zero, One} from "../helpers";
 
 export function loadOrCreateStar(
   appAddress: Address,
@@ -171,22 +171,21 @@ export function loadOrCreateStats(): Stats {
   // If the Stats entity doesn't exist, create it and set all couts to 0.
   if (!stats) {
     stats = new Stats("STATS_SINGLETON");
-    stats.uniqueUsers = BigInt.fromI32(0);
-    stats.constellationCount = BigInt.fromI32(0);
-    stats.starCount = BigInt.fromI32(0);
-    stats.ERC721Count = BigInt.fromI32(0);
-    stats.ERC20Count = BigInt.fromI32(0);
-    stats.TokensMintedTransactions = BigInt.fromI32(0);
-    stats.TokensTransferredTransactions = BigInt.fromI32(0);
-    stats.BadgesMintedTransactions = BigInt.fromI32(0);
-    stats.BadgesTransferredTransactions = BigInt.fromI32(0);
-    stats.TokensMintedRewards = BigInt.fromI32(0);
-    stats.TokensTransferredRewards = BigInt.fromI32(0);
-    stats.BadgesMintedRewards = BigInt.fromI32(0);
-    stats.BadgesTransferredRewards = BigInt.fromI32(0);
-
-    stats.ActionTransactions = BigInt.fromI32(0);
-    stats.MissionTransactions = BigInt.fromI32(0);
+    stats.uniqueUsers = Zero;
+    stats.constellationCount = Zero;
+    stats.starCount = Zero;
+    stats.ERC721Count = Zero;
+    stats.ERC20Count = Zero;
+    stats.TokensMintedTransactions = Zero;
+    stats.TokensTransferredTransactions = Zero;
+    stats.BadgesMintedTransactions = Zero;
+    stats.BadgesTransferredTransactions = Zero;
+    stats.TokensMintedRewards = Zero;
+    stats.TokensTransferredRewards = Zero;
+    stats.BadgesMintedRewards = Zero;
+    stats.BadgesTransferredRewards = Zero;
+    stats.ActionTransactions = Zero;
+    stats.MissionTransactions = Zero;
     stats.save();
   }
 
