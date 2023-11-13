@@ -103,7 +103,7 @@ export function handleTokenMinted(event: TokenMinted): void {
 
     missionFungibleToken.save();
     missionMetadata.save();
-
+    mission.save();
     user.save();
   }
 }
