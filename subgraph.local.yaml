@@ -13,7 +13,9 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Star
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: StarFactory
           file: ./abis/StarFactory.json
@@ -31,7 +33,9 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Constellation
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ConstellationFactory
           file: ./abis/ConstellationFactory.json
@@ -41,25 +45,6 @@ dataSources:
         - event: Created(address,address,string)
           handler: handleCreated
       file: ./src/ConstellationFactory.ts
-  - kind: ethereum/contract
-    name: AccessKey
-    network: mainnet
-    source:
-      address: "0x44b6317365fb117c540dccfd29348f94d5bbffdc"
-      abi: ERC721Base
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - AccessKey
-      abis:
-        - name: ERC721Base
-          file: ./abis/ERC721Base.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/AccessKey.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -71,8 +56,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Contract
-        - ContractData
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC721Factory
           file: ./abis/ERC721FactoryFacet.json
@@ -90,7 +76,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - NFT
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC721Base
           file: ./abis/ERC721Base.json
@@ -112,7 +100,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - NFT
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC721LazyMint
           file: ./abis/ERC721LazyMint.json
@@ -136,8 +126,8 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Contract
-        - ContractData
+        - Transaction
+        - Stats
         - User
       abis:
         - name: ERC20FactoryFacet
@@ -156,7 +146,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Token
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC20Base
           file: ./abis/ERC20Base.json
@@ -176,7 +168,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Action
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json

@@ -7,9 +7,5 @@
   "ConstellationFactory": {
     "address": "0x609401678A22F7e2c7AaFd817F6F5a0bbBf44e8F",
     "startBlock": 38765602
-  },
-  "accessKey": {
-    "address": "0xf5af05cccc34f1ada59a7e4081e5f50f5e5747a2",
-    "startBlock": 40831050
   }
 }

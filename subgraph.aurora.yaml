@@ -15,7 +15,9 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Star
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: StarFactory
           file: ./abis/StarFactory.json
@@ -35,7 +37,9 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Constellation
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ConstellationFactory
           file: ./abis/ConstellationFactory.json
@@ -56,8 +60,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Contract
-        - ContractData
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC721Factory
           file: ./abis/ERC721FactoryFacet.json
@@ -75,7 +80,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - NFT
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC721Base
           file: ./abis/ERC721Base.json
@@ -97,7 +104,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - NFT
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC721LazyMint
           file: ./abis/ERC721LazyMint.json
@@ -121,8 +130,8 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Contract
-        - ContractData
+        - Transaction
+        - Stats
         - User
       abis:
         - name: ERC20FactoryFacet
@@ -141,7 +150,9 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Token
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: ERC20Base
           file: ./abis/ERC20Base.json
@@ -161,19 +172,21 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Action
+        - Transaction
+        - Stats
+        - User
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json
         - name: ERC721Base
           file: ./abis/ERC721Base.json
       eventHandlers:
-        - event: TokenMinted(address,address,uint256,bytes32,string)
+        - event: TokenMinted(address,address,uint256,bytes32,bytes32,string)
           handler: handleTokenMinted
-        - event: TokenTransferred(address,address,uint256,bytes32,string)
+        - event: TokenTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleTokenTransferred
-        - event: BadgeMinted(address,address,bytes32,string)
+        - event: BadgeMinted(address,uint256,address,bytes32,bytes32,string)
           handler: handleBadgeMinted
-        - event: BadgeTransferred(address,address,uint256,bytes32,string)
+        - event: BadgeTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleBadgeTransferred
       file: ./src/facet/RewardsFacet.ts
