@@ -6,7 +6,7 @@ type User @entity {
   updatedAtBlock: BigInt!
 }
 
-type Stats @entity {
+type Stat @entity {
   id: ID!
   uniqueUsers: BigInt!
   constellationCount: BigInt!

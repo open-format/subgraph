@@ -20,7 +20,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: StarFactory
@@ -46,7 +46,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: ConstellationFactory
@@ -69,7 +69,7 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: ERC721Factory
@@ -89,7 +89,7 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: ERC721Base
@@ -113,7 +113,7 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: ERC721LazyMint
@@ -139,7 +139,7 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: ERC20FactoryFacet
@@ -159,7 +159,7 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: ERC20Base
@@ -181,7 +181,7 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Transaction
-        - Stats
+        - Stat
         - User
       abis:
         - name: RewardsFacet
