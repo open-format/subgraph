@@ -109,6 +109,13 @@ Prepare the local subgraph by running the following command:
 
 `yarn prepare:local`
 
+### Generate code for the local subgraph
+
+Generate needed code for the local subgraph by running the following command:
+
+`yarn gen:local`
+
+
 ### Create the local subgraph
 
 Create the local subgraph by running the following command:
