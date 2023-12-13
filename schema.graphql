@@ -163,6 +163,7 @@ type Mission @entity {
   metadata: MissionMetadata
   star: Star
   user: User!
+  xp_rewarded: BigInt!
   badges: [BadgeToken!]!
   tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
   createdAt: BigInt!

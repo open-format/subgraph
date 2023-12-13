@@ -18,6 +18,7 @@ import {
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
+import {Zero} from "./numbers";
 
 export function loadOrCreateStar(
   appAddress: Address,
@@ -178,6 +179,7 @@ export function loadOrCreateMission(
 
   if (!_Mission) {
     _Mission = new Mission(id);
+    _Mission.xp_rewarded = Zero;
     _Mission.createdAt = event.block.timestamp;
     _Mission.createdAtBlock = event.block.number;
     _Mission.badges = [];
