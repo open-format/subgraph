@@ -89,6 +89,7 @@ export function handleTokenMinted(event: TokenMinted): void {
       event.params.id,
       event.params.token
     );
+    mission.xp_rewarded = event.params.amount;
 
     missionFungibleToken.amount_rewarded = event.params.amount;
     missionFungibleToken.mission = mission.id;
