@@ -1,0 +1,11 @@
+{
+  "network": "mainnet",
+  "ConstellationFactory": {
+    "address": "0xd6a32015774e51b615Ec60C60f6803aE3bAD9739",
+    "startBlock": 5866145
+  },
+  "StarFactory": {
+    "address": "0x707353047F13C9192571c3f90196ac460cEd2FB9",
+    "startBlock": 5866108
+  }
+}
