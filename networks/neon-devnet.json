@@ -1,0 +1,16 @@
+{
+    "network": "neon-devnet",
+    "StarFactory": {
+      "address": "0xA6eabc98e1D7a29aB0f940E2fFC522EbFaA66b60",
+      "startBlock": 270331882
+    },
+    "ConstellationFactory": {
+      "address": "0xF2469CB8AFC27bC54e92071EC313952F79887b45",
+      "startBlock": 270332189
+    },
+    "accessKey": {
+      "address": "0x9D3EA231c1c0ee767703F531E6E4eC539b60Ec48",
+      "startBlock": 270332373
+    }
+  }
+  
