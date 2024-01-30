@@ -7,8 +7,8 @@ dataSources:
     name: StarFactory
     network: testnet
     source:
-      address: "0xB71197737D9CaDf3283ab96DE99601282bFcF95d"
-      startBlock: 6101123
+      address: "0x46ef7b6CE2Db199D61172a4121b59c061962f405"
+      startBlock: 7791351
       abi: StarFactory
     mapping:
       kind: ethereum/events
@@ -27,8 +27,8 @@ dataSources:
     name: ConstellationFactory
     network: testnet
     source:
-      address: "0x517A7dF38e4fca1bb77fCE1cBa718Bf3B0e377b7"
-      startBlock: 6101161
+      address: "0xc3c1e7EfAD820772e5C5a08612CBbE2e8D3e802A"
+      startBlock: 7791398
       abi: ConstellationFactory
     mapping:
       kind: ethereum/events
@@ -49,8 +49,8 @@ dataSources:
     name: AccessKey
     network: testnet
     source:
-      address: "0xDe5ddA5C506200CD9B13D0fC6c0AE24742BC007F"
-      startBlock: 6101185
+      address: "0xC55377860c5C75f52BDA21663302Fe94B7BcDf49"
+      startBlock: 7791416
       abi: ERC721Base
     mapping:
       kind: ethereum/events

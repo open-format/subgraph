@@ -14,7 +14,7 @@
     
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
-    "create:hedera-testnet": "graph create open-format_hedera-testnet --node http://0.0.0.0:8020",
+    "create:hedera-testnet": "dotenv cross-var -- graph create open-format_hedera-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:local": "graph create open-format/mumbai --node http://0.0.0.0:8020",
     "create:mumbai": "dotenv cross-var -- graph create open-format/mumbai --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:polygon": "dotenv cross-var -- graph create open-format/polygon --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
@@ -28,14 +28,14 @@
     
     "deploy:aurora": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora subgraph.aurora.yaml",
     "deploy:aurora-testnet": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora-testnet subgraph.aurora-testnet.yaml",
-    "deploy:hedera-testnet": "graph deploy open-format_hedera-testnet --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.hedera-testnet.yaml",
+    "deploy:hedera-testnet": "dotenv cross-var -- graph deploy open-format_hedera-testnet --ipfs http://%IPFS_URL% --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% subgraph.hedera-testnet.yaml",
     "deploy:local": "graph deploy open-format/mumbai --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
     "deploy:polygon": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/polygon subgraph.polygon.yaml",
     
     "remove:polygon": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/polygon",
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
-    "remove:hedera-testnet": "graph remove --node http://0.0.0.0:8020 open-format_hedera-testnet",
+    "remove:hedera-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format_hedera-testnet",
     
     "build": "graph build",
     "auth": "graph auth https://api.thegraph.com/deploy/"
