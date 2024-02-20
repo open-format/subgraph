@@ -1,15 +1,15 @@
 {
   "network": "testnet",
   "ConstellationFactory": {
-    "startBlock": 7791398,
-    "address": "0xc3c1e7EfAD820772e5C5a08612CBbE2e8D3e802A"
+    "startBlock": 21242,
+    "address": "0xCaCbdA1Cc8eB91f34De1962aE5913aB620f274a5"
   },
   "StarFactory": {
-    "startBlock": 7791351,
-    "address": "0x46ef7b6CE2Db199D61172a4121b59c061962f405"
+    "address": "0x15bAA998E907BA952b711Ffb6Cc27860b84c921C",
+    "startBlock": 21204
   },
   "accessKey": {
-    "address": "0xC55377860c5C75f52BDA21663302Fe94B7BcDf49",
-    "startBlock": 7791416
+    "address": "0x09E0a83Bb1595668EbAF4Ee42Fd40838BBea3955",
+    "startBlock": 21256
   }
 }

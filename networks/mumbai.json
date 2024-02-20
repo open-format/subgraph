@@ -1,15 +1,15 @@
 {
   "network": "mumbai",
   "StarFactory": {
-    "address": "0x429cB2c2A030952D3F5e10B534584aB49c303763",
-    "startBlock": 38765587
+    "address": "0x580a89c6C66823b3Ee441a4Bd2C0D3adA4b29428",
+    "startBlock": 44550768
   },
   "ConstellationFactory": {
-    "address": "0x609401678A22F7e2c7AaFd817F6F5a0bbBf44e8F",
-    "startBlock": 38765602
+    "address": "0x6efe81a7d8B0243B0BBA8A7042Ac4A516E6D5Af0",
+    "startBlock": 44550827
   },
   "accessKey": {
-    "address": "0xf5af05cccc34f1ada59a7e4081e5f50f5e5747a2",
-    "startBlock": 40831050
+    "address": "0x092081062aCc38cFA6829a3bf110D326C127e720",
+    "startBlock": 44550793
   }
 }
