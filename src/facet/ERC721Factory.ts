@@ -2,20 +2,20 @@ import {
   Address,
   BigInt,
   dataSource,
-  DataSourceContext
+  DataSourceContext,
 } from "@graphprotocol/graph-ts";
 import {ERC721Base, ERC721LazyMint} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import {
+  loadOrCreateApp,
   loadOrCreateBadge,
-  loadOrCreateStar,
   loadOrCreateUser,
   One,
-  Zero
+  Zero,
 } from "../helpers";
 
 let context = dataSource.context();
-let starAddress = Address.fromString(context.getString("Star"));
+let starAddress = Address.fromString(context.getString("App"));
 
 export function handleCreated(event: Created): void {
   let ERC721Context = new DataSourceContext();
@@ -30,13 +30,13 @@ export function handleCreated(event: Created): void {
 
   let badge = loadOrCreateBadge(event.params.id, event);
   let user = loadOrCreateUser(event.params.creator, event);
-  let star = loadOrCreateStar(starAddress, event);
+  let star = loadOrCreateApp(starAddress, event);
 
   badge.name = event.params.name;
   badge.symbol = event.params.symbol;
   badge.royaltyBps = BigInt.fromI32(event.params.royaltyBps);
   badge.royaltyRecipient = event.params.royaltyRecipient;
-  badge.star = starAddress.toHex();
+  badge.app = starAddress.toHex();
   badge.totalAwarded = Zero;
   badge.totalAvailable = Zero;
 
