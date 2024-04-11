@@ -45,24 +45,6 @@ dataSources:
         - event: Created(address,address,string)
           handler: handleCreated
       file: ./src/ConstellationFactory.ts
-  - kind: ethereum/contract
-    name: AccessKey
-    network: arbitrum-sepolia
-    source:
-      abi: ERC721Base
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - AccessKey
-      abis:
-        - name: ERC721Base
-          file: ./abis/ERC721Base.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/AccessKey.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
