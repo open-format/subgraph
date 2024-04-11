@@ -3,59 +3,39 @@ import {
   AccessKey,
   Action,
   ActionMetadata,
+  App,
+  AppStats,
   Badge,
   BadgeToken,
-  Constellation,
   FungibleToken,
   FungibleTokenBalance,
   FungibleTokenMetadata,
   Mission,
   MissionFungibleToken,
   MissionMetadata,
-  Star,
-  StarStats,
   Stats,
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
 import {Zero} from "./numbers";
 
-export function loadOrCreateStar(
+export function loadOrCreateApp(
   appAddress: Address,
   event: ethereum.Event
-): Star {
+): App {
   const id = appAddress.toHex();
-  let _star = Star.load(id);
+  let _app = App.load(id);
 
-  if (!_star) {
-    _star = new Star(id);
-    _star.createdAt = event.block.timestamp;
-    _star.createdAtBlock = event.block.number;
+  if (!_app) {
+    _app = new App(id);
+    _app.createdAt = event.block.timestamp;
+    _app.createdAtBlock = event.block.number;
   }
 
-  _star.updatedAt = event.block.timestamp;
-  _star.updatedAtBlock = event.block.number;
+  _app.updatedAt = event.block.timestamp;
+  _app.updatedAtBlock = event.block.number;
 
-  return _star as Star;
-}
-
-export function loadOrCreateConstellation(
-  constellationAddress: Address,
-  event: ethereum.Event
-): Constellation {
-  const id = constellationAddress.toHex();
-  let _constellation = Constellation.load(id);
-
-  if (!_constellation) {
-    _constellation = new Constellation(id);
-    _constellation.createdAt = event.block.timestamp;
-    _constellation.createdAtBlock = event.block.number;
-  }
-
-  _constellation.updatedAt = event.block.timestamp;
-  _constellation.updatedAtBlock = event.block.number;
-
-  return _constellation as Constellation;
+  return _app as App;
 }
 
 export function loadOrCreateBadge(
@@ -318,27 +298,26 @@ export function loadOrCreateAccessKey(
   return _AccessKey as AccessKey;
 }
 
-export function loadOrCreateStarStats(
-  starId: Address,
+export function loadOrCreateAppStats(
+  appId: Address,
   event: ethereum.Event
-): StarStats {
-  const id = starId.toHex();
-  let _StarStats = StarStats.load(id);
+): AppStats {
+  const id = appId.toHex();
+  let _AppStats = AppStats.load(id);
 
-  if (!_StarStats) {
-    _StarStats = new StarStats(id);
-    _StarStats.createdAt = event.block.timestamp;
-    _StarStats.createdAtBlock = event.block.number;
-    _StarStats.totalActionsComplete = BigInt.fromI32(0);
-    _StarStats.totalMissionsComplete = BigInt.fromI32(0);
-    _StarStats.totalRewardTokensAwarded = BigInt.fromI32(0);
-    _StarStats.totalBadgesAwarded = BigInt.fromI32(0);
-    _StarStats.totalXPAwarded = BigInt.fromI32(0);
-    _StarStats.uniqueUsersCount = BigInt.fromI32(0);
+  if (!_AppStats) {
+    _AppStats = new AppStats(id);
+    _AppStats.createdAt = event.block.timestamp;
+    _AppStats.createdAtBlock = event.block.number;
+    _AppStats.totalActionsComplete = BigInt.fromI32(0);
+    _AppStats.totalMissionsComplete = BigInt.fromI32(0);
+    _AppStats.totalBadgesAwarded = BigInt.fromI32(0);
+    _AppStats.totalXPAwarded = BigInt.fromI32(0);
+    _AppStats.uniqueUsersCount = BigInt.fromI32(0);
   }
 
-  _StarStats.updatedAt = event.block.timestamp;
-  _StarStats.updatedAtBlock = event.block.number;
+  _AppStats.updatedAt = event.block.timestamp;
+  _AppStats.updatedAtBlock = event.block.number;
 
-  return _StarStats as StarStats;
+  return _AppStats as AppStats;
 }
