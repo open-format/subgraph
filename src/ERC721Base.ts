@@ -5,7 +5,7 @@ import {
   Minted,
 } from "../generated/templates/ERC721Base/ERC721Base";
 
-import {Star} from "../generated/schema";
+import {App} from "../generated/schema";
 import {Transfer} from "../generated/templates/ERC721Base/ERC721Base";
 import {
   One,
@@ -29,10 +29,10 @@ export function handleMinted(event: Minted): void {
   let badge = loadBadge(event.address);
 
   if (badge) {
-    let star = Star.load(badge.star);
-    if (star) {
-      star.badgesAwarded = tokenId.plus(One);
-      star.save();
+    let app = App.load(badge.app);
+    if (app) {
+      app.badgesAwarded = tokenId.plus(One);
+      app.save();
     }
   }
 
@@ -50,7 +50,7 @@ export function handleMinted(event: Minted): void {
 export function handleBatchMinted(event: BatchMinted): void {
   let user = loadOrCreateUser(event.params.to, event);
   let badge = loadOrCreateBadge(contractAddress, event);
-  let star = Star.load(badge.star);
+  let app = App.load(badge.app);
 
   const totalSupplyBeforeMint = boundContract
     .totalSupply()
@@ -69,9 +69,9 @@ export function handleBatchMinted(event: BatchMinted): void {
 
   badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
 
-  if (star) {
-    star.badgesAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
-    star.save();
+  if (app) {
+    app.badgesAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
+    app.save();
   }
 
   badge.save();

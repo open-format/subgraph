@@ -2,15 +2,14 @@ import {Address, dataSource} from "@graphprotocol/graph-ts";
 import {
   ContractURIUpdated,
   ERC20Base as ERC20BaseContract,
-  Transfer
+  Transfer,
 } from "../generated/templates/ERC20Base/ERC20Base";
 import {
   ZERO_ADDRESS,
-  loadConstellation,
   loadOrCreateFungibleToken,
   loadOrCreateFungibleTokenBalance,
   loadOrCreateFungibleTokenMetadata,
-  loadOrCreateUser
+  loadOrCreateUser,
 } from "./helpers";
 
 let context = dataSource.context();
@@ -77,20 +76,15 @@ export function handleTransfer(event: Transfer): void {
 }
 
 export function handleContractURIUpdated(event: ContractURIUpdated): void {
-  const constellation = loadConstellation(contractAddress);
   const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
   const fungibleTokenMetadata = loadOrCreateFungibleTokenMetadata(
     contractAddress,
     event
   );
 
-  if (constellation) {
-    constellation.metadata = fungibleTokenMetadata.id;
-    constellation.save();
-  } else {
-    fungibleToken.metadata = fungibleTokenMetadata.id;
-    fungibleToken.save();
-  }
+  fungibleToken.metadata = fungibleTokenMetadata.id;
+  fungibleToken.save();
+
   fungibleTokenMetadata.URI = event.params.newURI;
   fungibleTokenMetadata.save();
 }

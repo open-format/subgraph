@@ -3,12 +3,11 @@ import {ActionId, BadgeId} from ".";
 import {
   Action,
   ActionMetadata,
+  App,
   Badge,
   BadgeToken,
-  Constellation,
   FungibleToken,
   MissionMetadata,
-  Star,
 } from "../../generated/schema";
 
 export function loadBadgeToken(
@@ -32,20 +31,14 @@ export function loadBadge(contractAddress: Address): Badge | null {
   return Badge.load(contractAddress.toHex());
 }
 
-export function loadStar(contractAddress: Address): Star | null {
-  return Star.load(contractAddress.toHex());
+export function loadStar(contractAddress: Address): App | null {
+  return App.load(contractAddress.toHex());
 }
 
 export function loadFungibleToken(
   contractAddress: Address
 ): FungibleToken | null {
   return FungibleToken.load(contractAddress.toHex());
-}
-
-export function loadConstellation(
-  constellationAddress: Address
-): Constellation | null {
-  return Constellation.load(constellationAddress.toHex());
 }
 
 export function loadActionMetadata(CID: string): ActionMetadata | null {

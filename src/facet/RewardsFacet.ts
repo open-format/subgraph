@@ -10,16 +10,16 @@ import {loadBadgeToken} from "../helpers";
 import {
   loadOrCreateAction,
   loadOrCreateActionMetadata,
+  loadOrCreateAppStats,
   loadOrCreateBadgeToken,
   loadOrCreateMission,
   loadOrCreateMissionFungibleToken,
   loadOrCreateMissionMetadata,
-  loadOrCreateStarStats,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
 
 let context = dataSource.context();
-let starAddress = Address.fromString(context.getString("Star"));
+let starAddress = Address.fromString(context.getString("App"));
 
 export function handleTokenMinted(event: TokenMinted): void {
   let user = loadOrCreateUser(event.params.to, event);
@@ -36,14 +36,14 @@ export function handleTokenMinted(event: TokenMinted): void {
       event.logIndex
     );
 
-    let starStats = loadOrCreateStarStats(starAddress, event);
+    let starStats = loadOrCreateAppStats(starAddress, event);
 
     actionMetadata.name = event.params.id.toString();
     actionMetadata.URI = event.params.uri;
 
     action.user = user.id;
     action.xp_rewarded = event.params.amount;
-    action.star = starAddress.toHex();
+    action.app = starAddress.toHex();
     action.metadata = actionMetadata.id;
 
     starStats.totalXPAwarded = starStats.totalXPAwarded.plus(
@@ -99,7 +99,7 @@ export function handleTokenMinted(event: TokenMinted): void {
     missionMetadata.URI = event.params.uri;
 
     mission.user = user.id;
-    mission.star = starAddress.toHex();
+    mission.app = starAddress.toHex();
     mission.metadata = missionMetadata.id;
 
     missionFungibleToken.save();
@@ -127,7 +127,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   );
 
   let user = loadOrCreateUser(event.params.to, event);
-  let starStats = loadOrCreateStarStats(starAddress, event);
+  let starStats = loadOrCreateAppStats(starAddress, event);
 
   missionFungibleToken.amount_rewarded = event.params.amount;
   missionFungibleToken.mission = mission.id;
@@ -137,7 +137,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   missionMetadata.URI = event.params.uri;
 
   mission.user = user.id;
-  mission.star = starAddress.toHex();
+  mission.app = starAddress.toHex();
   mission.metadata = missionMetadata.id;
 
   missionFungibleToken.save();
@@ -145,10 +145,6 @@ export function handleTokenTransferred(event: TokenTransferred): void {
 
   starStats.totalMissionsComplete = starStats.totalMissionsComplete.plus(
     BigInt.fromI32(1)
-  );
-
-  starStats.totalRewardTokensAwarded = starStats.totalRewardTokensAwarded.plus(
-    event.params.amount
   );
 
   mission.save();
@@ -168,7 +164,7 @@ export function handleBadgeMinted(event: BadgeMinted): void {
     event.params.id
   );
   let user = loadOrCreateUser(event.params.to, event);
-  let starStats = loadOrCreateStarStats(starAddress, event);
+  let starStats = loadOrCreateAppStats(starAddress, event);
   let totalSupply = boundContract.totalSupply();
   let quantity = event.params.quantity;
   let missionBadges = mission.badges;
@@ -196,7 +192,7 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   missionMetadata.URI = event.params.uri;
 
   mission.user = user.id;
-  mission.star = starAddress.toHex();
+  mission.app = starAddress.toHex();
   mission.metadata = missionMetadata.id;
   mission.badges = missionBadges;
 
@@ -225,7 +221,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   missionMetadata.URI = event.params.uri;
 
   mission.user = user.id;
-  mission.star = starAddress.toHex();
+  mission.app = starAddress.toHex();
   mission.metadata = missionMetadata.id;
 
   let missionBadges = mission.badges;
