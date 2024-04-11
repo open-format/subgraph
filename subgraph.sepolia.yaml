@@ -1,0 +1,197 @@
+specVersion: 0.0.4
+description: Open Format
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: StarFactory
+    network: arbitrum-sepolia
+    source:
+      address: "0xfa286f52075bCc6EE9716a765f8928762B3CD2d6"
+      startBlock: 32298341
+      abi: StarFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Star
+      abis:
+        - name: StarFactory
+          file: ./abis/StarFactory.json
+      eventHandlers:
+        - event: Created(address,address,address,string)
+          handler: handleCreated
+      file: ./src/StarFactory.ts
+  - kind: ethereum/contract
+    name: ConstellationFactory
+    network: arbitrum-sepolia
+    source:
+      address: "0x1890ED30698C70932fD784fA80aC9b161854b3Ed"
+      startBlock: 32298423
+      abi: ConstellationFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Constellation
+      abis:
+        - name: ConstellationFactory
+          file: ./abis/ConstellationFactory.json
+        - name: ERC20Base
+          file: ./abis/ERC20Base.json
+      eventHandlers:
+        - event: Created(address,address,string)
+          handler: handleCreated
+      file: ./src/ConstellationFactory.ts
+  - kind: ethereum/contract
+    name: AccessKey
+    network: arbitrum-sepolia
+    source:
+      abi: ERC721Base
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AccessKey
+      abis:
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/AccessKey.ts
+templates:
+  - name: ERC721FactoryFacet
+    kind: ethereum/contract
+    network: arbitrum-sepolia
+    source:
+      abi: ERC721Factory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Contract
+        - ContractData
+      abis:
+        - name: ERC721Factory
+          file: ./abis/ERC721FactoryFacet.json
+      eventHandlers:
+        - event: Created(address,address,string,string,address,uint16,bytes32)
+          handler: handleCreated
+      file: ./src/facet/ERC721Factory.ts
+  - name: ERC721Base
+    kind: ethereum/contract
+    network: arbitrum-sepolia
+    source:
+      abi: ERC721Base
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
+      eventHandlers:
+        - event: Minted(address,string)
+          handler: handleMinted
+        - event: BatchMinted(address,uint256,string)
+          handler: handleBatchMinted
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/ERC721Base.ts
+  - name: ERC721LazyMint
+    kind: ethereum/contract
+    network: arbitrum-sepolia
+    source:
+      abi: ERC721LazyMint
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: ERC721LazyMint
+          file: ./abis/ERC721LazyMint.json
+      eventHandlers:
+        - event: Minted(address,string)
+          handler: handleMinted
+        - event: BatchMinted(address,uint256,string)
+          handler: handleBatchMinted
+        - event: TokensLazyMinted(indexed uint256,uint256,string,bytes)
+          handler: handleLazyMint
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/ERC721LazyMint.ts
+  - name: ERC20FactoryFacet
+    kind: ethereum/contract
+    network: arbitrum-sepolia
+    source:
+      abi: ERC20FactoryFacet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Contract
+        - ContractData
+        - User
+      abis:
+        - name: ERC20FactoryFacet
+          file: ./abis/ERC20FactoryFacet.json
+      eventHandlers:
+        - event: Created(address,address,string,string,uint8,uint256,bytes32)
+          handler: handleCreated
+      file: ./src/facet/ERC20Factory.ts
+  - name: ERC20Base
+    kind: ethereum/contract
+    network: arbitrum-sepolia
+    source:
+      abi: ERC20Base
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: ERC20Base
+          file: ./abis/ERC20Base.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: ContractURIUpdated(string,string)
+          handler: handleContractURIUpdated
+      file: ./src/ERC20Base.ts
+  - name: RewardsFacet
+    kind: ethereum/contract
+    network: arbitrum-sepolia
+    source:
+      abi: RewardsFacet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Action
+      abis:
+        - name: RewardsFacet
+          file: ./abis/RewardsFacet.json
+        - name: ERC721Base
+          file: ./abis/ERC721Base.json
+      eventHandlers:
+        - event: TokenMinted(address,address,uint256,bytes32,bytes32,string)
+          handler: handleTokenMinted
+        - event: TokenTransferred(address,address,uint256,bytes32,bytes32,string)
+          handler: handleTokenTransferred
+        - event: BadgeMinted(address,uint256,address,bytes32,bytes32,string)
+          handler: handleBadgeMinted
+        - event: BadgeTransferred(address,address,uint256,bytes32,bytes32,string)
+          handler: handleBadgeTransferred
+      file: ./src/facet/RewardsFacet.ts
