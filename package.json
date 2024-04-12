@@ -9,6 +9,7 @@
     "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
     "prepare:aurora": "mustache networks/aurora.json subgraph.template.yaml subgraph.aurora.yaml",
     "prepare:aurora-testnet": "mustache networks/aurora-testnet.json subgraph.template.yaml subgraph.aurora-testnet.yaml",
+    "prepare:arbitrum-sepolia": "mustache networks/arbitrum-sepolia.json subgraph.template.yaml subgraph.arbitrum-sepolia.yaml",
     "create:local": "graph create open-format/mumbai --node http://0.0.0.0:8020",
     "create:mumbai": "dotenv cross-var -- graph create open-format/mumbai --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:polygon": "dotenv cross-var -- graph create open-format/polygon --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
@@ -18,6 +19,7 @@
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
     "gen:aurora": "graph codegen subgraph.aurora.yaml",
     "gen:aurora-testnet": "graph codegen subgraph.aurora-testnet.yaml",
+    "gen:arbitrum-sepolia": "graph codegen subgraph.arbitrum-sepolia.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
     "deploy:local": "graph deploy open-format/mumbai --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
@@ -26,6 +28,7 @@
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
     "deploy:polygon": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/polygon subgraph.polygon.yaml",
     "remove:polygon": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/polygon",
+    "deploy:arbitrum-sepolia": "dotenv cross-var -- graph deploy open-format-arbitrum-sepolia --version-label %ALCHEMY_SUBGRAPH_VERSION_ARBITRUM_SEPOLIA% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.arbitrum-sepolia.yaml",
     "build": "graph build",
     "auth": "graph auth https://api.thegraph.com/deploy/"
   },
