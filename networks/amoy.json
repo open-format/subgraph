@@ -1,15 +1,7 @@
 {
     "network": "polygon-amoy",
-    "StarFactory": {
-        "startBlock": 5686457,
-        "address": "0x542D145f2c66CB9ac58447Fe141BFB12fea7C8bE"
-    },
-    "ConstellationFactory": {
-        "startBlock": 5686486,
-        "address": "0x4cE72ceB49223A259FA1265Ba3a78484BbE8B889"
-    },
-    "accessKey": {
-        "address": "0xF2469CB8AFC27bC54e92071EC313952F79887b45",
-        "startBlock": 5686498
+    "AppFactory": {
+        "startBlock": 5743141,
+        "address": "0xeBe3AE63007C262c9705fD2aE52E8f7e6A479443"
     }
 }
