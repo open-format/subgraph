@@ -2,18 +2,18 @@ import {
   Address,
   BigInt,
   DataSourceContext,
-  dataSource
+  dataSource,
 } from "@graphprotocol/graph-ts";
 import {ERC20Base} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import {
+  loadOrCreateApp,
   loadOrCreateFungibleToken,
-  loadOrCreateStar,
-  loadOrCreateUser
+  loadOrCreateUser,
 } from "../helpers";
 
 let context = dataSource.context();
-let starAddress = Address.fromString(context.getString("Star"));
+let starAddress = Address.fromString(context.getString("App"));
 
 export function handleCreated(event: Created): void {
   let ERC20Context = new DataSourceContext();
@@ -23,14 +23,14 @@ export function handleCreated(event: Created): void {
 
   let fungibleToken = loadOrCreateFungibleToken(event.params.id, event);
   let user = loadOrCreateUser(event.params.creator, event);
-  let star = loadOrCreateStar(starAddress, event);
+  let star = loadOrCreateApp(starAddress, event);
 
   fungibleToken.name = event.params.name;
   fungibleToken.symbol = event.params.symbol;
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
 
-  fungibleToken.star = star.id;
+  fungibleToken.app = star.id;
   fungibleToken.owner = user.id;
 
   if (!star.xpToken) {
