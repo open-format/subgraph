@@ -7,8 +7,8 @@ dataSources:
     name: AppFactory
     network: polygon-amoy
     source:
-      address: "0xeBe3AE63007C262c9705fD2aE52E8f7e6A479443"
-      startBlock: 5743141
+      address: "0x3713395bd3c11E4D5A688b21cFa3f86D04288861"
+      startBlock: 5784012
       abi: AppFactory
     mapping:
       kind: ethereum/events
