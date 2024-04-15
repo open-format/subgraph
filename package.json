@@ -14,7 +14,6 @@
 
     "create:local": "graph create open-format/mumbai --node http://0.0.0.0:8020",
     "create:mumbai": "dotenv cross-var -- graph create open-format/mumbai --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
-    "create:polygon": "dotenv cross-var -- graph create open-format/polygon --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
 
@@ -29,11 +28,10 @@
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
     "deploy:aurora": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora subgraph.aurora.yaml",
     "deploy:aurora-testnet": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora-testnet subgraph.aurora-testnet.yaml",
-    "deploy:polygon": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/polygon subgraph.polygon.yaml",
     
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
-    "remove:polygon": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/polygon",
-
+    
+    "deploy:polygon": "dotenv cross-var -- graph deploy open-format-polygon --version-label %ALCHEMY_SUBGRAPH_VERSION_POLYGON_MAINNET% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.polygon.yaml",
     "deploy:amoy": "dotenv cross-var -- graph deploy open-format-amoy --version-label %ALCHEMY_SUBGRAPH_VERSION_POLYGON_AMOY% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.amoy.yaml",
 
     "build": "graph build",

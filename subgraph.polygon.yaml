@@ -4,47 +4,25 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: StarFactory
+    name: AppFactory
     network: matic
     source:
-      address: "0x1e823247D26efd56f5172b8C19F6c44CA700F2c5"
-      startBlock: 46050253
-      abi: StarFactory
+      address: "0x49c50D754F6118eB02DF6dDaD4a4d6D2a46AD837"
+      startBlock: 55743736
+      abi: AppFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Star
+        - App
       abis:
-        - name: StarFactory
-          file: ./abis/StarFactory.json
-      eventHandlers:
-        - event: Created(address,address,address,string)
-          handler: handleCreated
-      file: ./src/StarFactory.ts
-  - kind: ethereum/contract
-    name: ConstellationFactory
-    network: matic
-    source:
-      address: "0x0cE3fB93111Dee33cDB59f97e3df84e93adE46DD"
-      startBlock: 46050271
-      abi: ConstellationFactory
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Constellation
-      abis:
-        - name: ConstellationFactory
-          file: ./abis/ConstellationFactory.json
-        - name: ERC20Base
-          file: ./abis/ERC20Base.json
+        - name: AppFactory
+          file: ./abis/AppFactory.json
       eventHandlers:
         - event: Created(address,address,string)
           handler: handleCreated
-      file: ./src/ConstellationFactory.ts
+      file: ./src/AppFactory.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
@@ -168,12 +146,12 @@ templates:
         - name: ERC721Base
           file: ./abis/ERC721Base.json
       eventHandlers:
-        - event: TokenMinted(address,address,uint256,bytes32,string)
+        - event: TokenMinted(address,address,uint256,bytes32,bytes32,string)
           handler: handleTokenMinted
-        - event: TokenTransferred(address,address,uint256,bytes32,string)
+        - event: TokenTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleTokenTransferred
-        - event: BadgeMinted(address,address,bytes32,string)
+        - event: BadgeMinted(address,uint256,address,bytes32,bytes32,string)
           handler: handleBadgeMinted
-        - event: BadgeTransferred(address,address,uint256,bytes32,string)
+        - event: BadgeTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleBadgeTransferred
       file: ./src/facet/RewardsFacet.ts
