@@ -5,10 +5,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: AppFactory
-    network: matic
+    network: polygon-amoy
     source:
-      address: "0x49c50D754F6118eB02DF6dDaD4a4d6D2a46AD837"
-      startBlock: 55743736
+      address: "0x3713395bd3c11E4D5A688b21cFa3f86D04288861"
+      startBlock: 5784012
       abi: AppFactory
     mapping:
       kind: ethereum/events
@@ -26,7 +26,7 @@ dataSources:
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
-    network: matic
+    network: polygon-amoy
     source:
       abi: ERC721Factory
     mapping:
@@ -45,7 +45,7 @@ templates:
       file: ./src/facet/ERC721Factory.ts
   - name: ERC721Base
     kind: ethereum/contract
-    network: matic
+    network: polygon-amoy
     source:
       abi: ERC721Base
     mapping:
@@ -67,7 +67,7 @@ templates:
       file: ./src/ERC721Base.ts
   - name: ERC721LazyMint
     kind: ethereum/contract
-    network: matic
+    network: polygon-amoy
     source:
       abi: ERC721LazyMint
     mapping:
@@ -91,7 +91,7 @@ templates:
       file: ./src/ERC721LazyMint.ts
   - name: ERC20FactoryFacet
     kind: ethereum/contract
-    network: matic
+    network: polygon-amoy
     source:
       abi: ERC20FactoryFacet
     mapping:
@@ -111,7 +111,7 @@ templates:
       file: ./src/facet/ERC20Factory.ts
   - name: ERC20Base
     kind: ethereum/contract
-    network: matic
+    network: polygon-amoy
     source:
       abi: ERC20Base
     mapping:
@@ -131,7 +131,7 @@ templates:
       file: ./src/ERC20Base.ts
   - name: RewardsFacet
     kind: ethereum/contract
-    network: matic
+    network: polygon-amoy
     source:
       abi: RewardsFacet
     mapping:

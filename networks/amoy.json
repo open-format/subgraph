@@ -1,0 +1,7 @@
+{
+    "network": "polygon-amoy",
+    "AppFactory": {
+        "address": "0x3713395bd3c11E4D5A688b21cFa3f86D04288861",
+        "startBlock": 5784012
+    }
+}

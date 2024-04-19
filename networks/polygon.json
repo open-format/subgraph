@@ -1,11 +1,7 @@
 {
   "network": "matic",
-  "ConstellationFactory": {
-    "address": "0x0cE3fB93111Dee33cDB59f97e3df84e93adE46DD",
-    "startBlock": 46050271
-  },
-  "StarFactory": {
-    "address": "0x1e823247D26efd56f5172b8C19F6c44CA700F2c5",
-    "startBlock": 46050253
+  "AppFactory": {
+    "startBlock": 55743736,
+    "address": "0x49c50D754F6118eB02DF6dDaD4a4d6D2a46AD837"
   }
 }
