@@ -148,7 +148,7 @@ type Mission @entity {
   id: ID!
   metadata: MissionMetadata
   app: App
-  user: User!
+  user: User
   xp_rewarded: BigInt!
   badges: [BadgeToken!]!
   tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
