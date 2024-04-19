@@ -149,6 +149,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
 
   mission.save();
   starStats.save();
+  user.save();
 }
 export function handleBadgeMinted(event: BadgeMinted): void {
   let mission = loadOrCreateMission(
@@ -201,6 +202,7 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   starStats.save();
   missionMetadata.save();
   mission.save();
+  user.save();
 }
 export function handleBadgeTransferred(event: BadgeTransferred): void {
   let mission = loadOrCreateMission(
@@ -232,4 +234,5 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
 
   missionMetadata.save();
   mission.save();
+  user.save();
 }
