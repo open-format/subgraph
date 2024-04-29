@@ -38,15 +38,18 @@
 
     "deploy:arbitrum-sepolia": "dotenv cross-var -- graph deploy open-format-arbitrum-sepolia --version-label %ALCHEMY_SUBGRAPH_VERSION_ARBITRUM_SEPOLIA% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.arbitrum-sepolia.yaml",
     "build": "graph build",
-    "auth": "graph auth https://api.thegraph.com/deploy/"
+    "auth": "graph auth https://api.thegraph.com/deploy/",
+
+    "test": "graph test -v 0.6.0 --logs"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
-    "@graphprotocol/graph-cli": "^0.45.2",
-    "@graphprotocol/graph-ts": "^0.29.3",
+    "@graphprotocol/graph-cli": "^0.71.0",
+    "@graphprotocol/graph-ts": "^0.35.1",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^7.3.0",
+    "matchstick-as": "^0.6.0",
     "mustache": "^4.2.0"
   },
   "packageManager": "yarn@1.22.1"

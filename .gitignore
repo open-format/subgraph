@@ -68,3 +68,5 @@ typings/
 # yarn
 .yarn
 .pnp*
+
+tests/.bin/

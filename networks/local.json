@@ -1,7 +1,7 @@
 {
   "network": "mainnet",
-  "accessKey": {
-    "address": "0x44b6317365fb117c540dccfd29348f94d5bbffdc",
-    "startBlock": 0
+  "AppFactory": {
+    "startBlock": 3,
+    "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
   }
 }
