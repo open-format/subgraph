@@ -1,0 +1,33 @@
+name: Run Tests on PR ceation and Subsequent Commits
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    name: Execute Tests
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+            git config --global url."https://github.com/".insteadOf
+            ssh://git@github.com/
+      - name: Generate subgraph
+        run: yarn prepare:arbitrum-sepolia
+      - name: Generate code
+        run: yarn gen:arbitrum-sepolia
+      # Run tests
+      - name: Run tests
+        run: yarn run test
