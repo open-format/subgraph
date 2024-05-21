@@ -1,5 +1,5 @@
 import {Address, ethereum, log} from "@graphprotocol/graph-ts";
-import {Stats, Transaction, User} from "../../generated/schema";
+import {Stat, Transaction, User} from "../../generated/schema";
 import {One, Zero} from "../helpers";
 
 export function loadOrCreateTransaction(
@@ -58,15 +58,14 @@ export function loadOrCreateUser(
   return _User as User;
 }
 
-export function loadOrCreateStats(): Stats {
-  let stats = Stats.load("STATS_SINGLETON");
+export function loadOrCreateStats(): Stat {
+  let stats = Stat.load("STATS_SINGLETON");
 
   // If the Stats entity doesn't exist, create it and set all couts to 0.
   if (!stats) {
-    stats = new Stats("STATS_SINGLETON");
+    stats = new Stat("STATS_SINGLETON");
     stats.uniqueUsers = Zero;
-    stats.constellationCount = Zero;
-    stats.starCount = Zero;
+    stats.appCount = Zero;
     stats.ERC721Count = Zero;
     stats.ERC20Count = Zero;
     stats.TokensMintedTransactions = Zero;
@@ -76,5 +75,5 @@ export function loadOrCreateStats(): Stats {
     stats.save();
   }
 
-  return stats as Stats;
+  return stats as Stat;
 }

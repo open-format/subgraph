@@ -4,10 +4,10 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: StarFactory
+    name: AppFactory
     network: mainnet
     source:
-      abi: StarFactory
+      abi: AppFactory
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -17,34 +17,12 @@ dataSources:
         - Stat
         - User
       abis:
-        - name: StarFactory
-          file: ./abis/StarFactory.json
-      eventHandlers:
-        - event: Created(address,address,address,string)
-          handler: handleCreated
-      file: ./src/StarFactory.ts
-  - kind: ethereum/contract
-    name: ConstellationFactory
-    network: mainnet
-    source:
-      abi: ConstellationFactory
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Transaction
-        - Stat
-        - User
-      abis:
-        - name: ConstellationFactory
-          file: ./abis/ConstellationFactory.json
-        - name: ERC20Base
-          file: ./abis/ERC20Base.json
+        - name: AppFactory
+          file: ./abis/AppFactory.json
       eventHandlers:
         - event: Created(address,address,string)
           handler: handleCreated
-      file: ./src/ConstellationFactory.ts
+      file: ./src/AppFactory.ts
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract

@@ -1,5 +1,5 @@
 import {DataSourceContext} from "@graphprotocol/graph-ts";
-import {Created} from "../generated/StarFactory/StarFactory";
+import {Created} from "../generated/AppFactory/AppFactory";
 import {ERC20FactoryFacet, ERC721FactoryFacet} from "../generated/templates";
 import {One, loadOrCreateStats, loadOrCreateTransaction} from "./helpers";
 
@@ -13,6 +13,6 @@ export function handleCreated(event: Created): void {
   transaction.save();
 
   let stats = loadOrCreateStats();
-  stats.starCount = stats.starCount.plus(One);
+  stats.appCount = stats.appCount.plus(One);
   stats.save();
 }
