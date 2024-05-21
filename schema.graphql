@@ -1,201 +1,29 @@
-type Constellation @entity {
-  id: ID!
-  owner: User!
-  name: String!
-  stars: [Star!] @derivedFrom(field: "constellation")
-  rewardToken: FungibleToken!
-  metadata: FungibleTokenMetadata
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type FungibleTokenMetadata @entity {
-  id: ID!
-  URI: String!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type FungibleToken @entity {
-  id: ID!
-  name: String!
-  owner: User!
-  symbol: String!
-  metadata: FungibleTokenMetadata
-  star: Star
-  totalSupply: BigInt!
-  burntSupply: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type FungibleTokenBalance @entity {
-  id: ID!
-  user: User!
-  token: FungibleToken!
-  balance: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type Star @entity {
-  id: ID!
-  name: String!
-  metadata: StarMetadata
-  constellation: Constellation!
-  owner: User!
-  xpToken: FungibleToken
-  badges: [Badge!] @derivedFrom(field: "star")
-  stats: StarStats!
-  badgeCount: BigInt!
-  badgesAwarded: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type StarMetadata @entity {
-  id: ID!
-  name: String!
-  description: String!
-  URI: String!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-}
-
-type BadgeToken @entity {
-  id: ID!
-  tokenId: BigInt!
-  badge: Badge!
-  metadataURI: String!
-  owner: User
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type CollectedBadge @entity {
-  id: ID!
-  user: User!
-  metadataURI: String!
-}
-
-type Badge @entity {
-  id: ID!
-  name: String!
-  symbol: String!
-  tokens: [BadgeToken!] @derivedFrom(field: "badge")
-  star: Star!
-  royaltyBps: BigInt!
-  royaltyRecipient: Bytes!
-  totalAwarded: BigInt!
-  totalAvailable: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-# @TODO - Implement IPFS data types
-# type BadgeMetadata @entity {
-#   id: ID!
-#   name: String!
-#   description: String!
-#   image: String!
-#   external_url: String!
-#   animation_url: String!
-#   URI: String!
-#   createdAt: BigInt!
-#   createdAtBlock: BigInt!
-# }
-
 type User @entity {
   id: ID!
-  tokenBalances: [FungibleTokenBalance!] @derivedFrom(field: "user")
-  collectedBadges: [BadgeToken!] @derivedFrom(field: "owner")
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
   updatedAtBlock: BigInt!
 }
 
-type Action @entity {
-  id: ID!
-  metadata: ActionMetadata
-  star: Star
-  user: User!
-  xp_rewarded: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-}
-
-type ActionMetadata @entity {
-  id: ID!
-  name: String
-  URI: String!
-}
-
-type MissionFungibleToken @entity {
-  id: ID!
-  token: FungibleToken!
-  mission: Mission!
-  amount_rewarded: BigInt!
-}
-
-type MissionMetadata @entity {
-  id: ID!
-  name: String
-  URI: String!
-}
-
-type Mission @entity {
-  id: ID!
-  metadata: MissionMetadata
-  star: Star
-  user: User!
-  badges: [BadgeToken!]!
-  tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-}
-
-type AccessKey @entity {
-  id: ID!
-  currentOwner: User!
-  originalOwner: User!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type StarStats @entity {
-  id: ID!
-  star: Star!
-  uniqueUsers: [User!]
-  uniqueUsersCount: BigInt!
-  totalXPAwarded: BigInt!
-  totalActionsComplete: BigInt!
-  totalMissionsComplete: BigInt!
-  totalRewardTokensAwarded: BigInt!
-  totalBadgesAwarded: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type Stats @entity {
+type Stat @entity {
   id: ID!
   uniqueUsers: BigInt!
+  constellationCount: BigInt!
+  starCount: BigInt!
+  ERC721Count: BigInt!
+  ERC20Count: BigInt!
+  TokensMintedTransactions: BigInt!
+  TokensTransferredTransactions: BigInt!
+  BadgesMintedTransactions: BigInt!
+  BadgesTransferredTransactions: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  user: User!
+  type: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  gasUsed: BigInt
 }
