@@ -7,10 +7,10 @@ import { Mission } from "../../generated/schema";
 
 describe("RewardsFacet tests", () => {
     afterEach(() => {
-      clearStore();
-      dataSourceMock.resetValues();
+        clearStore();
+        dataSourceMock.resetValues();
     })
-    
+
     test("Token minted ACTION", () => {
         createApp();
         createERC20Token();
@@ -21,7 +21,7 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER2_ID, "id", TEST_USER2_ID); // Token user
         // TODO: User is not saved if new
         // assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
-        
+
         const actionId = ActionId(event.transaction.hash, event.logIndex);
 
         assert.fieldEquals(TEST_ACTION_ENTITY_TYPE, actionId, "id", actionId);
@@ -49,10 +49,10 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER2_ID, "id", TEST_USER2_ID); // Token user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
-        
+
         const missionId = MissionId(event.transaction.hash, event.params.id);
         const missionFungibleTokenId = event.transaction.hash.toHex() + "-" + event.params.id.toHex() + "-" + event.params.token.toHex();
-    
+
 
         assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "id", missionId);
         assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "xp_rewarded", event.params.amount.toString());
@@ -68,7 +68,7 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "amount_rewarded", event.params.amount.toString());
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "mission", missionId);
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "token", event.params.token.toHex());
-        
+
         // TODO: Mint token mission does not change app stats
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalXPAwarded", "0");
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalActionsComplete", "0");
@@ -78,7 +78,7 @@ describe("RewardsFacet tests", () => {
 
     test("Token transferred MISSION", () => {
         // TODO: Are token transferred events only triggered for missions?
-        
+
         createApp();
         createERC20Token();
         const event = transferERC20TokenMission();
@@ -87,10 +87,10 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER2_ID, "id", TEST_USER2_ID); // Token user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token transfer user
-        
+
         const missionId = MissionId(event.transaction.hash, event.params.id);
         const missionFungibleTokenId = event.transaction.hash.toHex() + "-" + event.params.id.toHex() + "-" + event.params.token.toHex();
-    
+
 
         assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "id", missionId);
         // TODO: Token transfer does not change xp_rewarded
@@ -107,7 +107,7 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "amount_rewarded", event.params.amount.toString());
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "mission", missionId);
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "token", event.params.token.toHex());
-        
+
         // TODO: Transfer token does not change totalXPAwarded or uniqueUsersCount
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalXPAwarded", "0");
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalActionsComplete", "0");
@@ -123,13 +123,13 @@ describe("RewardsFacet tests", () => {
         createMockedFunction(Address.fromString(TEST_TOKEN_ID), "totalSupply", "totalSupply():(uint256)")
             .withArgs([])
             .returns([ethereum.Value.fromUnsignedBigInt(totalSupply)]);
-                    
+
         const event = mintBadge();
 
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
-        
+
         const missionId = MissionId(event.transaction.hash, event.params.id);
 
         assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "id", missionId);
@@ -152,7 +152,7 @@ describe("RewardsFacet tests", () => {
             assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "metadataURI", event.params.uri);
             assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "owner", event.params.to.toHex());
         }
-        
+
         // TODO: Mint token mission does not change uniqueUsersCount
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalXPAwarded", "0");
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalActionsComplete", "0");
@@ -164,7 +164,7 @@ describe("RewardsFacet tests", () => {
         createApp();
 
         const badgeToken = getTestBadgeTokenEntity(
-            Address.fromString(TEST_TOKEN_ID), 
+            Address.fromString(TEST_TOKEN_ID),
             BigInt.fromString(TEST_BADGETOKEN_ID),
             TEST_USER3_ID,
             TEST_TOKEN_MINTED_URI
@@ -175,7 +175,7 @@ describe("RewardsFacet tests", () => {
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
-        
+
         const missionId = MissionId(event.transaction.hash, event.params.id);
 
         assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "id", missionId);
@@ -191,7 +191,7 @@ describe("RewardsFacet tests", () => {
         assert.assertTrue(mission!.badges != null, "Mission has badges");
         assert.assertTrue(mission!.badges.length == 1, "Mission badges has length = 1");
         assert.assertTrue(mission!.badges.at(0) == badgeToken.id, "Badge is ok");
-        
+
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalXPAwarded", "0");
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalActionsComplete", "0");
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalBadgesAwarded", "0");
