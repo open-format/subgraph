@@ -17,11 +17,10 @@ import {
   loadOrCreateUser,
 } from "./helpers";
 
-let context = dataSource.context();
-let contractAddress = Address.fromString(context.getString("ERC721Contract"));
-const boundContract = ERC721BaseContract.bind(contractAddress);
-
 export function handleMinted(event: Minted): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC721Contract"));
+  const boundContract = ERC721BaseContract.bind(contractAddress);
   const tokenId = boundContract.nextTokenIdToMint().minus(One);
 
   let badgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
@@ -48,6 +47,9 @@ export function handleMinted(event: Minted): void {
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC721Contract"));
+  const boundContract = ERC721BaseContract.bind(contractAddress);
   let user = loadOrCreateUser(event.params.to, event);
   let badge = loadOrCreateBadge(contractAddress, event);
   let app = App.load(badge.app);

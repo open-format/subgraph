@@ -12,10 +12,9 @@ import {
   loadOrCreateUser,
 } from "./helpers";
 
-let context = dataSource.context();
-let contractAddress = Address.fromString(context.getString("ERC20Contract"));
-
 export function handleTransfer(event: Transfer): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC20Contract"));
   const boundContract = ERC20BaseContract.bind(contractAddress);
   const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
 
@@ -76,6 +75,8 @@ export function handleTransfer(event: Transfer): void {
 }
 
 export function handleContractURIUpdated(event: ContractURIUpdated): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC20Contract"));
   const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
   const fungibleTokenMetadata = loadOrCreateFungibleTokenMetadata(
     contractAddress,
