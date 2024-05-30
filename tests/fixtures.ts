@@ -28,13 +28,13 @@ export const TEST_USER2_ID = "0x335fa9d1490d49fd915f268ca559181ee88515e1";
 export const TEST_USER3_ID = "0x6d2032c7d51a5dc235310dcded276a1e3814fa3b";
 
 export const TEST_BADGE_ID = "0x98b3a74058737378c72cf7a0eacb8f71b1db93af";
-export const TEST_BADGE_NAME = "0x98b3a74058737378c72cf7a0eacb8f71b1db93af";
+export const TEST_BADGE_NAME = "test_badge_name_01";
 
 export const TEST_TOKEN_ID = "0x08fef47c302422cf6d63e32e6414472989cd49e8";
 export const TEST_TOKEN_NAME = "test_token_name01";
 export const TEST_TOKEN_SYMBOL = "TST_01";
 export const TEST_TOKEN_ROYALTYRECIPIENT = "0xfa8ebdb2560179cf6d63e32e6414472989cd49e8";
-export const TEST_TOKEN_ROYALTYBPS = "10";
+export const TEST_TOKEN_ROYALTYBPS = "1000";
 export const TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT = "LazyMint";
 export const TEST_TOKEN_IMPLEMENTATIONID_BASE = "Base";
 export const TEST_TOKEN_TOTAL_SUPPLY = "1234";
