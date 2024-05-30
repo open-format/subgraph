@@ -5,13 +5,13 @@ import { Created as CreatedERC20FactoryFacet } from "../generated/templates/ERC2
 import { Created as CreatedERC721FactoryFacet } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import { Created as ERC20Created} from "../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import { Created as ERC721Created } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
-import { BadgeMinted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
+import { BadgeMinted1, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
 import { Created as AppCreated } from "../generated/AppFactory/AppFactory";
 import { TEST_ACTION_ENTITY_TYPE, TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "./fixtures";
 import { handleCreated as erc20handleCreated } from "../src/facet/ERC20Factory";
 import { handleCreated as appHandleCreated } from "../src/AppFactory";
 import { handleCreated as erc721handleCreated } from "../src/facet/ERC721Factory";
-import { handleBadgeMinted, handleBadgeTransferred, handleTokenMinted, handleTokenTransferred } from "../src/facet/RewardsFacet";
+import { handleBadgeMintedLegacy, handleBadgeTransferred, handleTokenMinted, handleTokenTransferred } from "../src/facet/RewardsFacet";
 import { BadgeId } from "../src/helpers";
 import { BadgeToken, FungibleToken } from "../generated/schema";
 import { ContractURIUpdated as ERC20ContractURIUpdated, Transfer as ERC20Transfer } from "../generated/templates/ERC20Base/ERC20Base";
@@ -180,8 +180,8 @@ export function transferERC20TokenMission(): TokenTransferred {
   return event;
 }
 
-export function mintBadge(): BadgeMinted {
-  const event = newEvent<BadgeMinted>([
+export function mintBadge(): BadgeMinted1 {
+  const event = newEvent<BadgeMinted1>([
       new Param("token", ParamType.ADDRESS, TEST_TOKEN_ID),
       new Param("quantity", ParamType.BIG_INT, "2"),
       new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
@@ -190,7 +190,7 @@ export function mintBadge(): BadgeMinted {
       new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
   ]);
   // Event handler
-  handleBadgeMinted(event);
+  handleBadgeMintedLegacy(event);
 
   return event;
 }
