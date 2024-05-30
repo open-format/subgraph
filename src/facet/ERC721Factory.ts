@@ -17,7 +17,7 @@ import {
 
 export function handleCreated(event: Created): void {
   let context = dataSource.context();
-  let starAddress = Address.fromString(context.getString("App"));
+  let appAddress = Address.fromString(context.getString("App"));
   let ERC721Context = new DataSourceContext();
 
   let implementationId = event.params.implementationId.toString();
