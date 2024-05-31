@@ -12,10 +12,10 @@ import {
   loadOrCreateUser,
 } from "../helpers";
 
-let context = dataSource.context();
-let starAddress = Address.fromString(context.getString("App"));
 
 export function handleCreated(event: Created): void {
+  let context = dataSource.context();
+  let starAddress = Address.fromString(context.getString("App"));
   let ERC20Context = new DataSourceContext();
 
   ERC20Context.setString("ERC20Contract", event.params.id.toHex());

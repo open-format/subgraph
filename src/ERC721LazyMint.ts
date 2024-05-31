@@ -15,13 +15,10 @@ import {
   loadOrCreateUser,
 } from "./helpers";
 
-let context = dataSource.context();
-let contractAddress = Address.fromString(
-  context.getString("ERC721ContractLazyMint")
-);
-const boundContract = ERC721LazyMint.bind(contractAddress);
-
 export function handleMinted(event: Minted): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC721ContractLazyMint"));
+  const boundContract = ERC721LazyMint.bind(contractAddress);
   const totalSupply = boundContract
     .nextTokenIdToMint()
     .minus(BigInt.fromI32(1));
@@ -44,6 +41,9 @@ export function handleMinted(event: Minted): void {
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC721ContractLazyMint"));
+  const boundContract = ERC721LazyMint.bind(contractAddress);  
   let user = loadOrCreateUser(event.params.to, event);
   let Badge = loadOrCreateBadge(contractAddress, event);
 

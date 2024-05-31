@@ -14,10 +14,10 @@ import {
   Zero,
 } from "../helpers";
 
-let context = dataSource.context();
-let starAddress = Address.fromString(context.getString("App"));
 
 export function handleCreated(event: Created): void {
+  let context = dataSource.context();
+  let starAddress = Address.fromString(context.getString("App"));
   let ERC721Context = new DataSourceContext();
 
   if (event.params.implementationId.toString() == "LazyMint") {
