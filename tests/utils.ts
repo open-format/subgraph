@@ -7,7 +7,7 @@ import { Created as ERC20Created} from "../generated/templates/ERC20FactoryFacet
 import { Created as ERC721Created } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import { BadgeMinted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
 import { Created as AppCreated } from "../generated/AppFactory/AppFactory";
-import { TEST_ACTION_ENTITY_TYPE, TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "./fixtures";
+import { TEST_ACTION_ENTITY_TYPE, TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "./fixtures";
 import { handleCreated as erc20handleCreated } from "../src/facet/ERC20Factory";
 import { handleCreated as appHandleCreated } from "../src/AppFactory";
 import { handleCreated as erc721handleCreated } from "../src/facet/ERC721Factory";
@@ -225,11 +225,11 @@ export function transferBadge(): BadgeTransferred {
   return event;
 }
 
-export function transferERC20(): ERC20Transfer {
+export function transferERC20(from: string, to: string, amount: string): ERC20Transfer {
   const event = newEvent<ERC20Transfer>([
-      new Param("from", ParamType.ADDRESS, TEST_USER2_ID),
-      new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
-      new Param("value", ParamType.BIG_INT, "5"),
+      new Param("from", ParamType.ADDRESS, from),
+      new Param("to", ParamType.ADDRESS, to),
+      new Param("value", ParamType.BIG_INT, amount),
   ]);
   // Event handler
   handleTransferERC20(event);
@@ -279,7 +279,7 @@ export function transferERC721(to: string): ERC721Transfer {
       new Param("to", ParamType.ADDRESS, to),
       new Param("tokenId", ParamType.BIG_INT, TEST_BADGETOKEN_ID),
   ]);
-  event.address = Address.fromString(TEST_TOKEN_ID);
+  event.address = Address.fromString(TEST_BADGE_ID);
   // Event handler
   handleTransferERC721(event);
 
@@ -297,7 +297,7 @@ export function getTestFungibleToken(): FungibleToken {
   fungibleToken.totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
   fungibleToken.owner = TEST_USER_ID;
   fungibleToken.symbol = "TEST";
-  fungibleToken.burntSupply = BigInt.fromI32(1);
+  fungibleToken.burntSupply = BigInt.fromI32(0);
 
   return fungibleToken;
 }
@@ -308,7 +308,7 @@ export function transferERC721LazyMint(to: string): TransferERC721LazyMint {
       new Param("to", ParamType.ADDRESS, to),
       new Param("tokenId", ParamType.BIG_INT, TEST_BADGETOKEN_ID),
   ]);
-  event.address = Address.fromString(TEST_TOKEN_ID);
+  event.address = Address.fromString(TEST_BADGE_ID);
   // Event handler
   handleTransferERC721LazyMint(event);
 
