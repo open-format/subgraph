@@ -66,6 +66,7 @@ describe("ERC721LazyMint tests", () => {
             TEST_USER2_ID,
             TEST_TOKEN_MINTED_URI
         );
+        badgeToken.owner = null;
         badgeToken.save();
     
         const event = mintedERC721LazyMint();
