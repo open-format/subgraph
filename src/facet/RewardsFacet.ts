@@ -18,10 +18,9 @@ import {
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
 
-let context = dataSource.context();
-let starAddress = Address.fromString(context.getString("App"));
-
 export function handleTokenMinted(event: TokenMinted): void {
+  let context = dataSource.context();
+  let starAddress = Address.fromString(context.getString("App"));
   let user = loadOrCreateUser(event.params.to, event);
 
   if (event.params.activityType.toString() == "ACTION") {
@@ -109,6 +108,9 @@ export function handleTokenMinted(event: TokenMinted): void {
   }
 }
 export function handleTokenTransferred(event: TokenTransferred): void {
+  let context = dataSource.context();
+  let starAddress = Address.fromString(context.getString("App"));
+
   let mission = loadOrCreateMission(
     event.transaction.hash,
     event.params.id,
@@ -152,6 +154,9 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   user.save();
 }
 export function handleBadgeMinted(event: BadgeMinted): void {
+  let context = dataSource.context();
+  let starAddress = Address.fromString(context.getString("App"));
+
   let mission = loadOrCreateMission(
     event.transaction.hash,
     event.params.id,
@@ -205,6 +210,9 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   user.save();
 }
 export function handleBadgeTransferred(event: BadgeTransferred): void {
+  let context = dataSource.context();
+  let starAddress = Address.fromString(context.getString("App"));
+
   let mission = loadOrCreateMission(
     event.transaction.hash,
     event.params.id,
@@ -230,6 +238,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
 
   if (missionBadges && missionBadge) {
     missionBadges.push(missionBadge.id);
+    mission.badges = missionBadges;
   }
 
   missionMetadata.save();
