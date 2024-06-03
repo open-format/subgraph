@@ -13,6 +13,7 @@ import {
   loadOrCreateAction,
   loadOrCreateActionMetadata,
   loadOrCreateAppStats,
+  loadOrCreateBadge,
   loadOrCreateBadgeToken,
   loadOrCreateMission,
   loadOrCreateMissionFungibleToken,
@@ -223,6 +224,8 @@ function handleERC721MintedEvent(
   );
   let user = loadOrCreateUser(params.to, event);
   let appStats = loadOrCreateAppStats(appAddress, event);
+  let badge = loadOrCreateBadge(params.token, event);
+  let badgeMetadataURI = badge.metadataURI
   let totalSupply = boundContract.totalSupply();
   let quantity = params.quantity;
   let missionBadges = mission.badges;
@@ -237,19 +240,18 @@ function handleERC721MintedEvent(
       tokenId,
       event
     );
-    let data = params.data.toString();
+
     missionBadge.badge = params.token.toHex();
     missionBadge.owner = user.id;
-    if (data) {
-      missionBadge.metadataURI = data;
-    }
+    missionBadge.metadataURI = badgeMetadataURI ? null : params.data.toString();
+
     missionBadge.save();
 
     missionBadges.push(missionBadge.id);
   }
 
+  missionMetadata.URI = badgeMetadataURI ? badgeMetadataURI : params.data.toString()
   missionMetadata.name = params.activityId.toString();
-  missionMetadata.URI = params.data.toString();
 
   mission.user = user.id;
   mission.app = appAddress.toHex();
