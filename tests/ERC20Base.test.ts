@@ -1,13 +1,19 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, mockInBlockStore, clearInBlockStore, logStore, dataSourceMock } from "matchstick-as/assembly/index"
-import { Param, ParamType, createApp, createERC20Token, getTestFungibleToken, newEvent, transferERC20, updateERC20ContractURI } from "../utils";
-import { TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_FUNGIBLETOKENBALANCE_ENTITY_TYPE, TEST_FUNGIBLETOKENMETADATA_ENTITY_TYPE, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "../fixtures";
+import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, mockInBlockStore, clearInBlockStore, logStore, dataSourceMock, beforeEach } from "matchstick-as/assembly/index"
+import { Param, ParamType, createApp, createERC20Token, getTestFungibleToken, newEvent, transferERC20, updateERC20ContractURI } from "./utils";
+import { TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_FUNGIBLETOKENBALANCE_ENTITY_TYPE, TEST_FUNGIBLETOKENMETADATA_ENTITY_TYPE, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "./fixtures";
 import { Address, BigInt, DataSourceContext, Value, ethereum } from "@graphprotocol/graph-ts";
-import { TokenBalanceId } from "../../src/helpers";
+import { TokenBalanceId } from "../src/helpers";
 
 describe("ERC20Base tests", () => {
     afterEach(() => {
       clearStore();
       dataSourceMock.resetValues();
+    })
+    
+    beforeEach(() => {
+        let context = new DataSourceContext()
+        context.set('ERC20Contract', Value.fromString(TEST_TOKEN_ID))
+        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20Contract', context)
     })
     
     test("Token transfer", () => {
@@ -16,10 +22,6 @@ describe("ERC20Base tests", () => {
         const balanceSender = BigInt.fromString("12");
         const balanceReceiver = BigInt.fromString("34");
         const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
-        let context = new DataSourceContext()
-        
-        context.set('ERC20Contract', Value.fromString(TEST_TOKEN_ID))
-        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20Contract', context)
 
         createMockedFunction(Address.fromString(TEST_TOKEN_ID), "balanceOf", "balanceOf(address):(uint256)")
             .withArgs([ ethereum.Value.fromAddress( sender ) ])
@@ -36,11 +38,12 @@ describe("ERC20Base tests", () => {
         const token = getTestFungibleToken();
         token.save();
 
-        transferERC20();
+        transferERC20(sender.toHex(), receiver.toHex(), "5");
 
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER2_ID, "id", TEST_USER2_ID); // Sender
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Receiver
+        assert.entityCount(TEST_USER_ENTITY_TYPE, 2);
 
         // Fungible token data
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "id", TEST_TOKEN_ID);
@@ -68,10 +71,6 @@ describe("ERC20Base tests", () => {
         const balanceSender = BigInt.fromString("0");
         const balanceReceiver = BigInt.fromString("34");
         const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
-        let context = new DataSourceContext()
-        
-        context.set('ERC20Contract', Value.fromString(TEST_TOKEN_ID))
-        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20Contract', context)
 
         createMockedFunction(Address.fromString(TEST_TOKEN_ID), "balanceOf", "balanceOf(address):(uint256)")
             .withArgs([ ethereum.Value.fromAddress( sender ) ])
@@ -88,11 +87,12 @@ describe("ERC20Base tests", () => {
         const token = getTestFungibleToken();
         token.save();
 
-        transferERC20();
+        transferERC20(sender.toHex(), receiver.toHex(), "5");
 
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Receiver
         assert.notInStore(TEST_USER_ENTITY_TYPE, sender.toHex());
+        assert.entityCount(TEST_USER_ENTITY_TYPE, 1);
 
         // Fungible token data
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "id", TEST_TOKEN_ID);
@@ -117,10 +117,6 @@ describe("ERC20Base tests", () => {
         const balanceSender = BigInt.fromString("12");
         const balanceReceiver = BigInt.fromString("0");
         const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
-        let context = new DataSourceContext()
-        
-        context.set('ERC20Contract', Value.fromString(TEST_TOKEN_ID))
-        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20Contract', context)
 
         createMockedFunction(Address.fromString(TEST_TOKEN_ID), "balanceOf", "balanceOf(address):(uint256)")
             .withArgs([ ethereum.Value.fromAddress( sender ) ])
@@ -137,17 +133,17 @@ describe("ERC20Base tests", () => {
         const token = getTestFungibleToken();
         token.save();
 
-        const event = transferERC20();
+        const event = transferERC20(sender.toHex(), receiver.toHex(), "5");
 
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER2_ID, "id", TEST_USER2_ID); // Sender
         assert.notInStore(TEST_USER_ENTITY_TYPE, receiver.toHex()); // Receiver
+        assert.entityCount(TEST_USER_ENTITY_TYPE, 1);
 
         // Fungible token data
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "id", TEST_TOKEN_ID);
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "totalSupply", totalSupply.toString());
-        // TODO: burntSupply does not increase
-        // assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "burntSupply", event.params.value.toString());
+        assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "burntSupply", event.params.value.toString());
 
         const senderTokenBalanceId = TokenBalanceId(Address.fromString(TEST_TOKEN_ID), sender);
         const receiverTokenBalanceId = TokenBalanceId(Address.fromString(TEST_TOKEN_ID), receiver);
@@ -163,10 +159,6 @@ describe("ERC20Base tests", () => {
     })
 
     test("Contract URI updated", () => {
-        let context = new DataSourceContext()
-        context.set('ERC20Contract', Value.fromString(TEST_TOKEN_ID))
-        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20Contract', context)
-
         const token = getTestFungibleToken();
         token.save();
 

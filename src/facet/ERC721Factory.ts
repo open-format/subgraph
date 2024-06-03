@@ -14,7 +14,6 @@ import {
   Zero,
 } from "../helpers";
 
-
 export function handleCreated(event: Created): void {
   let context = dataSource.context();
   let appAddress = Address.fromString(context.getString("App"));
