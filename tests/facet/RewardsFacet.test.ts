@@ -1,7 +1,7 @@
 import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, mockInBlockStore, clearInBlockStore, logStore, dataSourceMock } from "matchstick-as/assembly/index"
-import { Param, ParamType, createApp, createERC20Token, getTestBadgeTokenEntity, mintBadge, mintERC20TokenAction, mintERC20TokenMission, newEvent, transferBadge, transferERC20TokenMission } from "../utils";
+import { Param, ParamType, createApp, createBadge, createERC20Token, getTestBadgeTokenEntity, badgeMintedLegacy, mintERC20TokenAction, mintERC20TokenMission, newEvent, transferBadge, transferERC20TokenMission, badgeMinted, erc721Minted, updatedBaseURI } from "../utils";
 import { TEST_ACTIONMETADATA_ENTITY_TYPE, TEST_ACTION_ENTITY_TYPE, TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ENTITY_TYPE, TEST_BADGETOKEN_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, TEST_MISSIONMETADATA_ENTITY_TYPE, TEST_MISSION_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "../fixtures";
-import { ActionId, BadgeId, MissionId, loadOrCreateBadgeToken } from "../../src/helpers";
+import { ActionId, BadgeId, MissionId, loadBadgeToken } from "../../src/helpers";
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { Mission } from "../../generated/schema";
 
@@ -116,7 +116,8 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalMissionsComplete", "1");
     })
 
-    test("Badge minted", () => {
+    // older reward contract had a different event signature
+    test("Badge token minted legacy", () => {
         createApp();
 
         const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
@@ -124,7 +125,103 @@ describe("RewardsFacet tests", () => {
             .withArgs([])
             .returns([ethereum.Value.fromUnsignedBigInt(totalSupply)]);
 
-        const event = mintBadge();
+        const event = badgeMintedLegacy();
+
+        // Users data
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
+
+        const missionId = MissionId(event.transaction.hash, event.params.id);
+
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "id", missionId);
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "user", event.params.to.toHex());
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "metadata", missionId);
+
+        assert.fieldEquals(TEST_MISSIONMETADATA_ENTITY_TYPE, missionId, "id", missionId);
+        assert.fieldEquals(TEST_MISSIONMETADATA_ENTITY_TYPE, missionId, "name", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_MISSIONMETADATA_ENTITY_TYPE, missionId, "URI", TEST_TOKEN_MINTED_URI);
+
+        const quantity = event.params.quantity;
+        for (let i = 0; i < quantity.toI32(); i++) {
+            let tokenId = totalSupply.minus(quantity).plus(BigInt.fromI32(i));
+            const id = BadgeId(event.params.token, tokenId.toHex());
+
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "id", id);
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "tokenId", tokenId.toString());
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "badge", event.params.token.toHex());
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "metadataURI", event.params.uri);
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "owner", event.params.to.toHex());
+        }
+
+        // TODO: Mint token mission does not change uniqueUsersCount
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalXPAwarded", "0");
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalActionsComplete", "0");
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalBadgesAwarded", event.params.quantity.toString());
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "uniqueUsersCount", "0");
+    })
+
+    test("Badge token minted", () => {
+        createApp();
+        createBadge();
+        updatedBaseURI();
+
+        const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
+        createMockedFunction(Address.fromString(TEST_TOKEN_ID), "totalSupply", "totalSupply():(uint256)")
+            .withArgs([])
+            .returns([ethereum.Value.fromUnsignedBigInt(totalSupply)]);
+
+        const event = badgeMinted();
+
+        // Users data
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
+
+        const missionId = MissionId(event.transaction.hash, event.params.activityId);
+
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "id", missionId);
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "user", event.params.to.toHex());
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_MISSION_ENTITY_TYPE, missionId, "metadata", missionId);
+
+        assert.fieldEquals(TEST_MISSIONMETADATA_ENTITY_TYPE, missionId, "id", missionId);
+        assert.fieldEquals(TEST_MISSIONMETADATA_ENTITY_TYPE, missionId, "name", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_MISSIONMETADATA_ENTITY_TYPE, missionId, "URI", TEST_TOKEN_MINTED_URI);
+
+        const quantity = event.params.quantity;
+        for (let i = 0; i < quantity.toI32(); i++) {
+            let tokenId = totalSupply.minus(quantity).plus(BigInt.fromI32(i));
+            const id = BadgeId(event.params.token, tokenId.toHex());
+
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "id", id);
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "tokenId", tokenId.toString());
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "badge", event.params.token.toHex());
+            assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "owner", event.params.to.toHex());
+
+            const badgeToken = loadBadgeToken(event.params.token, tokenId)
+            if (badgeToken) {
+                assert.assertNull(badgeToken.metadataURI, "metadataURI should be null as it is stored on badge entity")
+            } else {
+                assert.assertNotNull(badgeToken)
+            }
+        }
+
+        // TODO: Mint token mission does not change uniqueUsersCount
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalXPAwarded", "0");
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalActionsComplete", "0");
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "totalBadgesAwarded", event.params.quantity.toString());
+        assert.fieldEquals(TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ID, "uniqueUsersCount", "0");
+    })
+
+    test("ERC721 token minted", () => {
+        createApp();
+
+        const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
+        createMockedFunction(Address.fromString(TEST_TOKEN_ID), "totalSupply", "totalSupply():(uint256)")
+            .withArgs([])
+            .returns([ethereum.Value.fromUnsignedBigInt(totalSupply)]);
+
+        const event = erc721Minted();
 
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
