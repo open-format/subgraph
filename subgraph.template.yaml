@@ -69,6 +69,30 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/ERC721Base.ts
+  - name: ERC721Badge
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ERC721Badge
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+      abis:
+        - name: ERC721Badge
+          file: ./abis/ERC721Badge.json
+      eventHandlers:
+        - event: Minted(address,string)
+          handler: handleMinted
+        - event: BatchMinted(address,uint256,string)
+          handler: handleBatchMinted
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: UpdatedBaseURI(string)
+          handler: handleUpdatedBaseURI
+      file: ./src/ERC721Badge.ts
   - name: ERC721LazyMint
     kind: ethereum/contract
     network: {{network}}

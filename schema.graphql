@@ -62,7 +62,7 @@ type BadgeToken @entity {
   id: ID!
   tokenId: BigInt!
   badge: Badge!
-  metadataURI: String!
+  metadataURI: String
   owner: User
   createdAt: BigInt!
   createdAtBlock: BigInt!
@@ -80,6 +80,7 @@ type Badge @entity {
   id: ID!
   name: String!
   symbol: String!
+  metadataURI: String
   tokens: [BadgeToken!] @derivedFrom(field: "badge")
   app: App!
   royaltyBps: BigInt!
