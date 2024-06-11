@@ -1,0 +1,7 @@
+{
+  "network": "arbitrum-sepolia",
+  "AppFactory": {
+    "startBlock": 53181340,
+    "address": "0x4174a9206A2213926fb74bA067Ea00e3E0EBEdbB"
+  }
+}
