@@ -173,12 +173,19 @@ templates:
           file: ./abis/RewardsFacet.json
         - name: ERC721Base
           file: ./abis/ERC721Base.json
+        - name: ERC721Badge
+          file: ./abis/ERC721Badge.json
       eventHandlers:
         - event: TokenMinted(address,address,uint256,bytes32,bytes32,string)
           handler: handleTokenMinted
         - event: TokenTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleTokenTransferred
+          # legacy event signature name
         - event: BadgeMinted(address,uint256,address,bytes32,bytes32,string)
+          handler: handleBadgeMintedLegacy
+        - event: ERC721Minted(address,uint256,address,bytes32,bytes32,string)
+          handler: handleERC721Minted
+        - event: BadgeMinted(address,uint256,address,bytes32,bytes32,bytes)
           handler: handleBadgeMinted
         - event: BadgeTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleBadgeTransferred
