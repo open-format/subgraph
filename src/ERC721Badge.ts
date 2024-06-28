@@ -83,6 +83,7 @@ export function handleBatchMinted(event: BatchMinted): void {
   }
 
   badge.save();
+  user.save();
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -90,10 +91,11 @@ export function handleTransfer(event: Transfer): void {
   let user = loadOrCreateUser(event.params.to, event);
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
-      store.remove("Badge", Badge.id);
+      store.remove("BadgeToken", Badge.id);
     } else {
       Badge.owner = user.id;
       Badge.save();
+      user.save();
     }
   }
 }

@@ -29,7 +29,6 @@ describe("ERC721Factory tests", () => {
         assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "app", TEST_APP_ID);
         assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAwarded", "0");
         assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAvailable", "0");
-        // TODO: no owner for NFT?
     })
 
     test("Create token LazyMint", () => {
@@ -53,6 +52,5 @@ describe("ERC721Factory tests", () => {
         assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "app", TEST_APP_ID);
         assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAwarded", "0");
         assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAvailable", "0");
-        // TODO: no owner for NFT?
     })
 });

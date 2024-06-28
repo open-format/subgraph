@@ -28,8 +28,7 @@ describe("ERC721LazyMint tests", () => {
 
         const event = batchMintedERC721LazyMint();
 
-        // TODO: User is not saved
-        // assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID);
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID);
 
         assert.entityCount(TEST_BADGETOKEN_ENTITY_TYPE, event.params.quantity.toI32());
         assert.entityCount(TEST_BADGE_ENTITY_TYPE, 1);
@@ -107,6 +106,7 @@ describe("ERC721LazyMint tests", () => {
         // Badge Token
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeTokenId, "id", badgeTokenId);
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeTokenId, "owner", event.params.to.toHex());
+        assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeTokenId, "tokenId", TEST_BADGETOKEN_ID);
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeTokenId, "metadataURI", event.params.tokenURI);
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeTokenId, "badge", event.address.toHex());
     })
@@ -137,6 +137,9 @@ describe("ERC721LazyMint tests", () => {
 
         const event = transferERC721LazyMint(TEST_USER3_ID);
 
+        // User data
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID);
+
         // Badge data
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeToken.id, "id", badgeToken.id);
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeToken.id, "owner", event.params.to.toHex());
@@ -152,11 +155,12 @@ describe("ERC721LazyMint tests", () => {
         );
         badgeToken.save();
 
-        // TODO: Error here trying to remove Badge with BadgeToken id
-        // transferERC721LazyMint("0x0000000000000000000000000000000000000000");
+        transferERC721LazyMint("0x0000000000000000000000000000000000000000");
+
+        assert.notInStore(TEST_USER_ENTITY_TYPE, "0x0000000000000000000000000000000000000000");
 
         // BadgeToken data
-        // assert.notInStore(TEST_BADGETOKEN_ENTITY_TYPE, badgeToken.id);
+        assert.notInStore(TEST_BADGETOKEN_ENTITY_TYPE, badgeToken.id);
     })
 
 });

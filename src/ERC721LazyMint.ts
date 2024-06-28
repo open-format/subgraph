@@ -64,6 +64,7 @@ export function handleBatchMinted(event: BatchMinted): void {
 
   Badge.totalAwarded = totalSupplyBeforeMint.plus(event.params.quantity);
   Badge.save();
+  user.save();
 }
 
 export function handleLazyMint(event: TokensLazyMinted): void {
@@ -74,12 +75,14 @@ export function handleLazyMint(event: TokensLazyMinted): void {
 
 export function handleTransfer(event: Transfer): void {
   let Badge = loadBadgeToken(event.address, event.params.tokenId);
+  let user = loadOrCreateUser(event.params.to, event);
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
-      store.remove("Badge", Badge.id);
+      store.remove("BadgeToken", Badge.id);
     } else {
       Badge.owner = event.params.to.toHex();
       Badge.save();
+      user.save();
     }
   }
 }

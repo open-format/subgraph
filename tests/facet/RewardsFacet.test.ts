@@ -19,8 +19,7 @@ describe("RewardsFacet tests", () => {
         // Users data
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER_ID, "id", TEST_USER_ID); // App user
         assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER2_ID, "id", TEST_USER2_ID); // Token user
-        // TODO: User is not saved if new
-        // assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
+        assert.fieldEquals(TEST_USER_ENTITY_TYPE, TEST_USER3_ID, "id", TEST_USER3_ID); // Token minted user
 
         const actionId = ActionId(event.transaction.hash, event.logIndex);
 
@@ -66,8 +65,6 @@ describe("RewardsFacet tests", () => {
     })
 
     test("Token transferred MISSION", () => {
-        // TODO: Are token transferred events only triggered for missions?
-
         createApp();
         createERC20Token();
         const event = transferERC20TokenMission();
