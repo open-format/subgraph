@@ -8,7 +8,6 @@ import {
 import {
   Zero,
   loadOrCreateApp,
-  loadOrCreateAppStats,
   loadOrCreateUser,
 } from "./helpers";
 
@@ -22,16 +21,12 @@ export function handleCreated(event: Created): void {
 
   let app = loadOrCreateApp(event.params.id, event);
   let user = loadOrCreateUser(event.params.owner, event);
-  let appStats = loadOrCreateAppStats(event.params.id, event);
 
   app.owner = user.id;
   app.name = event.params.name;
   app.badgeCount = Zero;
   app.badgesAwarded = Zero;
-  app.stats = appStats.id;
-  appStats.app = app.id;
 
-  appStats.save();
   app.save();
   user.save();
 }

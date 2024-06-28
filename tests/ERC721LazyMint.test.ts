@@ -1,8 +1,8 @@
-import { assert, createMockedFunction, clearStore, test, newMockEvent, newMockCall, countEntities, mockIpfsFile, beforeAll, describe, afterEach, afterAll, mockInBlockStore, clearInBlockStore, logStore, dataSourceMock, beforeEach } from "matchstick-as/assembly/index"
-import { Param, ParamType, batchMintedERC721, batchMintedERC721LazyMint, createApp, createERC20Token, createERC721LazyMintToken, createERC721Token, getTestBadgeTokenEntity, getTestFungibleToken, mintLazyMint, mintedERC721, mintedERC721LazyMint, newEvent, transferERC20, transferERC721, transferERC721LazyMint, updateERC20ContractURI } from "./utils";
-import { TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ENTITY_TYPE, TEST_BADGETOKEN_ID, TEST_BADGE_ENTITY_TYPE, TEST_BADGE_ID, TEST_FUNGIBLETOKENBALANCE_ENTITY_TYPE, TEST_FUNGIBLETOKENMETADATA_ENTITY_TYPE, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "./fixtures";
+import { assert, createMockedFunction, clearStore, test, describe, afterEach, dataSourceMock, beforeEach } from "matchstick-as/assembly/index";
+import { batchMintedERC721LazyMint, createApp, createERC721LazyMintToken, getTestBadgeTokenEntity, mintLazyMint, mintedERC721LazyMint, transferERC721LazyMint } from "./utils";
+import { TEST_BADGETOKEN_ENTITY_TYPE, TEST_BADGETOKEN_ID, TEST_BADGE_ENTITY_TYPE, TEST_BADGE_ID, TEST_TOKEN_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE } from "./fixtures";
 import { Address, BigInt, DataSourceContext, Value, ethereum } from "@graphprotocol/graph-ts";
-import { BadgeId, One, TokenBalanceId } from "../src/helpers";
+import { BadgeId, One } from "../src/helpers";
 
 describe("ERC721LazyMint tests", () => {
     afterEach(() => {

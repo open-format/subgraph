@@ -1,6 +1,5 @@
 export const TEST_APP_ENTITY_TYPE = "App";
 export const TEST_APPMETADATA_ENTITY_TYPE = "AppMetadata";
-export const TEST_APPSTATS_ENTITY_TYPE = "AppStats";
 export const TEST_ACTION_ENTITY_TYPE = "Action";
 export const TEST_ACTIONMETADATA_ENTITY_TYPE = "ActionMetadata";
 export const TEST_BADGE_ENTITY_TYPE = "Badge";
@@ -15,7 +14,6 @@ export const TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE = "MissionFungibleToken";
 export const TEST_MISSIONMETADATA_ENTITY_TYPE = "MissionMetadata";
 export const TEST_MISSION_ENTITY_TYPE = "Mission";
 export const TEST_NFT_ENTITY_TYPE = "NFT";
-export const TEST_STATS_ENTITY_TYPE = "Stats";
 export const TEST_TOKEN_ENTITY_TYPE = "Token";
 export const TEST_USER_ENTITY_TYPE = "User";
 
