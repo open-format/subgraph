@@ -12,7 +12,6 @@ import { loadBadgeToken } from "../helpers";
 import {
   loadOrCreateAction,
   loadOrCreateActionMetadata,
-  loadOrCreateAppStats,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
   loadOrCreateMission,
@@ -38,8 +37,6 @@ export function handleTokenMinted(event: TokenMinted): void {
       event.logIndex
     );
 
-    let appStats = loadOrCreateAppStats(appAddress, event);
-
     actionMetadata.name = event.params.id.toString();
     actionMetadata.URI = event.params.uri;
 
@@ -48,32 +45,8 @@ export function handleTokenMinted(event: TokenMinted): void {
     action.app = appAddress.toHex();
     action.metadata = actionMetadata.id;
 
-    appStats.totalXPAwarded = appStats.totalXPAwarded.plus(
-      action.xp_rewarded
-    );
-    appStats.totalActionsComplete = appStats.totalActionsComplete.plus(
-      BigInt.fromI32(1)
-    );
-
-    if (appStats.uniqueUsers == null) {
-      appStats.uniqueUsers = new Array<string>();
-    }
-
-    // Explicitly cast to non-nullable type
-    let uniqueUsers = appStats.uniqueUsers as Array<string>;
-
-    if (uniqueUsers.indexOf(user.id) == -1) {
-      uniqueUsers.push(user.id);
-      appStats.uniqueUsersCount = appStats.uniqueUsersCount.plus(
-        BigInt.fromI32(1)
-      );
-    }
-
-    appStats.uniqueUsers = uniqueUsers;
-
     actionMetadata.save();
     action.save();
-    appStats.save();
   } else {
     let mission = loadOrCreateMission(
       event.transaction.hash,
@@ -132,7 +105,6 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   );
 
   let user = loadOrCreateUser(event.params.to, event);
-  let appStats = loadOrCreateAppStats(appAddress, event);
 
   missionFungibleToken.amount_rewarded = event.params.amount;
   missionFungibleToken.mission = mission.id;
@@ -148,12 +120,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   missionFungibleToken.save();
   missionMetadata.save();
 
-  appStats.totalMissionsComplete = appStats.totalMissionsComplete.plus(
-    BigInt.fromI32(1)
-  );
-
   mission.save();
-  appStats.save();
   user.save();
 }
 
@@ -223,7 +190,6 @@ function handleERC721MintedEvent(
     params.activityId
   );
   let user = loadOrCreateUser(params.to, event);
-  let appStats = loadOrCreateAppStats(appAddress, event);
   let badge = loadOrCreateBadge(params.token, event);
   let badgeMetadataURI = badge.metadataURI
   let totalSupply = boundContract.totalSupply();
@@ -258,9 +224,6 @@ function handleERC721MintedEvent(
   mission.metadata = missionMetadata.id;
   mission.badges = missionBadges;
 
-  appStats.totalBadgesAwarded = appStats.totalBadgesAwarded.plus(quantity);
-
-  appStats.save();
   missionMetadata.save();
   mission.save();
   user.save();

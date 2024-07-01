@@ -3,7 +3,6 @@ import {
   Action,
   ActionMetadata,
   App,
-  AppStats,
   Badge,
   BadgeToken,
   FungibleToken,
@@ -12,7 +11,6 @@ import {
   Mission,
   MissionFungibleToken,
   MissionMetadata,
-  Stats,
   User,
 } from "../../generated/schema";
 import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
@@ -88,33 +86,11 @@ export function loadOrCreateUser(
     _User = new User(id);
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
-
-    const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-
-    if (_User.id != ZERO_ADDRESS) {
-      let stats = loadOrCreateStats();
-      stats.uniqueUsers = stats.uniqueUsers.plus(BigInt.fromI32(1));
-      stats.save();
-    }
   }
+    _User.updatedAt = event.block.timestamp;
+    _User.updatedAtBlock = event.block.number;
 
-  _User.updatedAt = event.block.timestamp;
-  _User.updatedAtBlock = event.block.number;
-
-  return _User as User;
-}
-
-export function loadOrCreateStats(): Stats {
-  let stats = Stats.load("STATS_SINGLETON");
-
-  // If the Stats entity doesn't exist, create it and set uniqueUsers to 0.
-  if (!stats) {
-    stats = new Stats("STATS_SINGLETON");
-    stats.uniqueUsers = BigInt.fromI32(0);
-    stats.save();
-  }
-
-  return stats as Stats;
+    return _User as User;
 }
 
 export function loadOrCreateActionMetadata(
@@ -276,28 +252,4 @@ export function loadOrCreateFungibleTokenBalance(
   _FungibleTokenBalance.updatedAtBlock = event.block.number;
 
   return _FungibleTokenBalance as FungibleTokenBalance;
-}
-
-export function loadOrCreateAppStats(
-  appId: Address,
-  event: ethereum.Event
-): AppStats {
-  const id = appId.toHex();
-  let _AppStats = AppStats.load(id);
-
-  if (!_AppStats) {
-    _AppStats = new AppStats(id);
-    _AppStats.createdAt = event.block.timestamp;
-    _AppStats.createdAtBlock = event.block.number;
-    _AppStats.totalActionsComplete = BigInt.fromI32(0);
-    _AppStats.totalMissionsComplete = BigInt.fromI32(0);
-    _AppStats.totalBadgesAwarded = BigInt.fromI32(0);
-    _AppStats.totalXPAwarded = BigInt.fromI32(0);
-    _AppStats.uniqueUsersCount = BigInt.fromI32(0);
-  }
-
-  _AppStats.updatedAt = event.block.timestamp;
-  _AppStats.updatedAtBlock = event.block.number;
-
-  return _AppStats as AppStats;
 }
