@@ -14,6 +14,8 @@ import { BadgeToken, FungibleToken } from "../generated/schema";
 import { ContractURIUpdated as ERC20ContractURIUpdated, Transfer as ERC20Transfer } from "../generated/templates/ERC20Base/ERC20Base";
 import { handleContractURIUpdated, handleTransfer as handleTransferERC20 } from "../src/ERC20Base";
 import { BatchMinted, Minted, Transfer as ERC721Transfer } from "../generated/templates/ERC721Base/ERC721Base";
+import { BatchMinted as BatchMintedBadge, Minted as MintedBadge, Transfer as TransferBadge } from "../generated/templates/ERC721Badge/ERC721Badge";
+import { handleBatchMinted as handleBatchMintedBadge, handleMinted as handleMintedBadge, handleTransfer as handleTransferBadge } from "../src/ERC721Badge";
 import { handleBatchMinted, handleMinted, handleTransfer as handleTransferERC721 } from "../src/ERC721Base";
 import { TokensLazyMinted, Minted as MintedLazyMint, Transfer as TransferERC721LazyMint, BatchMinted as BatchMintedLazyMint } from "../generated/templates/ERC721LazyMint/ERC721LazyMint";
 import { handleLazyMint, handleTransfer as handleTransferERC721LazyMint, handleMinted as handleMintedLazyMint, handleBatchMinted as handleBatchMintedLazyMint } from "../src/ERC721LazyMint";
@@ -326,6 +328,44 @@ export function transferERC721(to: string): ERC721Transfer {
   event.address = Address.fromString(TEST_BADGE_ID);
   // Event handler
   handleTransferERC721(event);
+
+  return event;
+}
+
+export function mintedBadge(): MintedBadge {
+  const event = newEvent<MintedBadge>([
+      new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+      new Param("tokenURI", ParamType.STRING, "uri://abc"),
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+  // Event handler
+  handleMintedBadge(event);
+
+  return event;
+}
+
+export function batchMintedBadge(): BatchMintedBadge {
+  const event = newEvent<BatchMintedBadge>([
+      new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+      new Param("quantity", ParamType.BIG_INT, "2"),
+      new Param("baseURI", ParamType.STRING, "uri://abc"),
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+  // Event handler
+  handleBatchMintedBadge(event);
+
+  return event;
+}
+
+export function transferERC721Badge(to: string): TransferBadge {
+  const event = newEvent<TransferBadge>([
+      new Param("from", ParamType.ADDRESS, TEST_USER_ID),
+      new Param("to", ParamType.ADDRESS, to),
+      new Param("tokenId", ParamType.BIG_INT, TEST_BADGETOKEN_ID),
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+  // Event handler
+  handleTransferBadge(event);
 
   return event;
 }

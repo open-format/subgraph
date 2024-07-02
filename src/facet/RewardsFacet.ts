@@ -47,6 +47,7 @@ export function handleTokenMinted(event: TokenMinted): void {
 
     actionMetadata.save();
     action.save();
+    user.save();
   } else {
     let mission = loadOrCreateMission(
       event.transaction.hash,
