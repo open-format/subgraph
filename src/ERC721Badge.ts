@@ -18,10 +18,6 @@ import {
   loadOrCreateUser,
 } from "./helpers";
 
-let context = dataSource.context();
-let contractAddress = Address.fromString(context.getString("ERC721ContractBadge"));
-const boundContract = ERC721BadgeContract.bind(contractAddress);
-
 export function handleUpdatedBaseURI(event: UpdatedBaseURI): void {
   let badge = loadOrCreateBadge(event.address, event);
 
@@ -30,6 +26,9 @@ export function handleUpdatedBaseURI(event: UpdatedBaseURI): void {
 }
 
 export function handleMinted(event: Minted): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC721ContractBadge"));
+  const boundContract = ERC721BadgeContract.bind(contractAddress);
   const tokenId = boundContract.nextTokenIdToMint().minus(One);
 
   let badgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
@@ -55,6 +54,9 @@ export function handleMinted(event: Minted): void {
 }
 
 export function handleBatchMinted(event: BatchMinted): void {
+  let context = dataSource.context();
+  let contractAddress = Address.fromString(context.getString("ERC721ContractBadge"));
+  const boundContract = ERC721BadgeContract.bind(contractAddress);
   let user = loadOrCreateUser(event.params.to, event);
   let badge = loadOrCreateBadge(contractAddress, event);
   let app = App.load(badge.app);
@@ -81,6 +83,7 @@ export function handleBatchMinted(event: BatchMinted): void {
   }
 
   badge.save();
+  user.save();
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -88,10 +91,11 @@ export function handleTransfer(event: Transfer): void {
   let user = loadOrCreateUser(event.params.to, event);
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
-      store.remove("Badge", Badge.id);
+      store.remove("BadgeToken", Badge.id);
     } else {
       Badge.owner = user.id;
       Badge.save();
+      user.save();
     }
   }
 }

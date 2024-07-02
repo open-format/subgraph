@@ -40,7 +40,6 @@ type App @entity {
   owner: User!
   xpToken: FungibleToken
   badges: [Badge!] @derivedFrom(field: "app")
-  stats: AppStats!
   badgeCount: BigInt!
   badgesAwarded: BigInt!
   createdAt: BigInt!
@@ -155,24 +154,4 @@ type Mission @entity {
   tokens: [MissionFungibleToken!] @derivedFrom(field: "mission")
   createdAt: BigInt!
   createdAtBlock: BigInt!
-}
-
-type AppStats @entity {
-  id: ID!
-  app: App!
-  uniqueUsers: [User!]
-  uniqueUsersCount: BigInt!
-  totalXPAwarded: BigInt!
-  totalActionsComplete: BigInt!
-  totalMissionsComplete: BigInt!
-  totalBadgesAwarded: BigInt!
-  createdAt: BigInt!
-  createdAtBlock: BigInt!
-  updatedAt: BigInt!
-  updatedAtBlock: BigInt!
-}
-
-type Stats @entity {
-  id: ID!
-  uniqueUsers: BigInt!
 }

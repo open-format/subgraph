@@ -1,25 +1,26 @@
-import { Address, ethereum, JSONValue, Value, ipfs, json, Bytes, BigInt, DataSourceContext } from "@graphprotocol/graph-ts"
-import { dataSourceMock, newMockEvent } from "matchstick-as/assembly/index"
-import {Created as CreatedApp} from "../generated/AppFactory/AppFactory";
-import { Created as CreatedERC20FactoryFacet } from "../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
-import { Created as CreatedERC721FactoryFacet } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
-import { Created as ERC20Created} from "../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
+import { Address, ethereum, Value, Bytes, BigInt, DataSourceContext } from "@graphprotocol/graph-ts";
+import { dataSourceMock, newMockEvent } from "matchstick-as/assembly/index";
+import { Created as ERC20Created } from "../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import { Created as ERC721Created } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
-import { BadgeMinted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
+import { BadgeMinted1, BadgeMinted, ERC721Minted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
 import { Created as AppCreated } from "../generated/AppFactory/AppFactory";
-import { TEST_ACTION_ENTITY_TYPE, TEST_APPSTATS_ENTITY_TYPE, TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_STATS_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "./fixtures";
+import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
 import { handleCreated as erc20handleCreated } from "../src/facet/ERC20Factory";
 import { handleCreated as appHandleCreated } from "../src/AppFactory";
 import { handleCreated as erc721handleCreated } from "../src/facet/ERC721Factory";
-import { handleBadgeMinted, handleBadgeTransferred, handleTokenMinted, handleTokenTransferred } from "../src/facet/RewardsFacet";
+import { handleBadgeMintedLegacy, handleBadgeMinted, handleERC721Minted, handleBadgeTransferred, handleTokenMinted, handleTokenTransferred } from "../src/facet/RewardsFacet";
 import { BadgeId } from "../src/helpers";
 import { BadgeToken, FungibleToken } from "../generated/schema";
 import { ContractURIUpdated as ERC20ContractURIUpdated, Transfer as ERC20Transfer } from "../generated/templates/ERC20Base/ERC20Base";
 import { handleContractURIUpdated, handleTransfer as handleTransferERC20 } from "../src/ERC20Base";
 import { BatchMinted, Minted, Transfer as ERC721Transfer } from "../generated/templates/ERC721Base/ERC721Base";
+import { BatchMinted as BatchMintedBadge, Minted as MintedBadge, Transfer as TransferBadge } from "../generated/templates/ERC721Badge/ERC721Badge";
+import { handleBatchMinted as handleBatchMintedBadge, handleMinted as handleMintedBadge, handleTransfer as handleTransferBadge } from "../src/ERC721Badge";
 import { handleBatchMinted, handleMinted, handleTransfer as handleTransferERC721 } from "../src/ERC721Base";
 import { TokensLazyMinted, Minted as MintedLazyMint, Transfer as TransferERC721LazyMint, BatchMinted as BatchMintedLazyMint } from "../generated/templates/ERC721LazyMint/ERC721LazyMint";
 import { handleLazyMint, handleTransfer as handleTransferERC721LazyMint, handleMinted as handleMintedLazyMint, handleBatchMinted as handleBatchMintedLazyMint } from "../src/ERC721LazyMint";
+import { UpdatedBaseURI } from "../generated/templates/ERC721Badge/ERC721Badge";
+import { handleUpdatedBaseURI } from "../src/ERC721Badge";
 
 export class Param {
   public name: string;
@@ -105,6 +106,21 @@ export function createERC20Token(): ERC20Created {
   return createEvent;
 }
 
+export function createBadge(): ERC721Created {
+  const createEvent = newEvent<ERC721Created>([
+    new Param("id", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("creator", ParamType.ADDRESS, TEST_USER2_ID),
+    new Param("name", ParamType.STRING, TEST_TOKEN_NAME),
+    new Param("symbol", ParamType.STRING, TEST_TOKEN_SYMBOL),
+    new Param("royaltyRecipient", ParamType.ADDRESS, TEST_TOKEN_ROYALTYRECIPIENT),
+    new Param("royaltyBps", ParamType.I32, TEST_TOKEN_ROYALTYBPS),
+    new Param("implementationId", ParamType.BYTES, TEST_TOKEN_IMPLEMENTATIONID_BADGE)
+  ]);
+  erc721handleCreated(createEvent);
+
+  return createEvent;
+}
+
 export function createERC721Token(): ERC721Created {
   const createEvent = newEvent<ERC721Created>([
       new Param("id", ParamType.ADDRESS, TEST_TOKEN_ID),
@@ -180,17 +196,47 @@ export function transferERC20TokenMission(): TokenTransferred {
   return event;
 }
 
-export function mintBadge(): BadgeMinted {
+export function badgeMinted(): BadgeMinted {
   const event = newEvent<BadgeMinted>([
-      new Param("token", ParamType.ADDRESS, TEST_TOKEN_ID),
-      new Param("quantity", ParamType.BIG_INT, "2"),
-      new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
-      new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
-      new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+    new Param("token", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("quantity", ParamType.BIG_INT, "2"),
+    new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+    new Param("activityId", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
+    new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
+    new Param("data", ParamType.BYTES, ""),
   ]);
   // Event handler
-  handleBadgeMinted(event);
+  handleBadgeMinted(event)
+
+  return event;
+}
+
+export function erc721Minted(): ERC721Minted {
+  const event = newEvent<ERC721Minted>([
+    new Param("token", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("quantity", ParamType.BIG_INT, "2"),
+    new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+    new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
+    new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
+    new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+  ]);
+  // Event handler
+  handleERC721Minted(event);
+
+  return event;
+}
+
+export function badgeMintedLegacy(): BadgeMinted1 {
+  const event = newEvent<BadgeMinted1>([
+    new Param("token", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("quantity", ParamType.BIG_INT, "2"),
+    new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+    new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
+    new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
+    new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+  ]);
+  // Event handler
+  handleBadgeMintedLegacy(event);
 
   return event;
 }
@@ -286,6 +332,44 @@ export function transferERC721(to: string): ERC721Transfer {
   return event;
 }
 
+export function mintedBadge(): MintedBadge {
+  const event = newEvent<MintedBadge>([
+      new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+      new Param("tokenURI", ParamType.STRING, "uri://abc"),
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+  // Event handler
+  handleMintedBadge(event);
+
+  return event;
+}
+
+export function batchMintedBadge(): BatchMintedBadge {
+  const event = newEvent<BatchMintedBadge>([
+      new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
+      new Param("quantity", ParamType.BIG_INT, "2"),
+      new Param("baseURI", ParamType.STRING, "uri://abc"),
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+  // Event handler
+  handleBatchMintedBadge(event);
+
+  return event;
+}
+
+export function transferERC721Badge(to: string): TransferBadge {
+  const event = newEvent<TransferBadge>([
+      new Param("from", ParamType.ADDRESS, TEST_USER_ID),
+      new Param("to", ParamType.ADDRESS, to),
+      new Param("tokenId", ParamType.BIG_INT, TEST_BADGETOKEN_ID),
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+  // Event handler
+  handleTransferBadge(event);
+
+  return event;
+}
+
 export function getTestFungibleToken(): FungibleToken {
   const fungibleToken = new FungibleToken(TEST_TOKEN_ID);
   fungibleToken.createdAt = BigInt.fromI32(1);
@@ -350,5 +434,15 @@ export function batchMintedERC721LazyMint(): BatchMintedLazyMint {
   // Event handler
   handleBatchMintedLazyMint(event);
 
+  return event;
+}
+
+export function updatedBaseURI(): UpdatedBaseURI {
+  const event = newEvent<UpdatedBaseURI>([
+    new Param("baseURIForTokens", ParamType.STRING, TEST_TOKEN_MINTED_URI)
+  ]);
+  event.address = Address.fromString(TEST_TOKEN_ID);
+
+  handleUpdatedBaseURI(event);
   return event;
 }

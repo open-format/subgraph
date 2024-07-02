@@ -1,6 +1,5 @@
 export const TEST_APP_ENTITY_TYPE = "App";
 export const TEST_APPMETADATA_ENTITY_TYPE = "AppMetadata";
-export const TEST_APPSTATS_ENTITY_TYPE = "AppStats";
 export const TEST_ACTION_ENTITY_TYPE = "Action";
 export const TEST_ACTIONMETADATA_ENTITY_TYPE = "ActionMetadata";
 export const TEST_BADGE_ENTITY_TYPE = "Badge";
@@ -15,7 +14,6 @@ export const TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE = "MissionFungibleToken";
 export const TEST_MISSIONMETADATA_ENTITY_TYPE = "MissionMetadata";
 export const TEST_MISSION_ENTITY_TYPE = "Mission";
 export const TEST_NFT_ENTITY_TYPE = "NFT";
-export const TEST_STATS_ENTITY_TYPE = "Stats";
 export const TEST_TOKEN_ENTITY_TYPE = "Token";
 export const TEST_USER_ENTITY_TYPE = "User";
 
@@ -37,6 +35,7 @@ export const TEST_TOKEN_ROYALTYRECIPIENT = "0xfa8ebdb2560179cf6d63e32e6414472989
 export const TEST_TOKEN_ROYALTYBPS = "1000";
 export const TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT = "LazyMint";
 export const TEST_TOKEN_IMPLEMENTATIONID_BASE = "Base";
+export const TEST_TOKEN_IMPLEMENTATIONID_BADGE = "Badge";
 export const TEST_TOKEN_TOTAL_SUPPLY = "1234";
 export const TEST_BADGETOKEN_ID = "1233";
 

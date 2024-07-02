@@ -77,6 +77,7 @@ export function handleBatchMinted(event: BatchMinted): void {
   }
 
   badge.save();
+  user.save();
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -85,10 +86,11 @@ export function handleTransfer(event: Transfer): void {
   if (Badge) {
     if (event.params.to == ZERO_ADDRESS) {
       //@TODO is burntSupply the correct name?
-      store.remove("Badge", Badge.id);
+      store.remove("BadgeToken", Badge.id);
     } else {
       Badge.owner = user.id;
       Badge.save();
+      user.save();
     }
   }
 }
