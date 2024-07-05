@@ -5,14 +5,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: AppFactory
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
-    {{#AppFactory.address}}
-      address: "{{AppFactory.address}}"
-    {{/AppFactory.address}}
-    {{#AppFactory.startBlock}}
-      startBlock: {{AppFactory.startBlock}}
-    {{/AppFactory.startBlock}}
+      address: "0x1ED380a1CE17AF38A79c70Ec152e864FefDcC14D"
+      startBlock: 61279895
       abi: AppFactory
     mapping:
       kind: ethereum/events
@@ -30,7 +26,7 @@ dataSources:
 templates:
   - name: ERC721FactoryFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
       abi: ERC721Factory
     mapping:
@@ -49,7 +45,7 @@ templates:
       file: ./src/facet/ERC721Factory.ts
   - name: ERC721Base
     kind: ethereum/contract
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
       abi: ERC721Base
     mapping:
@@ -71,7 +67,7 @@ templates:
       file: ./src/ERC721Base.ts
   - name: ERC721Badge
     kind: ethereum/contract
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
       abi: ERC721Badge
     mapping:
@@ -95,7 +91,7 @@ templates:
       file: ./src/ERC721Badge.ts
   - name: ERC721LazyMint
     kind: ethereum/contract
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
       abi: ERC721LazyMint
     mapping:
@@ -119,7 +115,7 @@ templates:
       file: ./src/ERC721LazyMint.ts
   - name: ERC20FactoryFacet
     kind: ethereum/contract
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
       abi: ERC20FactoryFacet
     mapping:
@@ -139,7 +135,7 @@ templates:
       file: ./src/facet/ERC20Factory.ts
   - name: ERC20Base
     kind: ethereum/contract
-    network: {{network}}
+    network: arbitrum-sepolia
     source:
       abi: ERC20Base
     mapping:
@@ -197,4 +193,4 @@ templates:
         - name: EventFacet
           file: ./abis/EventFacet.json
       handler: handleEventContent
-      file: ./src/facet/EventContent.ts
+      file: ./src/facet/EventFacet.ts

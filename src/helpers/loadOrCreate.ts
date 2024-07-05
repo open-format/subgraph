@@ -5,6 +5,9 @@ import {
   App,
   Badge,
   BadgeToken,
+  Event,
+  EventAsset,
+  EventContent,
   FungibleToken,
   FungibleTokenBalance,
   FungibleTokenMetadata,
@@ -87,10 +90,10 @@ export function loadOrCreateUser(
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
   }
-    _User.updatedAt = event.block.timestamp;
-    _User.updatedAtBlock = event.block.number;
+  _User.updatedAt = event.block.timestamp;
+  _User.updatedAtBlock = event.block.number;
 
-    return _User as User;
+  return _User as User;
 }
 
 export function loadOrCreateActionMetadata(
@@ -252,4 +255,40 @@ export function loadOrCreateFungibleTokenBalance(
   _FungibleTokenBalance.updatedAtBlock = event.block.number;
 
   return _FungibleTokenBalance as FungibleTokenBalance;
+}
+
+export function loadOrCreateEvent(event: ethereum.Event): Event {
+  const id = event.transaction.hash.toHex();
+  let _Event = Event.load(id);
+
+  if (!_Event) {
+    _Event = new Event(id);
+    _Event.createdAt = event.block.timestamp;
+    _Event.createdAtBlock = event.block.number;
+  }
+
+  return _Event as Event;
+}
+
+export function loadOrCreateEventAsset(event: ethereum.Event): EventAsset {
+  const id = event.transaction.hash.toHex() + "-" + event.logIndex.toHex();
+  let _EventAsset = EventAsset.load(id);
+
+  if (!_EventAsset) {
+    _EventAsset = new EventAsset(id);
+    _EventAsset.createdAt = event.block.timestamp;
+    _EventAsset.createdAtBlock = event.block.number;
+  }
+
+  return _EventAsset as EventAsset;
+}
+export function loadOrCreateEventContent(cid: string): EventContent {
+  const id = cid;
+  let _EventContent = EventContent.load(id);
+
+  if (!_EventContent) {
+    _EventContent = new EventContent(id);
+  }
+
+  return _EventContent as EventContent;
 }

@@ -155,3 +155,26 @@ type Mission @entity {
   createdAt: BigInt!
   createdAtBlock: BigInt!
 }
+
+type Event @entity {
+  id: ID!
+  metadata: String
+  assets: [EventAsset!]
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
+type EventAsset @entity {
+  id: ID!
+  type: String!
+  from: User!
+  to: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
+type EventContent @entity(immutable: true) {
+  id: ID!
+  hash: String
+  content: String
+}

@@ -4,7 +4,6 @@
   "scripts": {
     "reinstall": "rm -rf .pnp* && yarn",
     "clean": "rm -rf build/ generated/",
-    
     "prepare:mumbai": "mustache networks/mumbai.json subgraph.template.yaml subgraph.mumbai.yaml",
     "prepare:polygon": "mustache networks/polygon.json subgraph.template.yaml subgraph.polygon.yaml",
     "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
@@ -13,12 +12,10 @@
     "prepare:arbitrum-sepolia": "mustache networks/arbitrum-sepolia.json subgraph.template.yaml subgraph.arbitrum-sepolia.yaml",
     "prepare:arbitrum-sepolia-staging": "mustache networks/arbitrum-sepolia-staging.json subgraph.template.yaml subgraph.arbitrum-sepolia-staging.yaml",
     "prepare:amoy": "mustache networks/amoy.json subgraph.template.yaml subgraph.amoy.yaml",
-
     "create:local": "graph create open-format/mumbai --node http://0.0.0.0:8020",
     "create:mumbai": "dotenv cross-var -- graph create open-format/mumbai --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
-
     "gen:mumbai": "graph codegen subgraph.mumbai.yaml",
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
     "gen:aurora": "graph codegen subgraph.aurora.yaml",
@@ -27,28 +24,24 @@
     "gen:arbitrum-sepolia-staging": "graph codegen subgraph.arbitrum-sepolia-staging.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
     "gen:amoy": "graph codegen subgraph.amoy.yaml",
-    
     "deploy:local": "graph deploy open-format/mumbai --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
     "deploy:aurora": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora subgraph.aurora.yaml",
     "deploy:aurora-testnet": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora-testnet subgraph.aurora-testnet.yaml",
-    
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
-    
     "deploy:polygon": "dotenv cross-var -- graph deploy open-format-polygon --version-label %ALCHEMY_SUBGRAPH_VERSION_POLYGON_MAINNET% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.polygon.yaml",
     "deploy:amoy": "dotenv cross-var -- graph deploy open-format-amoy --version-label %ALCHEMY_SUBGRAPH_VERSION_POLYGON_AMOY% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.amoy.yaml",
-
     "deploy:arbitrum-sepolia": "dotenv cross-var -- graph deploy open-format-arbitrum-sepolia --version-label %ALCHEMY_SUBGRAPH_VERSION_ARBITRUM_SEPOLIA% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.arbitrum-sepolia.yaml",
     "deploy:arbitrum-sepolia-staging": "dotenv cross-var -- graph deploy open-format-arbitrum-sepolia-staging --version-label %ALCHEMY_SUBGRAPH_VERSION_ARBITRUM_SEPOLIA_STAGING% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.arbitrum-sepolia-staging.yaml",
-    "build": "graph build",
+    "build": "graph build subgraph.local.yaml",
     "auth": "graph auth https://api.thegraph.com/deploy/",
-
-    "test": "graph test -v 0.6.0 --logs"
+    "test": "graph test -v 0.6.0 --logs",
+    "graph": "graph"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
-    "@graphprotocol/graph-cli": "^0.71.0",
+    "@graphprotocol/graph-cli": "^0.78.0",
     "@graphprotocol/graph-ts": "^0.35.1",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^7.3.0",
