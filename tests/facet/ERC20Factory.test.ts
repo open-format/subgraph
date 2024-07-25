@@ -1,6 +1,6 @@
 import { assert, clearStore, test, describe, afterEach, dataSourceMock } from "matchstick-as/assembly/index";
 import { createApp, createERC20Token } from "../utils";
-import { TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_USER2_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "../fixtures";
+import { TEST_APP_ENTITY_TYPE, TEST_APP_ID, TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_USER2_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "../fixtures";
 
 describe("ERC20Factory tests", () => {
     afterEach(() => {
@@ -24,6 +24,7 @@ describe("ERC20Factory tests", () => {
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "id", TEST_TOKEN_ID);
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "name", TEST_TOKEN_NAME);
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "symbol", TEST_TOKEN_SYMBOL);
+        assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "decimals", TEST_TOKEN_DECIMALS);
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "totalSupply", "0");
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "burntSupply", "0");
         assert.fieldEquals(TEST_FUNGIBLETOKEN_ENTITY_TYPE, TEST_TOKEN_ID, "app", TEST_APP_ID);

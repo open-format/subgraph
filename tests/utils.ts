@@ -4,7 +4,7 @@ import { Created as ERC20Created } from "../generated/templates/ERC20FactoryFace
 import { Created as ERC721Created } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import { BadgeMinted1, BadgeMinted, ERC721Minted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
 import { Created as AppCreated } from "../generated/AppFactory/AppFactory";
-import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
+import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
 import { handleCreated as erc20handleCreated } from "../src/facet/ERC20Factory";
 import { handleCreated as appHandleCreated } from "../src/AppFactory";
 import { handleCreated as erc721handleCreated } from "../src/facet/ERC721Factory";
@@ -96,7 +96,7 @@ export function createERC20Token(): ERC20Created {
       new Param("creator", ParamType.ADDRESS, TEST_USER2_ID),
       new Param("name", ParamType.STRING, TEST_TOKEN_NAME),
       new Param("symbol", ParamType.STRING, TEST_TOKEN_SYMBOL),
-      new Param("decimals", ParamType.I32, "18"),
+      new Param("decimals", ParamType.I32, TEST_TOKEN_DECIMALS),
       new Param("supply", ParamType.BIG_INT, "1000"),
       new Param("implementationId", ParamType.BYTES, TEST_TOKEN_IMPLEMENTATIONID_BASE),
   ]);
@@ -382,6 +382,7 @@ export function getTestFungibleToken(): FungibleToken {
   fungibleToken.owner = TEST_USER_ID;
   fungibleToken.symbol = "TEST";
   fungibleToken.burntSupply = BigInt.fromI32(0);
+  fungibleToken.decimals = BigInt.fromString(TEST_TOKEN_DECIMALS).toI32();
 
   return fungibleToken;
 }
