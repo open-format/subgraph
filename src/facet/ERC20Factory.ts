@@ -27,6 +27,7 @@ export function handleCreated(event: Created): void {
 
   fungibleToken.name = event.params.name;
   fungibleToken.symbol = event.params.symbol;
+  fungibleToken.decimals = event.params.decimals;
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
 
