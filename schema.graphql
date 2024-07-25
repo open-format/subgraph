@@ -156,3 +156,15 @@ type Mission @entity {
   createdAt: BigInt!
   createdAtBlock: BigInt!
 }
+
+type Charge @entity(immutable: true) {
+  id: ID!
+  app: App!
+  user: User!
+  token: FungibleToken!
+  amount: BigInt!
+  chargeId: String!
+  chargeType: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
