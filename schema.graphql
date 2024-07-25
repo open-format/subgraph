@@ -12,6 +12,7 @@ type FungibleToken @entity {
   name: String!
   owner: User!
   symbol: String!
+  decimals: Int!
   metadata: FungibleTokenMetadata
   app: App
   totalSupply: BigInt!

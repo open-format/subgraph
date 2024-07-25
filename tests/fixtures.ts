@@ -31,6 +31,7 @@ export const TEST_BADGE_NAME = "test_badge_name_01";
 export const TEST_TOKEN_ID = "0x08fef47c302422cf6d63e32e6414472989cd49e8";
 export const TEST_TOKEN_NAME = "test_token_name01";
 export const TEST_TOKEN_SYMBOL = "TST_01";
+export const TEST_TOKEN_DECIMALS = "18";
 export const TEST_TOKEN_ROYALTYRECIPIENT = "0xfa8ebdb2560179cf6d63e32e6414472989cd49e8";
 export const TEST_TOKEN_ROYALTYBPS = "1000";
 export const TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT = "LazyMint";
