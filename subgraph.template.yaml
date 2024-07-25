@@ -190,3 +190,21 @@ templates:
         - event: BadgeTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleBadgeTransferred
       file: ./src/facet/RewardsFacet.ts
+  - name: ChargeFacet
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ChargeFacet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Action
+      abis:
+        - name: ChargeFacet
+          file: ./abis/ChargeFacet.json
+      eventHandlers:
+        - event: chargedUser(address,address,uint256,bytes32,bytes32)
+          handler: handleChargedUser
+      file: ./src/facet/ChargeFacet.ts

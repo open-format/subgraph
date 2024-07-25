@@ -1,10 +1,11 @@
-import {Address, BigInt, Bytes, ethereum} from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import {
   Action,
   ActionMetadata,
   App,
   Badge,
   BadgeToken,
+  Charge,
   FungibleToken,
   FungibleTokenBalance,
   FungibleTokenMetadata,
@@ -13,8 +14,8 @@ import {
   MissionMetadata,
   User,
 } from "../../generated/schema";
-import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
-import {Zero} from "./numbers";
+import { ActionId, BadgeId, ChargeId, MissionId, TokenBalanceId } from "./idTemplates";
+import { Zero } from "./numbers";
 
 export function loadOrCreateApp(
   appAddress: Address,
@@ -87,10 +88,10 @@ export function loadOrCreateUser(
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
   }
-    _User.updatedAt = event.block.timestamp;
-    _User.updatedAtBlock = event.block.number;
+  _User.updatedAt = event.block.timestamp;
+  _User.updatedAtBlock = event.block.number;
 
-    return _User as User;
+  return _User as User;
 }
 
 export function loadOrCreateActionMetadata(
@@ -252,4 +253,19 @@ export function loadOrCreateFungibleTokenBalance(
   _FungibleTokenBalance.updatedAtBlock = event.block.number;
 
   return _FungibleTokenBalance as FungibleTokenBalance;
+}
+
+// Charge is immutable so only need create
+export function createCharge(
+  transactionHash: Bytes,
+  logIndex: BigInt,
+  event: ethereum.Event
+): Charge {
+  let id = ChargeId(transactionHash, logIndex)
+  let charge = new Charge(id);
+
+  charge.createdAt = event.block.timestamp;
+  charge.createdAtBlock = event.block.number;
+
+  return charge as Charge;
 }
