@@ -9,7 +9,7 @@
         "internalType": "address"
       },
       {
-        "name": "credit",
+        "name": "token",
         "type": "address",
         "internalType": "address"
       },
@@ -34,10 +34,10 @@
   },
   {
     "type": "function",
-    "name": "getMinimumCreditBalance",
+    "name": "getRequiredTokenBalance",
     "inputs": [
       {
-        "name": "credit",
+        "name": "token",
         "type": "address",
         "internalType": "address"
       }
@@ -61,7 +61,7 @@
         "internalType": "address"
       },
       {
-        "name": "credit",
+        "name": "token",
         "type": "address",
         "internalType": "address"
       }
@@ -90,10 +90,10 @@
   },
   {
     "type": "function",
-    "name": "setMinimumCreditBalance",
+    "name": "setRequiredTokenBalance",
     "inputs": [
       {
-        "name": "credit",
+        "name": "token",
         "type": "address",
         "internalType": "address"
       },
@@ -121,26 +121,7 @@
   },
   {
     "type": "event",
-    "name": "OwnershipTransferred",
-    "inputs": [
-      {
-        "name": "previousOwner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "newOwner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "chargedUser",
+    "name": "ChargedUser",
     "inputs": [
       {
         "name": "user",
@@ -149,7 +130,7 @@
         "internalType": "address"
       },
       {
-        "name": "credit",
+        "name": "token",
         "type": "address",
         "indexed": false,
         "internalType": "address"
@@ -177,10 +158,29 @@
   },
   {
     "type": "event",
-    "name": "minimumCreditBalanceUpdated",
+    "name": "OwnershipTransferred",
     "inputs": [
       {
-        "name": "credit",
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RequiredTokenBalanceUpdated",
+    "inputs": [
+      {
+        "name": "token",
         "type": "address",
         "indexed": false,
         "internalType": "address"
