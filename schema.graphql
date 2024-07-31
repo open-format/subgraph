@@ -43,6 +43,7 @@ type App @entity {
   badges: [Badge!] @derivedFrom(field: "app")
   badgeCount: BigInt!
   badgesAwarded: BigInt!
+  requiredTokenBalance: [RequiredTokenBalance!] @derivedFrom(field: "app")
   createdAt: BigInt!
   createdAtBlock: BigInt!
   updatedAt: BigInt!
@@ -56,6 +57,17 @@ type AppMetadata @entity {
   URI: String!
   createdAt: BigInt!
   createdAtBlock: BigInt!
+}
+
+type RequiredTokenBalance @entity {
+  id: ID!
+  app: App!
+  token: FungibleToken!
+  balance: BigInt!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAt: BigInt!
+  updatedAtBlock: BigInt!
 }
 
 type BadgeToken @entity {

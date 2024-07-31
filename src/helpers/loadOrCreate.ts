@@ -12,9 +12,10 @@ import {
   Mission,
   MissionFungibleToken,
   MissionMetadata,
+  RequiredTokenBalance,
   User,
 } from "../../generated/schema";
-import { ActionId, BadgeId, ChargeId, MissionId, TokenBalanceId } from "./idTemplates";
+import { ActionId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
 import { Zero } from "./numbers";
 
 export function loadOrCreateApp(
@@ -268,4 +269,24 @@ export function createCharge(
   charge.createdAtBlock = event.block.number;
 
   return charge as Charge;
+}
+
+export function loadOrCreateRequiredTokenBalance(
+  contractAddress: Address,
+  tokenAddress: Address,
+  event: ethereum.Event
+): RequiredTokenBalance {
+  const id = RequiredTokenBalanceId(contractAddress, tokenAddress);
+  let requiredTokenBalance = RequiredTokenBalance.load(id);
+
+  if (!requiredTokenBalance) {
+    requiredTokenBalance = new RequiredTokenBalance(id);
+    requiredTokenBalance.createdAt = event.block.timestamp;
+    requiredTokenBalance.createdAtBlock = event.block.number;
+  }
+
+  requiredTokenBalance.updatedAt = event.block.timestamp;
+  requiredTokenBalance.updatedAtBlock = event.block.number;
+
+  return requiredTokenBalance as RequiredTokenBalance;
 }

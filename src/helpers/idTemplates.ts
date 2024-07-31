@@ -16,6 +16,10 @@ export function ChargeId(transactionHash: Bytes, logIndex: BigInt): string {
   return transactionHash.toHex() + "-" + logIndex.toHex();
 }
 
+export function RequiredTokenBalanceId(appAddress: Address, tokenAddress: Address): string {
+  return appAddress.toHex() + "-" + tokenAddress.toHex();
+}
+
 export function TokenBalanceId(
   contractAddress: Address,
   userAddress: Address

@@ -207,4 +207,6 @@ templates:
       eventHandlers:
         - event: ChargedUser(address,address,uint256,bytes32,bytes32)
           handler: handleChargedUser
+        - event: RequiredTokenBalanceUpdated(address,uint256)
+          handler: handleRequiredTokenBalanceUpdated
       file: ./src/facet/ChargeFacet.ts
