@@ -21,7 +21,7 @@ import { TokensLazyMinted, Minted as MintedLazyMint, Transfer as TransferERC721L
 import { handleLazyMint, handleTransfer as handleTransferERC721LazyMint, handleMinted as handleMintedLazyMint, handleBatchMinted as handleBatchMintedLazyMint } from "../src/ERC721LazyMint";
 import { UpdatedBaseURI } from "../generated/templates/ERC721Badge/ERC721Badge";
 import { handleUpdatedBaseURI } from "../src/ERC721Badge";
-import { chargedUser } from "../generated/templates/ChargeFacet/ChargeFacet";
+import { ChargedUser } from "../generated/templates/ChargeFacet/ChargeFacet";
 import { handleChargedUser } from "../src/facet/ChargeFacet";
 
 export class Param {
@@ -450,8 +450,8 @@ export function updatedBaseURI(): UpdatedBaseURI {
   return event;
 }
 
-export function chargeUser(): chargedUser {
-  const event = newEvent<chargedUser>([
+export function chargeUser(): ChargedUser {
+  const event = newEvent<ChargedUser>([
     new Param("user", ParamType.ADDRESS, TEST_USER_ID),
     new Param("credit", ParamType.ADDRESS, TEST_TOKEN_ID),
     new Param("amount", ParamType.BIG_INT, TEST_ONE_ETHER),

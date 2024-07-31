@@ -7,7 +7,8 @@ import {
   ethereum
 } from "@graphprotocol/graph-ts";
 import {
-  chargedUser as ChargedUser
+  ChargedUser,
+  RequiredTokenBalanceUpdated
 } from "../../generated/templates/ChargeFacet/ChargeFacet";
 import {
   createCharge,
@@ -22,7 +23,7 @@ export function handleChargedUser(event: ChargedUser): void {
 
   let user = loadOrCreateUser(event.params.user, event);
   let app = loadOrCreateApp(appAddress, event);
-  let token = loadOrCreateFungibleToken(event.params.credit, event);
+  let token = loadOrCreateFungibleToken(event.params.token, event);
   let charge = createCharge(event.transaction.hash, event.logIndex, event);
 
   charge.app = app.id

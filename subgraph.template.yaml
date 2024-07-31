@@ -205,6 +205,6 @@ templates:
         - name: ChargeFacet
           file: ./abis/ChargeFacet.json
       eventHandlers:
-        - event: chargedUser(address,address,uint256,bytes32,bytes32)
+        - event: ChargedUser(address,address,uint256,bytes32,bytes32)
           handler: handleChargedUser
       file: ./src/facet/ChargeFacet.ts
