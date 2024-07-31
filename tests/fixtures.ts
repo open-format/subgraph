@@ -17,6 +17,7 @@ export const TEST_NFT_ENTITY_TYPE = "NFT";
 export const TEST_TOKEN_ENTITY_TYPE = "Token";
 export const TEST_USER_ENTITY_TYPE = "User";
 export const TEST_CHARGE_ENTITY_TYPE = "Charge";
+export const TEST_REQUIREDTOKENBALANCE_ENTITY_TYPE = "RequiredTokenBalance"
 
 export const TEST_APP_ID = "0x483131211b3e41e0e432cb5f4d21b25e142d1f7a";
 export const TEST_APP_NAME = "TestApp";

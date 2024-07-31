@@ -21,8 +21,8 @@ import { TokensLazyMinted, Minted as MintedLazyMint, Transfer as TransferERC721L
 import { handleLazyMint, handleTransfer as handleTransferERC721LazyMint, handleMinted as handleMintedLazyMint, handleBatchMinted as handleBatchMintedLazyMint } from "../src/ERC721LazyMint";
 import { UpdatedBaseURI } from "../generated/templates/ERC721Badge/ERC721Badge";
 import { handleUpdatedBaseURI } from "../src/ERC721Badge";
-import { ChargedUser } from "../generated/templates/ChargeFacet/ChargeFacet";
-import { handleChargedUser } from "../src/facet/ChargeFacet";
+import { ChargedUser, RequiredTokenBalanceUpdated } from "../generated/templates/ChargeFacet/ChargeFacet";
+import { handleChargedUser, handleRequiredTokenBalanceUpdated } from "../src/facet/ChargeFacet";
 
 export class Param {
   public name: string;
@@ -464,3 +464,13 @@ export function chargeUser(): ChargedUser {
   return event;
 }
 
+export function setRequiredTokenBalance(): RequiredTokenBalanceUpdated {
+  const event = newEvent<RequiredTokenBalanceUpdated>([
+    new Param("credit", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("amount", ParamType.BIG_INT, TEST_ONE_ETHER),
+  ]);
+  event.address = Address.fromString(TEST_APP_ID);
+
+  handleRequiredTokenBalanceUpdated(event);
+  return event;
+}
