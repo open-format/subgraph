@@ -14,7 +14,7 @@
     "prepare:arbitrum-sepolia-staging": "mustache networks/arbitrum-sepolia-staging.json subgraph.template.yaml subgraph.arbitrum-sepolia-staging.yaml",
     "prepare:amoy": "mustache networks/amoy.json subgraph.template.yaml subgraph.amoy.yaml",
 
-    "create:local": "graph create open-format/mumbai --node http://0.0.0.0:8020",
+    "create:local": "graph create open-format-local --node http://0.0.0.0:8020",
     "create:mumbai": "dotenv cross-var -- graph create open-format/mumbai --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
@@ -28,7 +28,7 @@
     "gen:local": "graph codegen subgraph.local.yaml",
     "gen:amoy": "graph codegen subgraph.amoy.yaml",
     
-    "deploy:local": "graph deploy open-format/mumbai --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
+    "deploy:local": "graph deploy open-format-local --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
     "deploy:aurora": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora subgraph.aurora.yaml",
     "deploy:aurora-testnet": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/aurora-testnet subgraph.aurora-testnet.yaml",
