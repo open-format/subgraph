@@ -1,11 +1,7 @@
 {
   "network": "aurora",
-  "StarFactory": {
-    "address": "0xc0553B98d93114FB241196272603DF4543359820",
-    "startBlock": 98332717
-  },
-  "ConstellationFactory": {
-    "startBlock": 98332743,
-    "address": "0xa3cCc90A2025cefad0AeDF4CFe44aD059605620c"
+  "AppFactory": {
+    "startBlock": 131490511,
+    "address": "0x2eBF7f4572c218217ca01CE2883E3EfF93626a8E"
   }
 }
