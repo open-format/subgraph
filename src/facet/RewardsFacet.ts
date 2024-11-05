@@ -8,7 +8,7 @@ import {
   TokenMinted,
   TokenTransferred,
 } from "../../generated/templates/RewardsFacet/RewardsFacet";
-import { loadBadgeToken } from "../helpers";
+import { createExternalFungibleToken, loadBadgeToken, ZERO_ADDRESS } from "../helpers";
 import {
   loadOrCreateAction,
   loadOrCreateActionMetadata,
@@ -19,6 +19,7 @@ import {
   loadOrCreateMissionMetadata,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
+import { FungibleToken } from "../../generated/schema";
 
 export function handleTokenMinted(event: TokenMinted): void {
   let context = dataSource.context();
@@ -65,12 +66,20 @@ export function handleTokenMinted(event: TokenMinted): void {
       event.params.id,
       event.params.token
     );
+
+    // Check token exists
+    let tokenAddress = event.params.token;
+    let fungibleToken = FungibleToken.load(tokenAddress.toHex());
+    if (!fungibleToken) {
+      createExternalFungibleToken(tokenAddress, event);
+    }
+
     // TODO: this looks like if a any token is rewarded as part of a mission it will wrongly count as xp
     mission.xp_rewarded = event.params.amount;
 
     missionFungibleToken.amount_rewarded = event.params.amount;
     missionFungibleToken.mission = mission.id;
-    missionFungibleToken.token = event.params.token.toHex();
+    missionFungibleToken.token = tokenAddress.toHex();
 
     missionMetadata.name = event.params.id.toString();
     missionMetadata.URI = event.params.uri;
@@ -105,11 +114,18 @@ export function handleTokenTransferred(event: TokenTransferred): void {
     event.params.token
   );
 
+  // Check token exists
+  let tokenAddress = event.params.token;
+  let fungibleToken = FungibleToken.load(tokenAddress.toHex());
+  if (!fungibleToken) {
+    createExternalFungibleToken(tokenAddress, event);
+  }
+
   let user = loadOrCreateUser(event.params.to, event);
 
   missionFungibleToken.amount_rewarded = event.params.amount;
   missionFungibleToken.mission = mission.id;
-  missionFungibleToken.token = event.params.token.toHex();
+  missionFungibleToken.token = tokenAddress.toHex();
 
   missionMetadata.name = event.params.id.toString();
   missionMetadata.URI = event.params.uri;
