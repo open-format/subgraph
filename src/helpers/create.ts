@@ -18,10 +18,15 @@ export function createExternalFungibleToken(
   // need to call token to retrieve all the details
   let boundContract = ERC20BaseContract.bind(tokenAddress);
   let zeroUser = loadOrCreateUser(Address.fromBytes(ZERO_ADDRESS), event);
-  // TODO: catch bound contract failing
-  fungibleToken.name = boundContract.name();
-  fungibleToken.symbol = boundContract.symbol();
-  fungibleToken.decimals = boundContract.decimals();
+
+  // Try to fetch the token name, symbol and decimals from contract
+  // if they revert fallback to "UNKNOWN" or 18 for decimals
+  let nameResult = boundContract.try_name();
+  fungibleToken.name = nameResult.reverted ? "UNKNOWN" : nameResult.value;
+  let symbolResult = boundContract.try_symbol();
+  fungibleToken.symbol = symbolResult.reverted ? "UNKNOWN" : symbolResult.value;
+  let decimalsResult = boundContract.try_decimals();
+  fungibleToken.decimals = decimalsResult.reverted ? 18 : decimalsResult.value;
 
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
