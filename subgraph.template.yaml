@@ -171,6 +171,8 @@ templates:
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json
+        - name: ERC20Base
+          file: ./abis/ERC20Base.json
         - name: ERC721Base
           file: ./abis/ERC721Base.json
         - name: ERC721Badge
