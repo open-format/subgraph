@@ -26,3 +26,7 @@ export function TokenBalanceId(
 ): string {
   return contractAddress.toHex() + "-" + userAddress.toHex();
 }
+
+export function AppFungibleTokenId(appAddress: Address, tokenAddress: Address): string {
+  return appAddress.toHex() + "-" + tokenAddress.toHex();
+}

@@ -8,10 +8,11 @@ import {
   TokenMinted,
   TokenTransferred,
 } from "../../generated/templates/RewardsFacet/RewardsFacet";
-import { createExternalFungibleToken, loadBadgeToken, ZERO_ADDRESS } from "../helpers";
+import { createExternalFungibleToken, loadBadgeToken } from "../helpers";
 import {
   loadOrCreateAction,
   loadOrCreateActionMetadata,
+  loadOrCreateAppFungibleToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
   loadOrCreateMission,
@@ -67,19 +68,14 @@ export function handleTokenMinted(event: TokenMinted): void {
       event.params.token
     );
 
-    // Check token exists
-    let tokenAddress = event.params.token;
-    let fungibleToken = FungibleToken.load(tokenAddress.toHex());
-    if (!fungibleToken) {
-      createExternalFungibleToken(tokenAddress, event);
-    }
+    associateAppWithToken(appAddress, event.params.token, event);
 
     // TODO: this looks like if a any token is rewarded as part of a mission it will wrongly count as xp
     mission.xp_rewarded = event.params.amount;
 
     missionFungibleToken.amount_rewarded = event.params.amount;
     missionFungibleToken.mission = mission.id;
-    missionFungibleToken.token = tokenAddress.toHex();
+    missionFungibleToken.token = event.params.token.toHex();
 
     missionMetadata.name = event.params.id.toString();
     missionMetadata.URI = event.params.uri;
@@ -114,18 +110,13 @@ export function handleTokenTransferred(event: TokenTransferred): void {
     event.params.token
   );
 
-  // Check token exists
-  let tokenAddress = event.params.token;
-  let fungibleToken = FungibleToken.load(tokenAddress.toHex());
-  if (!fungibleToken) {
-    createExternalFungibleToken(tokenAddress, event);
-  }
+  associateAppWithToken(appAddress, event.params.token, event);
 
   let user = loadOrCreateUser(event.params.to, event);
 
   missionFungibleToken.amount_rewarded = event.params.amount;
   missionFungibleToken.mission = mission.id;
-  missionFungibleToken.token = tokenAddress.toHex();
+  missionFungibleToken.token = event.params.token.toHex();
 
   missionMetadata.name = event.params.id.toString();
   missionMetadata.URI = event.params.uri;
@@ -283,6 +274,16 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   user.save();
 }
 
+function associateAppWithToken(appAddress: Address, tokenAddress: Address, event: ethereum.Event): void {
+  // Check token exists
+  let fungibleToken = FungibleToken.load(tokenAddress.toHex());
+  if (!fungibleToken) {
+    createExternalFungibleToken(tokenAddress, event);
+  }
+  // Ensure app has an association with fungibleToken
+  let appFungibleToken = loadOrCreateAppFungibleToken(appAddress, tokenAddress);
+  appFungibleToken.save();
+}
 
 export class BadgeMintedParams {
   _token: Address

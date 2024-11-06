@@ -7,6 +7,13 @@ type FungibleTokenMetadata @entity {
   updatedAtBlock: BigInt!
 }
 
+# Performant many to many relationship of App and fungibleToken, see https://thegraph.com/docs/en/developing/creating-a-subgraph/#example-1
+type AppFungibleToken @entity {
+  id: ID!
+  app: App!
+  token: FungibleToken!
+}
+
 type FungibleToken @entity {
   id: ID!
   name: String!
@@ -43,6 +50,7 @@ type App @entity {
   badges: [Badge!] @derivedFrom(field: "app")
   badgeCount: BigInt!
   badgesAwarded: BigInt!
+  tokens: [AppFungibleToken!] @derivedFrom(field: "app")
   requiredTokenBalance: [RequiredTokenBalance!] @derivedFrom(field: "app")
   createdAt: BigInt!
   createdAtBlock: BigInt!

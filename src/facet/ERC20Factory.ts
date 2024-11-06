@@ -8,6 +8,7 @@ import {ERC20Base} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import {
   loadOrCreateApp,
+  loadOrCreateAppFungibleToken,
   loadOrCreateFungibleToken,
   loadOrCreateUser,
 } from "../helpers";
@@ -15,15 +16,16 @@ import {
 
 export function handleCreated(event: Created): void {
   let context = dataSource.context();
-  let starAddress = Address.fromString(context.getString("App"));
+  let appAddress = Address.fromString(context.getString("App"));
   let ERC20Context = new DataSourceContext();
 
   ERC20Context.setString("ERC20Contract", event.params.id.toHex());
   ERC20Base.createWithContext(event.params.id, ERC20Context);
 
   let fungibleToken = loadOrCreateFungibleToken(event.params.id, event);
+  let appFungibleToken = loadOrCreateAppFungibleToken(appAddress, event.params.id);
   let user = loadOrCreateUser(event.params.creator, event);
-  let star = loadOrCreateApp(starAddress, event);
+  let app = loadOrCreateApp(appAddress, event);
 
   fungibleToken.name = event.params.name;
   fungibleToken.symbol = event.params.symbol;
@@ -40,5 +42,6 @@ export function handleCreated(event: Created): void {
   }
 
   fungibleToken.save();
+  appFungibleToken.save();
   user.save();
 }
