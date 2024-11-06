@@ -21,7 +21,11 @@ type FungibleToken @entity {
   symbol: String!
   decimals: Int!
   metadata: FungibleTokenMetadata
-  app: App
+  """
+  DEPRECATED: The `app` field has been deprecated as app-token is a many to many relationship, please use `apps` instead.
+  """
+  app: App @deprecated(reason: "The `app` field has been deprecated as app-token is a many to many relationship, please use `apps` instead.")
+  apps: [AppFungibleToken!] @derivedFrom(field: "token")
   totalSupply: BigInt!
   burntSupply: BigInt!
   createdAt: BigInt!

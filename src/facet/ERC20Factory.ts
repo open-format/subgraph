@@ -32,13 +32,15 @@ export function handleCreated(event: Created): void {
   fungibleToken.decimals = event.params.decimals;
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
-
-  fungibleToken.app = star.id;
   fungibleToken.owner = user.id;
 
-  if (!star.xpToken) {
-    star.xpToken = fungibleToken.id;
-    star.save();
+  // DEPRECATED: `app` will be removed in the next major release.
+  // Replaced with `apps` which is derived from `AppFungibleTokens`.
+  fungibleToken.app = app.id;
+
+  if (!app.xpToken) {
+    app.xpToken = fungibleToken.id;
+    app.save();
   }
 
   fungibleToken.save();
