@@ -48,6 +48,7 @@ export const TEST_TOKEN_MINTED_ACTION = "ACTION";
 export const TEST_TOKEN_MINTED_ACTION_ID = "ACTION_ID";
 export const TEST_TOKEN_MINTED_MISSION = "MISSION";
 export const TEST_TOKEN_MINTED_MISSION_ID = "MISSION_ID";
+export const TEST_TOKEN_MINTED_MISSION_URI = "ipfs://Qmam9tnUCBjBBDtXUaZKQ3svoyjDALV8jo4wj9WWHQvuN5"
 export const TEST_TOKEN_MINTED_URI = "ipfs://abcd123456";
 
 export const TEST_CHARGE_ID = "CHARGE_ID";
