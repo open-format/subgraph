@@ -18,3 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 - `FungibleToken.app` field (#124)
+
+### Fixed
+
+- Bug where `MissionMetadata.URI` field was being indexed incorrectly (#70)

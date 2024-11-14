@@ -224,7 +224,7 @@ function handleERC721MintedEvent(
     missionBadges.push(missionBadge.id);
   }
 
-  missionMetadata.URI = badgeMetadataURI ? badgeMetadataURI : params.data.toString()
+  missionMetadata.URI = params.data.toString();
   missionMetadata.name = params.activityId.toString();
 
   mission.user = user.id;
