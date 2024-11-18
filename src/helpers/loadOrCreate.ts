@@ -3,6 +3,7 @@ import {
   Action,
   ActionMetadata,
   App,
+  AppFungibleToken,
   Badge,
   BadgeToken,
   Charge,
@@ -15,7 +16,7 @@ import {
   RequiredTokenBalance,
   User,
 } from "../../generated/schema";
-import { ActionId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
+import { ActionId, AppFungibleTokenId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
 import { Zero } from "./numbers";
 
 export function loadOrCreateApp(
@@ -289,4 +290,20 @@ export function loadOrCreateRequiredTokenBalance(
   requiredTokenBalance.updatedAtBlock = event.block.number;
 
   return requiredTokenBalance as RequiredTokenBalance;
+}
+
+export function loadOrCreateAppFungibleToken(
+  appAddress: Address,
+  tokenAddress: Address
+): AppFungibleToken {
+  const id = AppFungibleTokenId(appAddress, tokenAddress);
+  let appFungibleToken = AppFungibleToken.load(id);
+
+  if (!appFungibleToken) {
+    appFungibleToken = new AppFungibleToken(id);
+    appFungibleToken.app = appAddress.toHex();
+    appFungibleToken.token = tokenAddress.toHex();
+  }
+
+  return appFungibleToken as AppFungibleToken;
 }

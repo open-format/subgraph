@@ -7,6 +7,13 @@ type FungibleTokenMetadata @entity {
   updatedAtBlock: BigInt!
 }
 
+# Performant many to many relationship of App and fungibleToken, see https://thegraph.com/docs/en/developing/creating-a-subgraph/#example-1
+type AppFungibleToken @entity {
+  id: ID!
+  app: App!
+  token: FungibleToken!
+}
+
 type FungibleToken @entity {
   id: ID!
   name: String!
@@ -14,7 +21,11 @@ type FungibleToken @entity {
   symbol: String!
   decimals: Int!
   metadata: FungibleTokenMetadata
-  app: App
+  """
+  DEPRECATED: The `app` field has been deprecated as app-token is a many to many relationship, please use `apps` instead.
+  """
+  app: App @deprecated(reason: "The `app` field has been deprecated as app-token is a many to many relationship, please use `apps` instead.")
+  apps: [AppFungibleToken!] @derivedFrom(field: "token")
   totalSupply: BigInt!
   burntSupply: BigInt!
   createdAt: BigInt!
@@ -43,6 +54,7 @@ type App @entity {
   badges: [Badge!] @derivedFrom(field: "app")
   badgeCount: BigInt!
   badgesAwarded: BigInt!
+  tokens: [AppFungibleToken!] @derivedFrom(field: "app")
   requiredTokenBalance: [RequiredTokenBalance!] @derivedFrom(field: "app")
   createdAt: BigInt!
   createdAtBlock: BigInt!

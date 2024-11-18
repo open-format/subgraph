@@ -8,10 +8,11 @@ import {
   TokenMinted,
   TokenTransferred,
 } from "../../generated/templates/RewardsFacet/RewardsFacet";
-import { loadBadgeToken } from "../helpers";
+import { createExternalFungibleToken, loadBadgeToken } from "../helpers";
 import {
   loadOrCreateAction,
   loadOrCreateActionMetadata,
+  loadOrCreateAppFungibleToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
   loadOrCreateMission,
@@ -19,6 +20,7 @@ import {
   loadOrCreateMissionMetadata,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
+import { FungibleToken } from "../../generated/schema";
 
 export function handleTokenMinted(event: TokenMinted): void {
   let context = dataSource.context();
@@ -65,6 +67,9 @@ export function handleTokenMinted(event: TokenMinted): void {
       event.params.id,
       event.params.token
     );
+
+    associateAppWithToken(appAddress, event.params.token, event);
+
     // TODO: this looks like if a any token is rewarded as part of a mission it will wrongly count as xp
     mission.xp_rewarded = event.params.amount;
 
@@ -104,6 +109,8 @@ export function handleTokenTransferred(event: TokenTransferred): void {
     event.params.id,
     event.params.token
   );
+
+  associateAppWithToken(appAddress, event.params.token, event);
 
   let user = loadOrCreateUser(event.params.to, event);
 
@@ -217,7 +224,7 @@ function handleERC721MintedEvent(
     missionBadges.push(missionBadge.id);
   }
 
-  missionMetadata.URI = badgeMetadataURI ? badgeMetadataURI : params.data.toString()
+  missionMetadata.URI = params.data.toString();
   missionMetadata.name = params.activityId.toString();
 
   mission.user = user.id;
@@ -267,6 +274,16 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   user.save();
 }
 
+function associateAppWithToken(appAddress: Address, tokenAddress: Address, event: ethereum.Event): void {
+  // Check token exists
+  let fungibleToken = FungibleToken.load(tokenAddress.toHex());
+  if (!fungibleToken) {
+    createExternalFungibleToken(tokenAddress, event);
+  }
+  // Ensure app has an association with fungibleToken
+  let appFungibleToken = loadOrCreateAppFungibleToken(appAddress, tokenAddress);
+  appFungibleToken.save();
+}
 
 export class BadgeMintedParams {
   _token: Address
