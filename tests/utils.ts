@@ -4,7 +4,7 @@ import { Created as ERC20Created } from "../generated/templates/ERC20FactoryFace
 import { Created as ERC721Created } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import { BadgeMinted1, BadgeMinted, ERC721Minted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
 import { Created as AppCreated } from "../generated/AppFactory/AppFactory";
-import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
+import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_CHARGE_ID, TEST_CHARGE_TYPE, TEST_ONE_ETHER, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_MISSION_URI, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
 import { handleCreated as erc20handleCreated } from "../src/facet/ERC20Factory";
 import { handleCreated as appHandleCreated } from "../src/AppFactory";
 import { handleCreated as erc721handleCreated } from "../src/facet/ERC721Factory";
@@ -21,6 +21,8 @@ import { TokensLazyMinted, Minted as MintedLazyMint, Transfer as TransferERC721L
 import { handleLazyMint, handleTransfer as handleTransferERC721LazyMint, handleMinted as handleMintedLazyMint, handleBatchMinted as handleBatchMintedLazyMint } from "../src/ERC721LazyMint";
 import { UpdatedBaseURI } from "../generated/templates/ERC721Badge/ERC721Badge";
 import { handleUpdatedBaseURI } from "../src/ERC721Badge";
+import { ChargedUser, RequiredTokenBalanceUpdated } from "../generated/templates/ChargeFacet/ChargeFacet";
+import { handleChargedUser, handleRequiredTokenBalanceUpdated } from "../src/facet/ChargeFacet";
 
 export class Param {
   public name: string;
@@ -158,7 +160,7 @@ export function mintERC20TokenAction(): TokenMinted {
       new Param("amount", ParamType.BIG_INT, "2"),
       new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_ACTION_ID),
       new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_ACTION),
-      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleTokenMinted(tokenMintedEvent);
@@ -173,7 +175,7 @@ export function mintERC20TokenMission(): TokenMinted {
       new Param("amount", ParamType.BIG_INT, "2"),
       new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
       new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleTokenMinted(tokenMintedEvent);
@@ -188,7 +190,7 @@ export function transferERC20TokenMission(): TokenTransferred {
       new Param("amount", ParamType.BIG_INT, "2"),
       new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
       new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleTokenTransferred(event);
@@ -203,7 +205,7 @@ export function badgeMinted(): BadgeMinted {
     new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
     new Param("activityId", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
     new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-    new Param("data", ParamType.BYTES, ""),
+    new Param("data", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleBadgeMinted(event)
@@ -218,7 +220,7 @@ export function erc721Minted(): ERC721Minted {
     new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
     new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
     new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-    new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+    new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleERC721Minted(event);
@@ -233,7 +235,7 @@ export function badgeMintedLegacy(): BadgeMinted1 {
     new Param("to", ParamType.ADDRESS, TEST_USER3_ID),
     new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
     new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-    new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+    new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleBadgeMintedLegacy(event);
@@ -263,7 +265,7 @@ export function transferBadge(): BadgeTransferred {
       new Param("tokenId", ParamType.BIG_INT, TEST_BADGETOKEN_ID),
       new Param("id", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION_ID),
       new Param("activityType", ParamType.BYTES, TEST_TOKEN_MINTED_MISSION),
-      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_URI),
+      new Param("uri", ParamType.STRING, TEST_TOKEN_MINTED_MISSION_URI),
   ]);
   // Event handler
   handleBadgeTransferred(event);
@@ -445,5 +447,30 @@ export function updatedBaseURI(): UpdatedBaseURI {
   event.address = Address.fromString(TEST_TOKEN_ID);
 
   handleUpdatedBaseURI(event);
+  return event;
+}
+
+export function chargeUser(): ChargedUser {
+  const event = newEvent<ChargedUser>([
+    new Param("user", ParamType.ADDRESS, TEST_USER_ID),
+    new Param("credit", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("amount", ParamType.BIG_INT, TEST_ONE_ETHER),
+    new Param("chargeId", ParamType.BYTES, TEST_CHARGE_ID),
+    new Param("chargeType", ParamType.BYTES, TEST_CHARGE_TYPE),
+  ]);
+  event.address = Address.fromString(TEST_APP_ID);
+
+  handleChargedUser(event);
+  return event;
+}
+
+export function setRequiredTokenBalance(): RequiredTokenBalanceUpdated {
+  const event = newEvent<RequiredTokenBalanceUpdated>([
+    new Param("credit", ParamType.ADDRESS, TEST_TOKEN_ID),
+    new Param("amount", ParamType.BIG_INT, TEST_ONE_ETHER),
+  ]);
+  event.address = Address.fromString(TEST_APP_ID);
+
+  handleRequiredTokenBalanceUpdated(event);
   return event;
 }

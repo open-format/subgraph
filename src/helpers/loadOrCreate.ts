@@ -1,20 +1,23 @@
-import {Address, BigInt, Bytes, ethereum} from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import {
   Action,
   ActionMetadata,
   App,
+  AppFungibleToken,
   Badge,
   BadgeToken,
+  Charge,
   FungibleToken,
   FungibleTokenBalance,
   FungibleTokenMetadata,
   Mission,
   MissionFungibleToken,
   MissionMetadata,
+  RequiredTokenBalance,
   User,
 } from "../../generated/schema";
-import {ActionId, BadgeId, MissionId, TokenBalanceId} from "./idTemplates";
-import {Zero} from "./numbers";
+import { ActionId, AppFungibleTokenId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
+import { Zero } from "./numbers";
 
 export function loadOrCreateApp(
   appAddress: Address,
@@ -87,10 +90,10 @@ export function loadOrCreateUser(
     _User.createdAt = event.block.timestamp;
     _User.createdAtBlock = event.block.number;
   }
-    _User.updatedAt = event.block.timestamp;
-    _User.updatedAtBlock = event.block.number;
+  _User.updatedAt = event.block.timestamp;
+  _User.updatedAtBlock = event.block.number;
 
-    return _User as User;
+  return _User as User;
 }
 
 export function loadOrCreateActionMetadata(
@@ -252,4 +255,55 @@ export function loadOrCreateFungibleTokenBalance(
   _FungibleTokenBalance.updatedAtBlock = event.block.number;
 
   return _FungibleTokenBalance as FungibleTokenBalance;
+}
+
+// Charge is immutable so only need create
+export function createCharge(
+  transactionHash: Bytes,
+  logIndex: BigInt,
+  event: ethereum.Event
+): Charge {
+  let id = ChargeId(transactionHash, logIndex)
+  let charge = new Charge(id);
+
+  charge.createdAt = event.block.timestamp;
+  charge.createdAtBlock = event.block.number;
+
+  return charge as Charge;
+}
+
+export function loadOrCreateRequiredTokenBalance(
+  contractAddress: Address,
+  tokenAddress: Address,
+  event: ethereum.Event
+): RequiredTokenBalance {
+  const id = RequiredTokenBalanceId(contractAddress, tokenAddress);
+  let requiredTokenBalance = RequiredTokenBalance.load(id);
+
+  if (!requiredTokenBalance) {
+    requiredTokenBalance = new RequiredTokenBalance(id);
+    requiredTokenBalance.createdAt = event.block.timestamp;
+    requiredTokenBalance.createdAtBlock = event.block.number;
+  }
+
+  requiredTokenBalance.updatedAt = event.block.timestamp;
+  requiredTokenBalance.updatedAtBlock = event.block.number;
+
+  return requiredTokenBalance as RequiredTokenBalance;
+}
+
+export function loadOrCreateAppFungibleToken(
+  appAddress: Address,
+  tokenAddress: Address
+): AppFungibleToken {
+  const id = AppFungibleTokenId(appAddress, tokenAddress);
+  let appFungibleToken = AppFungibleToken.load(id);
+
+  if (!appFungibleToken) {
+    appFungibleToken = new AppFungibleToken(id);
+    appFungibleToken.app = appAddress.toHex();
+    appFungibleToken.token = tokenAddress.toHex();
+  }
+
+  return appFungibleToken as AppFungibleToken;
 }

@@ -171,6 +171,8 @@ templates:
       abis:
         - name: RewardsFacet
           file: ./abis/RewardsFacet.json
+        - name: ERC20Base
+          file: ./abis/ERC20Base.json
         - name: ERC721Base
           file: ./abis/ERC721Base.json
         - name: ERC721Badge
@@ -190,3 +192,23 @@ templates:
         - event: BadgeTransferred(address,address,uint256,bytes32,bytes32,string)
           handler: handleBadgeTransferred
       file: ./src/facet/RewardsFacet.ts
+  - name: ChargeFacet
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ChargeFacet
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Action
+      abis:
+        - name: ChargeFacet
+          file: ./abis/ChargeFacet.json
+      eventHandlers:
+        - event: ChargedUser(address,address,uint256,bytes32,bytes32)
+          handler: handleChargedUser
+        - event: RequiredTokenBalanceUpdated(address,uint256)
+          handler: handleRequiredTokenBalanceUpdated
+      file: ./src/facet/ChargeFacet.ts
