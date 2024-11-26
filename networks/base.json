@@ -1,0 +1,7 @@
+{
+  "network": "base",
+  "AppFactory": {
+    "address": "0x2d6f1620b263Ce71862Fa95f6fEAbB6A366478cC",
+    "startBlock": 22715950
+  }
+}
