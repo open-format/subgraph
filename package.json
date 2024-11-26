@@ -8,6 +8,8 @@
     "prepare:mumbai": "mustache networks/mumbai.json subgraph.template.yaml subgraph.mumbai.yaml",
     "prepare:polygon": "mustache networks/polygon.json subgraph.template.yaml subgraph.polygon.yaml",
     "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
+    "prepare:base-sepolia": "mustache networks/base-sepolia.json subgraph.template.yaml subgraph.base-sepolia.yaml",
+    "prepare:base": "mustache networks/base.json subgraph.template.yaml subgraph.base.yaml",
     "prepare:aurora": "mustache networks/aurora.json subgraph.template.yaml subgraph.aurora.yaml",
     "prepare:aurora-testnet": "mustache networks/aurora-testnet.json subgraph.template.yaml subgraph.aurora-testnet.yaml",
     "prepare:arbitrum-sepolia": "mustache networks/arbitrum-sepolia.json subgraph.template.yaml subgraph.arbitrum-sepolia.yaml",
@@ -21,6 +23,8 @@
 
     "gen:mumbai": "graph codegen subgraph.mumbai.yaml",
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
+    "gen:base-sepolia": "graph codegen subgraph.base-sepolia.yaml",
+    "gen:base": "graph codegen subgraph.base.yaml",
     "gen:aurora": "graph codegen subgraph.aurora.yaml",
     "gen:aurora-testnet": "graph codegen subgraph.aurora-testnet.yaml",
     "gen:arbitrum-sepolia": "graph codegen subgraph.arbitrum-sepolia.yaml",
@@ -30,6 +34,8 @@
     
     "deploy:local": "graph deploy open-format-local --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
+    "deploy:base-sepolia": "graph deploy --studio open-format-base-sepolia subgraph.base-sepolia.yaml",
+    "deploy:base": "graph deploy --studio open-format-base subgraph.base.yaml",
     "deploy:aurora": "graph deploy --studio open-format-aurora subgraph.aurora.yaml",
     "deploy:aurora-testnet": "graph deploy --studio open-format-aurora-testnet subgraph.aurora-testnet.yaml",
 
