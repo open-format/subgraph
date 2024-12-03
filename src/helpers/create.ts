@@ -30,6 +30,7 @@ export function createExternalFungibleToken(
 
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
+  fungibleToken.isNonTransferable = false;
   fungibleToken.createdAt = event.block.timestamp;
   fungibleToken.createdAtBlock = event.block.number;
   fungibleToken.updatedAt = event.block.timestamp;

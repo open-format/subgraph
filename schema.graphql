@@ -21,6 +21,7 @@ type FungibleToken @entity {
   symbol: String!
   decimals: Int!
   metadata: FungibleTokenMetadata
+  isNonTransferable: Boolean
   """
   DEPRECATED: The `app` field has been deprecated as app-token is a many to many relationship, please use `apps` instead.
   """
@@ -51,6 +52,7 @@ type App @entity {
   metadata: AppMetadata
   owner: User!
   xpToken: FungibleToken
+  pointToken: FungibleToken
   badges: [Badge!] @derivedFrom(field: "app")
   badgeCount: BigInt!
   badgesAwarded: BigInt!

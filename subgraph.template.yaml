@@ -157,6 +157,26 @@ templates:
         - event: ContractURIUpdated(string,string)
           handler: handleContractURIUpdated
       file: ./src/ERC20Base.ts
+  - name: ERC20Point
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ERC20Point
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: ERC20Point
+          file: ./abis/ERC20Point.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: ContractURIUpdated(string,string)
+          handler: handleContractURIUpdated
+      file: ./src/ERC20Point.ts
   - name: RewardsFacet
     kind: ethereum/contract
     network: {{network}}
