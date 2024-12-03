@@ -33,10 +33,13 @@ export function handleMinted(event: Minted): void {
 
   let badgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
 
-  let badge = loadBadge(event.address);
+  let badge = loadOrCreateBadge(contractAddress, event);
+  const totalSupply = boundContract.totalSupply();
 
-  if (badge) {
-    let app = App.load(badge.app);
+  let appBadge = loadBadge(event.address);
+
+  if (appBadge) {
+    let app = App.load(appBadge.app);
     if (app) {
       app.badgesAwarded = tokenId.plus(One);
       app.save();
@@ -49,6 +52,9 @@ export function handleMinted(event: Minted): void {
   badgeToken.tokenId = tokenId;
   badgeToken.badge = event.address.toHex();
 
+  badge.totalAwarded = totalSupply;
+
+  badge.save();
   badgeToken.save();
   user.save();
 }

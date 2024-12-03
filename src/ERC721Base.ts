@@ -23,12 +23,15 @@ export function handleMinted(event: Minted): void {
   const boundContract = ERC721BaseContract.bind(contractAddress);
   const tokenId = boundContract.nextTokenIdToMint().minus(One);
 
+  let badge = loadOrCreateBadge(contractAddress, event);
+  const totalSupply = boundContract.totalSupply();
+
   let badgeToken = loadOrCreateBadgeToken(event.address, tokenId, event);
 
-  let badge = loadBadge(event.address);
+  let appBadge = loadBadge(event.address);
 
-  if (badge) {
-    let app = App.load(badge.app);
+  if (appBadge) {
+    let app = App.load(appBadge.app);
     if (app) {
       app.badgesAwarded = tokenId.plus(One);
       app.save();
@@ -42,6 +45,9 @@ export function handleMinted(event: Minted): void {
   badgeToken.tokenId = tokenId;
   badgeToken.badge = event.address.toHex();
 
+  badge.totalAwarded = totalSupply;
+
+  badge.save();
   badgeToken.save();
   user.save();
 }
