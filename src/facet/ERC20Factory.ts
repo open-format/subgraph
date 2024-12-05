@@ -12,13 +12,14 @@ import {
   loadOrCreateFungibleToken,
   loadOrCreateUser,
 } from "../helpers";
+import { FUNGIBLE_TOKEN_TYPE_BASE, FUNGIBLE_TOKEN_TYPE_POINT } from "../helpers/enums";
 
 
 export function handleCreated(event: Created): void {
   let context = dataSource.context();
   let appAddress = Address.fromString(context.getString("App"));
   let ERC20Context = new DataSourceContext();
-  let isNonTransferable = false;
+  let tokenType = FUNGIBLE_TOKEN_TYPE_BASE;
 
   let implementationId = event.params.implementationId.toString();
   if (implementationId == "Base") {
@@ -27,7 +28,7 @@ export function handleCreated(event: Created): void {
   } else {
     ERC20Context.setString("ERC20PointContract", event.params.id.toHex());
     ERC20Point.createWithContext(event.params.id, ERC20Context);
-    isNonTransferable = true;
+    tokenType = FUNGIBLE_TOKEN_TYPE_POINT
   }
 
 
@@ -42,22 +43,14 @@ export function handleCreated(event: Created): void {
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
   fungibleToken.owner = user.id;
-  fungibleToken.isNonTransferable = isNonTransferable;
+  fungibleToken.tokenType = tokenType;
 
   // DEPRECATED: `app` will be removed in the next major release.
   // Replaced with `apps` which is derived from `AppFungibleTokens`.
   fungibleToken.app = app.id;
 
-  let saveApp = false;
   if (!app.xpToken) {
     app.xpToken = fungibleToken.id;
-    saveApp = true;
-  }
-  if (!app.pointToken && isNonTransferable) {
-    app.pointToken = fungibleToken.id;
-    saveApp = true;
-  }
-  if (saveApp) {
     app.save();
   }
   

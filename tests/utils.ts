@@ -25,6 +25,7 @@ import { UpdatedBaseURI } from "../generated/templates/ERC721Badge/ERC721Badge";
 import { handleUpdatedBaseURI } from "../src/ERC721Badge";
 import { ChargedUser, RequiredTokenBalanceUpdated } from "../generated/templates/ChargeFacet/ChargeFacet";
 import { handleChargedUser, handleRequiredTokenBalanceUpdated } from "../src/facet/ChargeFacet";
+import { FUNGIBLE_TOKEN_TYPE_BASE, FUNGIBLE_TOKEN_TYPE_POINT } from "../src/helpers/enums";
 
 export class Param {
   public name: string;
@@ -426,7 +427,7 @@ export function getTestFungibleToken(): FungibleToken {
   fungibleToken.symbol = "TEST";
   fungibleToken.burntSupply = BigInt.fromI32(0);
   fungibleToken.decimals = BigInt.fromString(TEST_TOKEN_DECIMALS).toI32();
-  fungibleToken.isNonTransferable = false;
+  fungibleToken.tokenType = FUNGIBLE_TOKEN_TYPE_BASE;
 
   return fungibleToken;
 }
@@ -444,7 +445,7 @@ export function getTestFungiblePointToken(): FungibleToken {
   fungibleToken.symbol = "TEST";
   fungibleToken.burntSupply = BigInt.fromI32(0);
   fungibleToken.decimals = BigInt.fromString(TEST_TOKEN_DECIMALS).toI32();
-  fungibleToken.isNonTransferable = true;
+  fungibleToken.tokenType = FUNGIBLE_TOKEN_TYPE_POINT;
 
   return fungibleToken;
 }

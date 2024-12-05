@@ -3,6 +3,7 @@ import { ZERO_ADDRESS } from "./address";
 import { FungibleToken } from "../../generated/schema";
 import { loadOrCreateUser } from "./loadOrCreate";
 import { ERC20Base as ERC20BaseContract } from "../../generated/templates/ERC20Base/ERC20Base";
+import { FUNGIBLE_TOKEN_TYPE_EXTERNAL } from "./enums";
 
 /**
  * Use to index fungibleTokens not created by openformat contracts.
@@ -30,7 +31,7 @@ export function createExternalFungibleToken(
 
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
-  fungibleToken.isNonTransferable = false;
+  fungibleToken.tokenType = FUNGIBLE_TOKEN_TYPE_EXTERNAL;
   fungibleToken.createdAt = event.block.timestamp;
   fungibleToken.createdAtBlock = event.block.number;
   fungibleToken.updatedAt = event.block.timestamp;
