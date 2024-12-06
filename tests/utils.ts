@@ -4,7 +4,7 @@ import { Created as ERC20Created } from "../generated/templates/ERC20FactoryFace
 import { Created as ERC721Created } from "../generated/templates/ERC721FactoryFacet/ERC721Factory";
 import { BadgeMinted1, BadgeMinted, ERC721Minted, BadgeTransferred, TokenMinted, TokenTransferred } from "../generated/templates/RewardsFacet/RewardsFacet";
 import { Created as AppCreated } from "../generated/AppFactory/AppFactory";
-import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_CHARGE_ID, TEST_CHARGE_TYPE, TEST_ONE_ETHER, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_MISSION_URI, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
+import { TEST_APP_ID, TEST_APP_NAME, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_CHARGE_ID, TEST_CHARGE_TYPE, TEST_ONE_ETHER, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_IMPLEMENTATIONID_BADGE, TEST_TOKEN_IMPLEMENTATIONID_BASE, TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT, TEST_TOKEN_IMPLEMENTATIONID_POINT, TEST_TOKEN_MINTED_ACTION, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_MISSION_URI, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_ROYALTYBPS, TEST_TOKEN_ROYALTYRECIPIENT, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ID } from "./fixtures";
 import { handleCreated as erc20handleCreated } from "../src/facet/ERC20Factory";
 import { handleCreated as appHandleCreated } from "../src/AppFactory";
 import { handleCreated as erc721handleCreated } from "../src/facet/ERC721Factory";
@@ -12,7 +12,9 @@ import { handleBadgeMintedLegacy, handleBadgeMinted, handleERC721Minted, handleB
 import { BadgeId } from "../src/helpers";
 import { BadgeToken, FungibleToken } from "../generated/schema";
 import { ContractURIUpdated as ERC20ContractURIUpdated, Transfer as ERC20Transfer } from "../generated/templates/ERC20Base/ERC20Base";
+import { ContractURIUpdated as ERC20PointContractURIUpdated, Transfer as ERC20PointTransfer } from "../generated/templates/ERC20Point/ERC20Point";
 import { handleContractURIUpdated, handleTransfer as handleTransferERC20 } from "../src/ERC20Base";
+import { handleContractURIUpdated as handlePointContractURIUpdated, handleTransfer as handleTransferERC20Point } from "../src/ERC20Point";
 import { BatchMinted, Minted, Transfer as ERC721Transfer } from "../generated/templates/ERC721Base/ERC721Base";
 import { BatchMinted as BatchMintedBadge, Minted as MintedBadge, Transfer as TransferBadge } from "../generated/templates/ERC721Badge/ERC721Badge";
 import { handleBatchMinted as handleBatchMintedBadge, handleMinted as handleMintedBadge, handleTransfer as handleTransferBadge } from "../src/ERC721Badge";
@@ -23,6 +25,7 @@ import { UpdatedBaseURI } from "../generated/templates/ERC721Badge/ERC721Badge";
 import { handleUpdatedBaseURI } from "../src/ERC721Badge";
 import { ChargedUser, RequiredTokenBalanceUpdated } from "../generated/templates/ChargeFacet/ChargeFacet";
 import { handleChargedUser, handleRequiredTokenBalanceUpdated } from "../src/facet/ChargeFacet";
+import { FUNGIBLE_TOKEN_TYPE_BASE, FUNGIBLE_TOKEN_TYPE_POINT } from "../src/helpers/enums";
 
 export class Param {
   public name: string;
@@ -101,6 +104,22 @@ export function createERC20Token(): ERC20Created {
       new Param("decimals", ParamType.I32, TEST_TOKEN_DECIMALS),
       new Param("supply", ParamType.BIG_INT, "1000"),
       new Param("implementationId", ParamType.BYTES, TEST_TOKEN_IMPLEMENTATIONID_BASE),
+  ]);
+  // Create token using event handler
+  erc20handleCreated(createEvent);
+
+  return createEvent;
+}
+
+export function createERC20PointToken(): ERC20Created {
+  const createEvent = newEvent<ERC20Created>([
+      new Param("id", ParamType.ADDRESS, TEST_TOKEN_ID),
+      new Param("creator", ParamType.ADDRESS, TEST_USER2_ID),
+      new Param("name", ParamType.STRING, TEST_TOKEN_NAME),
+      new Param("symbol", ParamType.STRING, TEST_TOKEN_SYMBOL),
+      new Param("decimals", ParamType.I32, TEST_TOKEN_DECIMALS),
+      new Param("supply", ParamType.BIG_INT, "1000"),
+      new Param("implementationId", ParamType.BYTES, TEST_TOKEN_IMPLEMENTATIONID_POINT),
   ]);
   // Create token using event handler
   erc20handleCreated(createEvent);
@@ -285,6 +304,18 @@ export function transferERC20(from: string, to: string, amount: string): ERC20Tr
   return event;
 }
 
+export function transferERC20Point(from: string, to: string, amount: string): ERC20PointTransfer {
+  const event = newEvent<ERC20PointTransfer>([
+      new Param("from", ParamType.ADDRESS, from),
+      new Param("to", ParamType.ADDRESS, to),
+      new Param("value", ParamType.BIG_INT, amount),
+  ]);
+  // Event handler
+  handleTransferERC20Point(event);
+
+  return event;
+}
+
 export function updateERC20ContractURI(): ERC20ContractURIUpdated {
   const event = newEvent<ERC20ContractURIUpdated>([
       new Param("prevURI", ParamType.STRING, "uri://abc"),
@@ -292,6 +323,17 @@ export function updateERC20ContractURI(): ERC20ContractURIUpdated {
   ]);
   // Event handler
   handleContractURIUpdated(event);
+
+  return event;
+}
+
+export function updateERC20PointContractURI(): ERC20PointContractURIUpdated {
+  const event = newEvent<ERC20PointContractURIUpdated>([
+      new Param("prevURI", ParamType.STRING, "uri://abc"),
+      new Param("newURI", ParamType.STRING, "uri://abc1234"),
+  ]);
+  // Event handler
+  handlePointContractURIUpdated(event);
 
   return event;
 }
@@ -385,6 +427,25 @@ export function getTestFungibleToken(): FungibleToken {
   fungibleToken.symbol = "TEST";
   fungibleToken.burntSupply = BigInt.fromI32(0);
   fungibleToken.decimals = BigInt.fromString(TEST_TOKEN_DECIMALS).toI32();
+  fungibleToken.tokenType = FUNGIBLE_TOKEN_TYPE_BASE;
+
+  return fungibleToken;
+}
+
+export function getTestFungiblePointToken(): FungibleToken {
+  const fungibleToken = new FungibleToken(TEST_TOKEN_ID);
+  fungibleToken.createdAt = BigInt.fromI32(1);
+  fungibleToken.createdAtBlock = BigInt.fromI32(1);
+  fungibleToken.updatedAt = BigInt.fromI32(1);
+  fungibleToken.updatedAtBlock = BigInt.fromI32(1);
+  fungibleToken.name = TEST_TOKEN_NAME;
+  fungibleToken.app = TEST_APP_ID;
+  fungibleToken.totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
+  fungibleToken.owner = TEST_USER_ID;
+  fungibleToken.symbol = "TEST";
+  fungibleToken.burntSupply = BigInt.fromI32(0);
+  fungibleToken.decimals = BigInt.fromString(TEST_TOKEN_DECIMALS).toI32();
+  fungibleToken.tokenType = FUNGIBLE_TOKEN_TYPE_POINT;
 
   return fungibleToken;
 }
