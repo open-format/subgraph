@@ -15,8 +15,9 @@ import {
   MissionMetadata,
   RequiredTokenBalance,
   User,
+  Reward
 } from "../../generated/schema";
-import { ActionId, AppFungibleTokenId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
+import { RewardId, ActionId, AppFungibleTokenId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
 import { Zero } from "./numbers";
 
 export function loadOrCreateApp(
@@ -94,6 +95,25 @@ export function loadOrCreateUser(
   _User.updatedAtBlock = event.block.number;
 
   return _User as User;
+}
+
+export function loadOrCreateReward(
+  label: String,
+  rewardType: String,
+  URI: String,
+  event: ethereum.Event
+): Reward {
+  const id = RewardId(label, rewardType, URI, event);
+  let reward = Reward.load(id);
+
+  if (!reward) {
+    reward = new Reward(id);
+    reward.transactionHash = event.transaction.hash.toHex()
+    reward.createdAt = event.block.timestamp;
+    reward.createdAtBlock = event.block.number;
+  }
+
+  return reward as Reward
 }
 
 export function loadOrCreateActionMetadata(
