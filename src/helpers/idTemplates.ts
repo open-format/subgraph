@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt, ByteArray, Bytes, crypto, ethereum } from "@graphprotocol/graph-ts";
 
 export function BadgeId(contractAddress: Address, tokenId: string): string {
   return contractAddress.toHex() + "-" + tokenId;
@@ -29,4 +29,13 @@ export function TokenBalanceId(
 
 export function AppFungibleTokenId(appAddress: Address, tokenAddress: Address): string {
   return appAddress.toHex() + "-" + tokenAddress.toHex();
+}
+
+export function RewardId(
+  label: String,
+  rewardType: String,
+  metadataURI: String,
+  event: ethereum.Event): string {
+  const rewardHash = crypto.keccak256(ByteArray.fromUTF8(`${label}|${rewardType}|${metadataURI}`))
+  return rewardHash.toHex() + "-" + event.transaction.hash.toHex() + "-" + event.logIndex.toString()
 }
