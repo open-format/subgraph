@@ -116,6 +116,7 @@ export function loadOrCreateReward(
   return reward as Reward
 }
 
+// TODO: remove when action entity is removed from schema
 export function loadOrCreateActionMetadata(
   transactionHash: Bytes,
   logIndex: BigInt
@@ -130,6 +131,8 @@ export function loadOrCreateActionMetadata(
   return _ActionMetadata as ActionMetadata;
 }
 
+
+// TODO: remove when action entity is removed from schema
 export function loadOrCreateAction(
   transactionHash: Bytes,
   logIndex: BigInt,
@@ -147,6 +150,8 @@ export function loadOrCreateAction(
   return _Action as Action;
 }
 
+
+// TODO: remove when mission entity is removed from schema
 export function loadOrCreateMission(
   transactionHash: Bytes,
   actionId: Bytes,
@@ -166,6 +171,8 @@ export function loadOrCreateMission(
   return _Mission as Mission;
 }
 
+
+// TODO: remove when mission entity is removed from schema
 export function loadOrCreateMissionFungibleToken(
   transactionHash: Bytes,
   missionId: Bytes,
@@ -186,6 +193,7 @@ export function loadOrCreateMissionFungibleToken(
   return _MissionFungibleToken as MissionFungibleToken;
 }
 
+// TODO: remove when mission entity is removed from schema
 export function loadOrCreateMissionMetadata(
   transactionHash: Bytes,
   actionId: Bytes
@@ -237,25 +245,6 @@ export function loadOrCreateFungibleTokenMetadata(
 
   return _FungibleTokenMetadata as FungibleTokenMetadata;
 }
-
-// export function loadOrCreateToken(
-//   contractAddress: Address,
-//   event: ethereum.Event
-// ): Token {
-//   const id = contractAddress.toHex();
-//   let _Token = Token.load(id);
-
-//   if (!_Token) {
-//     _Token = new Token(id);
-//     _Token.createdAt = event.block.timestamp;
-//     _Token.createdAtBlock = event.block.number;
-//   }
-
-//   _Token.updatedAt = event.block.timestamp;
-//   _Token.updatedAtBlock = event.block.number;
-
-//   return _Token as Token;
-// }
 
 export function loadOrCreateFungibleTokenBalance(
   contractAddress: Address,
