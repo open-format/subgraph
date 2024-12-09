@@ -124,19 +124,6 @@ type Badge @entity {
   updatedAtBlock: BigInt!
 }
 
-# @TODO - Implement IPFS data types
-# type BadgeMetadata @entity {
-#   id: ID!
-#   name: String!
-#   description: String!
-#   image: String!
-#   external_url: String!
-#   animation_url: String!
-#   URI: String!
-#   createdAt: BigInt!
-#   createdAtBlock: BigInt!
-# }
-
 type User @entity {
   id: ID!
   tokenBalances: [FungibleTokenBalance!] @derivedFrom(field: "user")
