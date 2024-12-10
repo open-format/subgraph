@@ -70,3 +70,8 @@ typings/
 .pnp*
 
 tests/.bin/
+
+# generated subgraph.yaml files
+subgraph.*.yaml
+# Except for subgraph.template.yaml
+!subgraph.template.yaml
