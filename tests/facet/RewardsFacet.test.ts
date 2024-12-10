@@ -264,6 +264,7 @@ describe("RewardsFacet tests", () => {
 
     test("ERC721 token minted", () => {
         createApp();
+        createBadge();
 
         const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
         createMockedFunction(Address.fromString(TEST_TOKEN_ID), "totalSupply", "totalSupply():(uint256)")
@@ -300,8 +301,9 @@ describe("RewardsFacet tests", () => {
         }
     })
 
-    test("Badge transfer", () => {
+    test("Badge token transfer", () => {
         createApp();
+        createBadge();
 
         const badgeToken = getTestBadgeTokenEntity(
             Address.fromString(TEST_TOKEN_ID),
