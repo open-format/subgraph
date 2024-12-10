@@ -1,4 +1,4 @@
-import { Address, BigInt, dataSource } from "@graphprotocol/graph-ts";
+import { Address, BigInt, dataSource, ethereum } from "@graphprotocol/graph-ts";
 import { ERC721Base as BadgeContract } from "../../generated/templates/ERC721Base/ERC721Base";
 import {
   BadgeMinted,
@@ -16,7 +16,7 @@ import {
   loadOrCreateReward,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
-import { Zero } from "../helpers";
+import { associateAppWithBadge, associateAppWithToken, Zero } from "../helpers";
 import {
   DEPRECATED_handleBadgeMinted,
   DEPRECATED_handleERC721Minted,
@@ -25,6 +25,7 @@ import {
   DEPRECATED_handleTokenMinted,
   DEPRECATED_handleTokenTransferred
 } from "./DEPRECATED_RewardsFacet";
+import { Badge } from "../../generated/schema";
 
 export function handleTokenMinted(event: TokenMinted): void {
   DEPRECATED_handleTokenMinted(event)
@@ -32,6 +33,8 @@ export function handleTokenMinted(event: TokenMinted): void {
   let context = dataSource.context();
   let appAddress = Address.fromString(context.getString("App"));
   let user = loadOrCreateUser(event.params.to, event);
+
+  associateAppWithToken(appAddress, event.params.token, event)
   let token = loadOrCreateFungibleToken(event.params.token, event)
 
   let reward = loadOrCreateReward(
@@ -63,6 +66,8 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   let context = dataSource.context();
   let appAddress = Address.fromString(context.getString("App"));
   let user = loadOrCreateUser(event.params.to, event);
+
+  associateAppWithToken(appAddress, event.params.token, event)
   let token = loadOrCreateFungibleToken(event.params.token, event)
 
   let reward = loadOrCreateReward(
@@ -93,8 +98,10 @@ export function handleERC721Minted(event: ERC721Minted): void {
   DEPRECATED_handleERC721Minted(event)
 
   let context = dataSource.context();
-  let appAddress = Address.fromString(context.getString("App"));
-  let user = loadOrCreateUser(event.params.to, event);
+  let appAddress = Address.fromString(context.getString("App"))
+  let user = loadOrCreateUser(event.params.to, event)
+
+  associateAppWithBadge(appAddress, event.params.token, event)
   let badge = loadOrCreateBadge(event.params.token, event)
 
   let reward = loadOrCreateReward(
@@ -110,41 +117,16 @@ export function handleERC721Minted(event: ERC721Minted): void {
   reward.metadataURI = event.params.uri.toString()
   reward.user = user.id
 
+  let badges = indexBadgeTokens(badge, event.params.quantity, user.id, event.params.uri.toString(), event)
+
   reward.badge = badge.id
-  let badges: Array<string> = []
-  let boundContract = BadgeContract.bind(event.params.token)
-  let totalSupply = boundContract.totalSupply()
-  let quantity = event.params.quantity
-  for (let i = 0; i < quantity.toI32(); i++) {
-    let id = totalSupply.minus(quantity).plus(BigInt.fromI32(i))
-    let badgeToken = loadOrCreateBadgeToken(
-      event.params.token,
-      id,
-      event
-    )
-
-    badgeToken.badge = badge.id
-    badgeToken.owner = user.id
-    badgeToken.metadataURI = badge.metadataURI ? null : event.params.uri.toString()
-    badgeToken.save()
-
-    badges.push(badgeToken.id)
-  }
   reward.badges = badges
   reward.badgeCount = badges.length
 
   reward.tokenAmount = Zero
 
   user.save()
-  badge.save()
   reward.save()
-}
-
-// TODO: Remove as event no longer emitted from contracts, and only needed to maintain testnet history
-// handles ERC721 tokens being rewarded with the uri being emitted from the event
-// but with the event named BadgeMinted
-export function handleBadgeMintedLegacy(event: BadgeMinted1): void {
-  DEPRECATED_handleBadgeMintedLegacy(event)
 }
 
 // handles ERC721 badge tokens being rewarded with the uri on the contract
@@ -152,8 +134,10 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   DEPRECATED_handleBadgeMinted(event)
 
   let context = dataSource.context();
-  let appAddress = Address.fromString(context.getString("App"));
-  let user = loadOrCreateUser(event.params.to, event);
+  let appAddress = Address.fromString(context.getString("App"))
+  let user = loadOrCreateUser(event.params.to, event)
+
+  associateAppWithBadge(appAddress, event.params.token, event)
   let badge = loadOrCreateBadge(event.params.token, event)
 
   let reward = loadOrCreateReward(
@@ -169,42 +153,33 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   reward.metadataURI = event.params.data.toString()
   reward.user = user.id
 
+  let badges = indexBadgeTokens(badge, event.params.quantity, user.id, event.params.data.toString(), event)
+
   reward.badge = badge.id
-  let badges: Array<string> = []
-  let boundContract = BadgeContract.bind(event.params.token)
-  let totalSupply = boundContract.totalSupply()
-  let quantity = event.params.quantity
-  for (let i = 0; i < quantity.toI32(); i++) {
-    let id = totalSupply.minus(quantity).plus(BigInt.fromI32(i))
-    let badgeToken = loadOrCreateBadgeToken(
-      event.params.token,
-      id,
-      event
-    )
-
-    badgeToken.badge = badge.id
-    badgeToken.owner = user.id
-    badgeToken.metadataURI = badge.metadataURI ? null : event.params.data.toString()
-    badgeToken.save()
-
-    badges.push(badgeToken.id)
-  }
   reward.badges = badges
   reward.badgeCount = badges.length
 
   reward.tokenAmount = Zero
 
   user.save()
-  badge.save()
   reward.save()
+}
+
+// TODO: Remove as event no longer emitted from contracts, and only needed to maintain arbitrum-sepolia history
+// handles ERC721 tokens being rewarded with the uri being emitted from the event
+// but with the event named BadgeMinted
+export function handleBadgeMintedLegacy(event: BadgeMinted1): void {
+  DEPRECATED_handleBadgeMintedLegacy(event)
 }
 
 export function handleBadgeTransferred(event: BadgeTransferred): void {
   DEPRECATED_handleBadgeTransferred(event)
 
-  let context = dataSource.context();
-  let appAddress = Address.fromString(context.getString("App"));
-  let user = loadOrCreateUser(event.params.to, event);
+  let context = dataSource.context()
+  let appAddress = Address.fromString(context.getString("App"))
+  let user = loadOrCreateUser(event.params.to, event)
+
+  associateAppWithBadge(appAddress, event.params.token, event)
   let badge = loadOrCreateBadge(event.params.token, event)
 
   let reward = loadOrCreateReward(
@@ -220,7 +195,6 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   reward.metadataURI = event.params.uri.toString()
   reward.user = user.id
 
-  reward.badge = badge.id
   let badgeToken = loadOrCreateBadgeToken(
     event.params.token,
     event.params.tokenId,
@@ -228,7 +202,9 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   )
   badgeToken.badge = badge.id
   badgeToken.owner = user.id
+  badgeToken.save()
 
+  reward.badge = badge.id
   reward.badges = [badgeToken.id]
   reward.badgeCount = 1
 
@@ -236,6 +212,28 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
 
   user.save()
   reward.save()
-  badge.save()
-  badgeToken.save()
+}
+
+function indexBadgeTokens(badge: Badge, quantity: BigInt, user: string, metadataURI: string, event: ethereum.Event): Array<string> {
+  let badges: Array<string> = []
+  let badgeAddress = Address.fromString(badge.id)
+  let boundContract = BadgeContract.bind(badgeAddress)
+  let totalSupply = boundContract.totalSupply()
+  for (let i = 0; i < quantity.toI32(); i++) {
+    let id = totalSupply.minus(quantity).plus(BigInt.fromI32(i))
+    let badgeToken = loadOrCreateBadgeToken(
+      badgeAddress,
+      id,
+      event
+    )
+
+    badgeToken.badge = badge.id
+    badgeToken.owner = user
+    badgeToken.metadataURI = badge.metadataURI ? null : metadataURI
+    badgeToken.save()
+
+    badges.push(badgeToken.id)
+  }
+
+  return badges
 }

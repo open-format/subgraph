@@ -13,19 +13,18 @@ import {
   TokenMinted,
   TokenTransferred,
 } from "../../generated/templates/RewardsFacet/RewardsFacet";
-import { createExternalFungibleToken, loadBadgeToken } from "../helpers";
-import {
+import { 
+  loadBadgeToken,
   loadOrCreateAction,
   loadOrCreateActionMetadata,
-  loadOrCreateAppFungibleToken,
   loadOrCreateBadge,
   loadOrCreateBadgeToken,
   loadOrCreateMission,
   loadOrCreateMissionFungibleToken,
   loadOrCreateMissionMetadata,
   loadOrCreateUser,
-} from "../helpers/loadOrCreate";
-import { FungibleToken } from "../../generated/schema";
+  associateAppWithToken
+} from "../helpers";
 
 export function DEPRECATED_handleTokenMinted(event: TokenMinted): void {
   let context = dataSource.context();
@@ -277,17 +276,6 @@ export function DEPRECATED_handleBadgeTransferred(event: BadgeTransferred): void
   missionMetadata.save();
   mission.save();
   user.save();
-}
-
-function associateAppWithToken(appAddress: Address, tokenAddress: Address, event: ethereum.Event): void {
-  // Check token exists
-  let fungibleToken = FungibleToken.load(tokenAddress.toHex());
-  if (!fungibleToken) {
-    createExternalFungibleToken(tokenAddress, event);
-  }
-  // Ensure app has an association with fungibleToken
-  let appFungibleToken = loadOrCreateAppFungibleToken(appAddress, tokenAddress);
-  appFungibleToken.save();
 }
 
 export class BadgeMintedParams {
