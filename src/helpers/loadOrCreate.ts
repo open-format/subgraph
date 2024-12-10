@@ -15,8 +15,9 @@ import {
   MissionMetadata,
   RequiredTokenBalance,
   User,
+  Reward
 } from "../../generated/schema";
-import { ActionId, AppFungibleTokenId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
+import { RewardId, ActionId, AppFungibleTokenId, BadgeId, ChargeId, MissionId, RequiredTokenBalanceId, TokenBalanceId } from "./idTemplates";
 import { Zero } from "./numbers";
 
 export function loadOrCreateApp(
@@ -96,6 +97,26 @@ export function loadOrCreateUser(
   return _User as User;
 }
 
+export function loadOrCreateReward(
+  label: String,
+  rewardType: String,
+  URI: String,
+  event: ethereum.Event
+): Reward {
+  const id = RewardId(label, rewardType, URI, event);
+  let reward = Reward.load(id);
+
+  if (!reward) {
+    reward = new Reward(id);
+    reward.transactionHash = event.transaction.hash.toHex()
+    reward.createdAt = event.block.timestamp;
+    reward.createdAtBlock = event.block.number;
+  }
+
+  return reward as Reward
+}
+
+// TODO: remove when action entity is removed from schema
 export function loadOrCreateActionMetadata(
   transactionHash: Bytes,
   logIndex: BigInt
@@ -110,6 +131,8 @@ export function loadOrCreateActionMetadata(
   return _ActionMetadata as ActionMetadata;
 }
 
+
+// TODO: remove when action entity is removed from schema
 export function loadOrCreateAction(
   transactionHash: Bytes,
   logIndex: BigInt,
@@ -127,6 +150,8 @@ export function loadOrCreateAction(
   return _Action as Action;
 }
 
+
+// TODO: remove when mission entity is removed from schema
 export function loadOrCreateMission(
   transactionHash: Bytes,
   actionId: Bytes,
@@ -146,6 +171,8 @@ export function loadOrCreateMission(
   return _Mission as Mission;
 }
 
+
+// TODO: remove when mission entity is removed from schema
 export function loadOrCreateMissionFungibleToken(
   transactionHash: Bytes,
   missionId: Bytes,
@@ -166,6 +193,7 @@ export function loadOrCreateMissionFungibleToken(
   return _MissionFungibleToken as MissionFungibleToken;
 }
 
+// TODO: remove when mission entity is removed from schema
 export function loadOrCreateMissionMetadata(
   transactionHash: Bytes,
   actionId: Bytes
@@ -217,25 +245,6 @@ export function loadOrCreateFungibleTokenMetadata(
 
   return _FungibleTokenMetadata as FungibleTokenMetadata;
 }
-
-// export function loadOrCreateToken(
-//   contractAddress: Address,
-//   event: ethereum.Event
-// ): Token {
-//   const id = contractAddress.toHex();
-//   let _Token = Token.load(id);
-
-//   if (!_Token) {
-//     _Token = new Token(id);
-//     _Token.createdAt = event.block.timestamp;
-//     _Token.createdAtBlock = event.block.number;
-//   }
-
-//   _Token.updatedAt = event.block.timestamp;
-//   _Token.updatedAtBlock = event.block.number;
-
-//   return _Token as Token;
-// }
 
 export function loadOrCreateFungibleTokenBalance(
   contractAddress: Address,
