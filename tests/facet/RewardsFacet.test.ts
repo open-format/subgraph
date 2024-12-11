@@ -1,7 +1,7 @@
 import { assert, createMockedFunction, clearStore, test, describe, afterEach, dataSourceMock, beforeEach } from "matchstick-as/assembly/index";
 import { createApp, createBadge, createERC20Token, getTestBadgeTokenEntity, badgeMintedLegacy, mintERC20TokenAction, mintERC20TokenMission, transferBadge, transferERC20TokenMission, badgeMinted, erc721Minted, updatedBaseURI } from "../utils";
-import { TEST_ACTIONMETADATA_ENTITY_TYPE, TEST_ACTION_ENTITY_TYPE, TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, TEST_APP_ID, TEST_BADGETOKEN_ENTITY_TYPE, TEST_BADGETOKEN_ID, TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, TEST_MISSIONMETADATA_ENTITY_TYPE, TEST_MISSION_ENTITY_TYPE, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_MISSION_URI, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "../fixtures";
-import { ActionId, AppFungibleTokenId, BadgeId, MissionId, ZERO_ADDRESS, loadBadgeToken } from "../../src/helpers";
+import { TEST_ACTIONMETADATA_ENTITY_TYPE, TEST_ACTION_ENTITY_TYPE, TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, TEST_APP_ID, TEST_BADGETOKEN_ENTITY_TYPE, TEST_BADGETOKEN_ID, TEST_BADGE_ID, TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, TEST_MISSIONMETADATA_ENTITY_TYPE, TEST_MISSION_ENTITY_TYPE, TEST_REWARD_ENTITY_TYPE, TEST_TOKEN_DECIMALS, TEST_TOKEN_ID, TEST_TOKEN_MINTED_ACTION_ID, TEST_TOKEN_MINTED_MISSION, TEST_TOKEN_MINTED_MISSION_ID, TEST_TOKEN_MINTED_MISSION_URI, TEST_TOKEN_MINTED_URI, TEST_TOKEN_NAME, TEST_TOKEN_SYMBOL, TEST_TOKEN_TOTAL_SUPPLY, TEST_USER2_ID, TEST_USER3_ID, TEST_USER_ENTITY_TYPE, TEST_USER_ID } from "../fixtures";
+import { ActionId, AppFungibleTokenId, BadgeId, MissionId, RewardId, ZERO_ADDRESS, Zero, loadBadgeToken } from "../../src/helpers";
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { Mission } from "../../generated/schema";
 
@@ -32,6 +32,24 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_ACTIONMETADATA_ENTITY_TYPE, actionId, "id", actionId);
         assert.fieldEquals(TEST_ACTIONMETADATA_ENTITY_TYPE, actionId, "name", TEST_TOKEN_MINTED_ACTION_ID);
         assert.fieldEquals(TEST_ACTIONMETADATA_ENTITY_TYPE, actionId, "URI", TEST_TOKEN_MINTED_MISSION_URI);
+
+        const rewardId = RewardId(
+            TEST_TOKEN_MINTED_ACTION_ID,
+            "ACTION",
+            TEST_TOKEN_MINTED_MISSION_URI,
+            event
+        );
+
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_ACTION_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", "ACTION");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "token", TEST_TOKEN_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", event.params.amount.toString());
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", "0");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
     })
 
     test("Token minted MISSION", () => {
@@ -62,6 +80,24 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "amount_rewarded", event.params.amount.toString());
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "mission", missionId);
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "token", event.params.token.toHex());
+
+        const rewardId = RewardId(
+            TEST_TOKEN_MINTED_MISSION_ID,
+            TEST_TOKEN_MINTED_MISSION,
+            TEST_TOKEN_MINTED_MISSION_URI,
+            event
+        );
+
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "token", TEST_TOKEN_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", event.params.amount.toString());
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", "0");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
     })
 
     test("Token transferred MISSION", () => {
@@ -93,6 +129,24 @@ describe("RewardsFacet tests", () => {
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "amount_rewarded", event.params.amount.toString());
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "mission", missionId);
         assert.fieldEquals(TEST_MISSIONFUNGIBLETOKEN_ENTITY_TYPE, missionFungibleTokenId, "token", event.params.token.toHex());
+
+        const rewardId = RewardId(
+            TEST_TOKEN_MINTED_MISSION_ID,
+            TEST_TOKEN_MINTED_MISSION,
+            TEST_TOKEN_MINTED_MISSION_URI,
+            event
+        );
+
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "token", TEST_TOKEN_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", event.params.amount.toString());
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", "0");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
     })
 
     describe("When Token is external", () => {
@@ -142,6 +196,24 @@ describe("RewardsFacet tests", () => {
             assert.fieldEquals(TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, appFungibleTokenId, "id", appFungibleTokenId);
             assert.fieldEquals(TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, appFungibleTokenId, "app", TEST_APP_ID);
             assert.fieldEquals(TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, appFungibleTokenId, "token", TEST_TOKEN_ID);
+
+            const rewardId = RewardId(
+                TEST_TOKEN_MINTED_MISSION_ID,
+                TEST_TOKEN_MINTED_MISSION,
+                TEST_TOKEN_MINTED_MISSION_URI,
+                event
+            );
+
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "token", TEST_TOKEN_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", event.params.amount.toString());
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", "0");
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
         })
 
         test("Token minted MISSION", () => {
@@ -174,6 +246,24 @@ describe("RewardsFacet tests", () => {
             assert.fieldEquals(TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, appFungibleTokenId, "id", appFungibleTokenId);
             assert.fieldEquals(TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, appFungibleTokenId, "app", TEST_APP_ID);
             assert.fieldEquals(TEST_APPFUNGIBLETOKEN_ENTITY_TYPE, appFungibleTokenId, "token", TEST_TOKEN_ID);
+
+            const rewardId = RewardId(
+                TEST_TOKEN_MINTED_MISSION_ID,
+                TEST_TOKEN_MINTED_MISSION,
+                TEST_TOKEN_MINTED_MISSION_URI,
+                event
+            );
+
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "token", TEST_TOKEN_ID);
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", event.params.amount.toString());
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", "0");
+            assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
         })
     })
 
@@ -260,10 +350,29 @@ describe("RewardsFacet tests", () => {
                 assert.assertNotNull(badgeToken)
             }
         }
+
+        const rewardId = RewardId(
+            TEST_TOKEN_MINTED_MISSION_ID,
+            TEST_TOKEN_MINTED_MISSION,
+            TEST_TOKEN_MINTED_MISSION_URI,
+            event
+        );
+
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", "0");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badge", TEST_TOKEN_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", event.params.quantity.toString());
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
     })
 
     test("ERC721 token minted", () => {
         createApp();
+        createBadge();
 
         const totalSupply = BigInt.fromString(TEST_TOKEN_TOTAL_SUPPLY);
         createMockedFunction(Address.fromString(TEST_TOKEN_ID), "totalSupply", "totalSupply():(uint256)")
@@ -298,10 +407,29 @@ describe("RewardsFacet tests", () => {
             assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "metadataURI", event.params.uri);
             assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, id, "owner", event.params.to.toHex());
         }
+
+        const rewardId = RewardId(
+            TEST_TOKEN_MINTED_MISSION_ID,
+            TEST_TOKEN_MINTED_MISSION,
+            TEST_TOKEN_MINTED_MISSION_URI,
+            event
+        );
+
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", "0");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badge", TEST_TOKEN_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", event.params.quantity.toString());
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
     })
 
-    test("Badge transfer", () => {
+    test("Badge token transfer", () => {
         createApp();
+        createBadge();
 
         const badgeToken = getTestBadgeTokenEntity(
             Address.fromString(TEST_TOKEN_ID),
@@ -331,6 +459,24 @@ describe("RewardsFacet tests", () => {
         assert.assertTrue(mission!.badges != null, "Mission has badges");
         assert.assertTrue(mission!.badges.length == 1, "Mission badges has length = 1");
         assert.assertTrue(mission!.badges.at(0) == badgeToken.id, "Badge is ok");
+
+        const rewardId = RewardId(
+            TEST_TOKEN_MINTED_MISSION_ID,
+            TEST_TOKEN_MINTED_MISSION,
+            TEST_TOKEN_MINTED_MISSION_URI,
+            event
+        );
+
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "id", rewardId);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "app", TEST_APP_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardId", TEST_TOKEN_MINTED_MISSION_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "rewardType", TEST_TOKEN_MINTED_MISSION);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "metadataURI", TEST_TOKEN_MINTED_MISSION_URI);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "user", TEST_USER3_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "tokenAmount", "0");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badge", TEST_TOKEN_ID);
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "badgeCount", "1");
+        assert.fieldEquals(TEST_REWARD_ENTITY_TYPE, rewardId, "transactionHash", event.transaction.hash.toHex());
     })
 
 });
