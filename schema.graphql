@@ -138,7 +138,7 @@ type Reward @entity (immutable: true) {
   token: FungibleToken
   tokenAmount: BigInt!
   badge: Badge
-  badges: [BadgeToken!]
+  badgeTokens: [BadgeToken!]
   badgeCount: Int!
   transactionHash: String!
   createdAt: BigInt!

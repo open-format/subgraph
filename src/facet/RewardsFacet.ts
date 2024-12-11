@@ -117,11 +117,11 @@ export function handleERC721Minted(event: ERC721Minted): void {
   reward.metadataURI = event.params.uri.toString()
   reward.user = user.id
 
-  let badges = indexBadgeTokens(badge, event.params.quantity, user.id, event.params.uri.toString(), event)
+  let badgeTokens = indexBadgeTokens(badge, event.params.quantity, user.id, event.params.uri.toString(), event)
 
   reward.badge = badge.id
-  reward.badges = badges
-  reward.badgeCount = badges.length
+  reward.badgeTokens = badgeTokens
+  reward.badgeCount = badgeTokens.length
 
   reward.tokenAmount = Zero
 
@@ -153,11 +153,11 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   reward.metadataURI = event.params.data.toString()
   reward.user = user.id
 
-  let badges = indexBadgeTokens(badge, event.params.quantity, user.id, event.params.data.toString(), event)
+  let badgeTokens = indexBadgeTokens(badge, event.params.quantity, user.id, event.params.data.toString(), event)
 
   reward.badge = badge.id
-  reward.badges = badges
-  reward.badgeCount = badges.length
+  reward.badgeTokens = badgeTokens
+  reward.badgeCount = badgeTokens.length
 
   reward.tokenAmount = Zero
 
@@ -205,7 +205,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   badgeToken.save()
 
   reward.badge = badge.id
-  reward.badges = [badgeToken.id]
+  reward.badgeTokens = [badgeToken.id]
   reward.badgeCount = 1
 
   reward.tokenAmount = Zero
@@ -215,7 +215,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
 }
 
 function indexBadgeTokens(badge: Badge, quantity: BigInt, user: string, metadataURI: string, event: ethereum.Event): Array<string> {
-  let badges: Array<string> = []
+  let badgeTokens: Array<string> = []
   let badgeAddress = Address.fromString(badge.id)
   let boundContract = BadgeContract.bind(badgeAddress)
   let totalSupply = boundContract.totalSupply()
@@ -232,8 +232,8 @@ function indexBadgeTokens(badge: Badge, quantity: BigInt, user: string, metadata
     badgeToken.metadataURI = badge.metadataURI ? null : metadataURI
     badgeToken.save()
 
-    badges.push(badgeToken.id)
+    badgeTokens.push(badgeToken.id)
   }
 
-  return badges
+  return badgeTokens
 }
