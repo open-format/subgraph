@@ -16,7 +16,7 @@ import {
   loadOrCreateReward,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
-import { associateAppWithBadge, associateAppWithToken, Zero } from "../helpers";
+import { associateAppWithBadge, associateAppWithToken, createRewardData, Zero } from "../helpers";
 import {
   DEPRECATED_handleBadgeMinted,
   DEPRECATED_handleERC721Minted,
@@ -58,6 +58,21 @@ export function handleTokenMinted(event: TokenMinted): void {
   user.save()
   token.save()
   reward.save()
+
+  let rewardData = createRewardData(event)
+
+  rewardData.app = appAddress.toHex()
+  rewardData.rewardId = event.params.id.toString()
+  rewardData.rewardType = event.params.activityType.toString()
+  rewardData.metadataURI = event.params.uri
+  rewardData.user = user.id
+
+  rewardData.token = token.id
+  rewardData.tokenAmount = event.params.amount
+
+  rewardData.badgeCount = 0
+
+  rewardData.save()
 }
 
 export function handleTokenTransferred(event: TokenTransferred): void {
@@ -91,6 +106,21 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   user.save()
   token.save()
   reward.save()
+
+  let rewardData = createRewardData(event)
+
+  rewardData.app = appAddress.toHex()
+  rewardData.rewardId = event.params.id.toString()
+  rewardData.rewardType = event.params.activityType.toString()
+  rewardData.metadataURI = event.params.uri
+  rewardData.user = user.id
+
+  rewardData.token = token.id
+  rewardData.tokenAmount = event.params.amount
+
+  rewardData.badgeCount = 0
+
+  rewardData.save()
 }
 
 // handles ERC721 tokens being rewarded with the uri being emitted from the event
@@ -127,6 +157,22 @@ export function handleERC721Minted(event: ERC721Minted): void {
 
   user.save()
   reward.save()
+
+  let rewardData = createRewardData(event)
+
+  rewardData.app = appAddress.toHex()
+  rewardData.rewardId = event.params.id.toString()
+  rewardData.rewardType = event.params.activityType.toString()
+  rewardData.metadataURI = event.params.uri
+  rewardData.user = user.id
+
+  rewardData.badge = badge.id
+  rewardData.badgeTokens = badgeTokens
+  rewardData.badgeCount = badgeTokens.length
+
+  rewardData.tokenAmount = Zero
+
+  rewardData.save()
 }
 
 // handles ERC721 badge tokens being rewarded with the uri on the contract
@@ -163,6 +209,22 @@ export function handleBadgeMinted(event: BadgeMinted): void {
 
   user.save()
   reward.save()
+
+  let rewardData = createRewardData(event)
+
+  rewardData.app = appAddress.toHex()
+  rewardData.rewardId = event.params.activityId.toString()
+  rewardData.rewardType = event.params.activityType.toString()
+  rewardData.metadataURI = event.params.data.toString()
+  rewardData.user = user.id
+
+  rewardData.badge = badge.id
+  rewardData.badgeTokens = badgeTokens
+  rewardData.badgeCount = badgeTokens.length
+
+  rewardData.tokenAmount = Zero
+
+  rewardData.save()
 }
 
 // TODO: Remove as event no longer emitted from contracts, and only needed to maintain arbitrum-sepolia history
@@ -212,6 +274,22 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
 
   user.save()
   reward.save()
+
+  let rewardData = createRewardData(event)
+
+  rewardData.app = appAddress.toHex()
+  rewardData.rewardId = event.params.id.toString()
+  rewardData.rewardType = event.params.activityType.toString()
+  rewardData.metadataURI = event.params.uri
+  rewardData.user = user.id
+
+  rewardData.badge = badge.id
+  rewardData.badgeTokens = [badgeToken.id]
+  rewardData.badgeCount = 1
+
+  rewardData.tokenAmount = Zero
+
+  rewardData.save()
 }
 
 function indexBadgeTokens(badge: Badge, quantity: BigInt, user: string, metadataURI: string, event: ethereum.Event): Array<string> {
