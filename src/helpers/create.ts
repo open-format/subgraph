@@ -1,6 +1,6 @@
 import { Address, ethereum, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { ZERO_ADDRESS } from "./address";
-import { Badge, FungibleToken } from "../../generated/schema";
+import { Badge, FungibleToken, RewardData } from "../../generated/schema";
 import { loadOrCreateUser } from "./loadOrCreate";
 import { ERC20Base as ERC20BaseContract } from "../../generated/templates/ERC20Base/ERC20Base";
 import { FUNGIBLE_TOKEN_TYPE_EXTERNAL } from "./enums";
@@ -85,3 +85,10 @@ export function createExternalBadge(
   return badge
 }
 
+export function createRewardData(event: ethereum.Event): RewardData {
+  let rewardData = new RewardData("auto")
+  rewardData.timestamp = event.block.timestamp.toI64()
+  rewardData.transactionHash = event.transaction.hash.toHex()
+
+  return rewardData
+}
