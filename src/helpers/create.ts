@@ -1,10 +1,11 @@
 import { Address, ethereum, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { ZERO_ADDRESS } from "./address";
-import { Badge, FungibleToken, RewardData } from "../../generated/schema";
+import { Badge, FungibleToken, RewardData, UserReward, UserRewardData } from "../../generated/schema";
 import { loadOrCreateUser } from "./loadOrCreate";
 import { ERC20Base as ERC20BaseContract } from "../../generated/templates/ERC20Base/ERC20Base";
 import { FUNGIBLE_TOKEN_TYPE_EXTERNAL } from "./enums";
 import { ERC721Base } from "../../generated/templates/ERC721Base/ERC721Base";
+import { UserRewardId } from "./idTemplates";
 
 /**
  * Use to index fungibleTokens not created by openformat contracts.
@@ -91,4 +92,23 @@ export function createRewardData(event: ethereum.Event): RewardData {
   rewardData.transactionHash = event.transaction.hash.toHex()
 
   return rewardData
+}
+
+export function saveUserRewardData(appAddress: Address, userAddress: Address, event: ethereum.Event): void {
+  const id = UserRewardId(appAddress, userAddress);
+  let userReward = UserReward.load(id);
+
+  // Save UserReward and UserRewardData only if no reward exists for user in app.
+  if (!userReward) {
+    userReward = new UserReward(id);
+    userReward.createdAt = event.block.timestamp;
+    userReward.createdAtBlock = event.block.number;
+    userReward.save()
+
+    const userRewardData = new UserRewardData("auto");
+    userRewardData.timestamp = event.block.timestamp.toI64()
+    userRewardData.appId = appAddress.toHex();
+    userRewardData.userId = userAddress.toHex();
+    userRewardData.save();
+  }
 }
