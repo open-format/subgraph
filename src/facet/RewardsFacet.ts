@@ -16,7 +16,7 @@ import {
   loadOrCreateReward,
   loadOrCreateUser,
 } from "../helpers/loadOrCreate";
-import { associateAppWithBadge, associateAppWithToken, createRewardData, saveUserRewardData, Zero } from "../helpers";
+import { associateAppWithBadge, associateAppWithToken, saveRewardBadgeData, saveRewardTokenData, saveUserRewardData, Zero } from "../helpers";
 import {
   DEPRECATED_handleBadgeMinted,
   DEPRECATED_handleERC721Minted,
@@ -56,17 +56,7 @@ export function handleTokenMinted(event: TokenMinted): void {
   token.save()
   reward.save()
 
-  let rewardData = createRewardData(event)
-  rewardData.appId = appAddress.toHex()
-  rewardData.rewardId = event.params.id.toString()
-  rewardData.rewardType = event.params.activityType.toString()
-  rewardData.metadataURI = event.params.uri
-  rewardData.userId = user.id
-  rewardData.tokenId = token.id
-  rewardData.tokenAmount = event.params.amount
-  rewardData.badgeCount = 0
-  rewardData.save()
-
+  saveRewardTokenData(reward, event);
   saveUserRewardData(appAddress, event.params.to, event);
 }
 
@@ -99,17 +89,7 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   token.save()
   reward.save()
 
-  let rewardData = createRewardData(event)
-  rewardData.appId = appAddress.toHex()
-  rewardData.rewardId = event.params.id.toString()
-  rewardData.rewardType = event.params.activityType.toString()
-  rewardData.metadataURI = event.params.uri
-  rewardData.userId = user.id
-  rewardData.tokenId = token.id
-  rewardData.tokenAmount = event.params.amount
-  rewardData.badgeCount = 0
-  rewardData.save()
-
+  saveRewardTokenData(reward, event);
   saveUserRewardData(appAddress, event.params.to, event);
 }
 
@@ -145,17 +125,7 @@ export function handleERC721Minted(event: ERC721Minted): void {
   user.save()
   reward.save()
 
-  let rewardData = createRewardData(event)
-  rewardData.appId = appAddress.toHex()
-  rewardData.rewardId = event.params.id.toString()
-  rewardData.rewardType = event.params.activityType.toString()
-  rewardData.metadataURI = event.params.uri
-  rewardData.userId = user.id
-  rewardData.badgeId = badge.id
-  rewardData.badgeCount = badgeTokens.length
-  rewardData.tokenAmount = Zero
-  rewardData.save()
-
+  saveRewardBadgeData(reward, event);
   saveUserRewardData(appAddress, event.params.to, event);
 }
 
@@ -191,17 +161,7 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   user.save()
   reward.save()
 
-  let rewardData = createRewardData(event)
-  rewardData.appId = appAddress.toHex()
-  rewardData.rewardId = event.params.activityId.toString()
-  rewardData.rewardType = event.params.activityType.toString()
-  rewardData.metadataURI = event.params.data.toString()
-  rewardData.userId = user.id
-  rewardData.badgeId = badge.id
-  rewardData.badgeCount = badgeTokens.length
-  rewardData.tokenAmount = Zero
-  rewardData.save()
-
+  saveRewardBadgeData(reward, event);
   saveUserRewardData(appAddress, event.params.to, event);
 }
 
@@ -251,17 +211,7 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   user.save()
   reward.save()
 
-  let rewardData = createRewardData(event)
-  rewardData.appId = appAddress.toHex()
-  rewardData.rewardId = event.params.id.toString()
-  rewardData.rewardType = event.params.activityType.toString()
-  rewardData.metadataURI = event.params.uri
-  rewardData.userId = user.id
-  rewardData.badgeId = badge.id
-  rewardData.badgeCount = 1
-  rewardData.tokenAmount = Zero
-  rewardData.save()
-
+  saveRewardBadgeData(reward, event);
   saveUserRewardData(appAddress, event.params.to, event);
 }
 
