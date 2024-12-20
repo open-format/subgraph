@@ -1,11 +1,12 @@
 import { Address, ethereum, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { ZERO_ADDRESS } from "./address";
-import { Badge, FungibleToken, RewardData, UserReward, UserRewardData } from "../../generated/schema";
+import { Badge, FungibleToken, Reward, RewardBadgeData, RewardData, RewardTokenData, UserReward, UserRewardData } from "../../generated/schema";
 import { loadOrCreateUser } from "./loadOrCreate";
 import { ERC20Base as ERC20BaseContract } from "../../generated/templates/ERC20Base/ERC20Base";
 import { FUNGIBLE_TOKEN_TYPE_EXTERNAL } from "./enums";
 import { ERC721Base } from "../../generated/templates/ERC721Base/ERC721Base";
 import { UserRewardId } from "./idTemplates";
+import { Zero } from "./numbers";
 
 /**
  * Use to index fungibleTokens not created by openformat contracts.
@@ -86,12 +87,58 @@ export function createExternalBadge(
   return badge
 }
 
-export function createRewardData(event: ethereum.Event): RewardData {
-  let rewardData = new RewardData("auto")
-  rewardData.timestamp = event.block.timestamp.toI64()
-  rewardData.transactionHash = event.transaction.hash.toHex()
+export function saveRewardTokenData(reward: Reward, event: ethereum.Event): void {
+  const rewardData            = new RewardData("auto");
+  rewardData.timestamp        = event.block.timestamp.toI64();
+  rewardData.transactionHash  = event.transaction.hash.toHex();
+  rewardData.appId            = reward.app;
+  rewardData.rewardId         = reward.rewardId;
+  rewardData.rewardType       = reward.rewardType;
+  rewardData.metadataURI      = reward.metadataURI;
+  rewardData.userId           = reward.user;
+  rewardData.tokenId          = reward.token;
+  rewardData.tokenAmount      = reward.tokenAmount;
+  rewardData.badgeCount       = 0;
+  rewardData.save()
 
-  return rewardData
+  const rewardTokenData           = new RewardTokenData("auto");
+  rewardTokenData.timestamp       = event.block.timestamp.toI64();
+  rewardTokenData.transactionHash = event.transaction.hash.toHex();
+  rewardTokenData.appId           = reward.app;
+  rewardTokenData.rewardId        = reward.rewardId;
+  rewardTokenData.rewardType      = reward.rewardType;
+  rewardTokenData.metadataURI     = reward.metadataURI;
+  rewardTokenData.userId          = reward.user;
+  rewardTokenData.tokenId         = reward.token;
+  rewardTokenData.tokenAmount     = reward.tokenAmount;
+  rewardTokenData.save();
+}
+
+export function saveRewardBadgeData(reward: Reward, event: ethereum.Event): void {
+  const rewardData            = new RewardData("auto");
+  rewardData.timestamp        = event.block.timestamp.toI64();
+  rewardData.transactionHash  = event.transaction.hash.toHex();
+  rewardData.appId            = reward.app;
+  rewardData.rewardId         = reward.rewardId;
+  rewardData.rewardType       = reward.rewardType;
+  rewardData.metadataURI      = reward.metadataURI;
+  rewardData.userId           = reward.user;
+  rewardData.badgeId          = reward.badge;
+  rewardData.badgeCount       = reward.badgeCount;
+  rewardData.tokenAmount      = Zero;
+  rewardData.save()
+
+  const rewardBadgeData           = new RewardBadgeData("auto");
+  rewardBadgeData.timestamp       = event.block.timestamp.toI64();
+  rewardBadgeData.transactionHash = event.transaction.hash.toHex();
+  rewardBadgeData.appId           = reward.app;
+  rewardBadgeData.rewardId        = reward.rewardId;
+  rewardBadgeData.rewardType      = reward.rewardType;
+  rewardBadgeData.metadataURI     = reward.metadataURI;
+  rewardBadgeData.userId          = reward.user;
+  rewardBadgeData.badgeId         = reward.badge;
+  rewardBadgeData.badgeCount      = reward.badgeCount;
+  rewardBadgeData.save();
 }
 
 export function saveUserRewardData(appAddress: Address, userAddress: Address, event: ethereum.Event): void {
