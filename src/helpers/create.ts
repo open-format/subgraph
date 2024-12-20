@@ -1,11 +1,11 @@
 import { Address, ethereum, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { ZERO_ADDRESS } from "./address";
-import { Badge, FungibleToken, Reward, RewardBadgeData, RewardData, RewardTokenData, UserReward, UserRewardData } from "../../generated/schema";
+import { AppRewardId, Badge, FungibleToken, Reward, RewardBadgeData, RewardData, RewardTokenData, UserReward, UserRewardData } from "../../generated/schema";
 import { loadOrCreateUser } from "./loadOrCreate";
 import { ERC20Base as ERC20BaseContract } from "../../generated/templates/ERC20Base/ERC20Base";
 import { FUNGIBLE_TOKEN_TYPE_EXTERNAL } from "./enums";
 import { ERC721Base } from "../../generated/templates/ERC721Base/ERC721Base";
-import { UserRewardId } from "./idTemplates";
+import { AppRewardIdTemplate, UserRewardId } from "./idTemplates";
 import { Zero } from "./numbers";
 
 /**
@@ -157,5 +157,19 @@ export function saveUserRewardData(appAddress: Address, userAddress: Address, ev
     userRewardData.appId = appAddress.toHex();
     userRewardData.userId = userAddress.toHex();
     userRewardData.save();
+  }
+}
+
+export function saveAppRewardId(appAddress: Address, rewardId: string, event: ethereum.Event): void {
+  const id = AppRewardIdTemplate(appAddress, rewardId);
+  let appRewardId = AppRewardId.load(id);
+
+  if (!appRewardId) {
+    appRewardId = new AppRewardId(id);
+    appRewardId.app = appAddress.toHex();
+    appRewardId.rewardId = rewardId;
+    appRewardId.createdAt = event.block.timestamp;
+    appRewardId.createdAtBlock = event.block.number;
+    appRewardId.save()
   }
 }

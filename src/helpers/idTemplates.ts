@@ -43,3 +43,8 @@ export function RewardId(
 export function UserRewardId(appAddress: Address, userAddress: Address): string {
   return appAddress.toHex() + "-" + userAddress.toHex();
 }
+
+export function AppRewardIdTemplate(appAddress: Address, rewardId: string): string {
+  const rewardHash = crypto.keccak256(ByteArray.fromUTF8(rewardId))
+  return appAddress.toHex() + "-" + rewardHash.toHex();
+}

@@ -78,6 +78,14 @@ type AppMetadata @entity {
   createdAtBlock: BigInt!
 }
 
+type AppRewardId @entity (immutable: true) {
+  id: ID!
+  app: App!
+  rewardId: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
 type RequiredTokenBalance @entity {
   id: ID!
   app: App!
