@@ -15,11 +15,13 @@
     "prepare:arbitrum-sepolia": "mustache networks/arbitrum-sepolia.json subgraph.template.yaml subgraph.arbitrum-sepolia.yaml",
     "prepare:arbitrum-sepolia-staging": "mustache networks/arbitrum-sepolia-staging.json subgraph.template.yaml subgraph.arbitrum-sepolia-staging.yaml",
     "prepare:amoy": "mustache networks/amoy.json subgraph.template.yaml subgraph.amoy.yaml",
+    "prepare:turbo": "mustache networks/turbo.json subgraph.template.yaml subgraph.turbo.yaml",
 
     "create:local": "graph create open-format-local --node http://0.0.0.0:8020",
     "create:mumbai": "dotenv cross-var -- graph create open-format/mumbai --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
+    "create:turbo": "graph create open-format-local --node http://127.0.0.1:8020",
 
     "gen:mumbai": "graph codegen subgraph.mumbai.yaml",
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
@@ -31,6 +33,7 @@
     "gen:arbitrum-sepolia-staging": "graph codegen subgraph.arbitrum-sepolia-staging.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
     "gen:amoy": "graph codegen subgraph.amoy.yaml",
+    "gen:turbo": "graph codegen subgraph.turbo.yaml",
     
     "deploy:local": "graph deploy open-format-local --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:mumbai": "dotenv cross-var -- graph deploy --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% --ipfs http://%IPFS_URL% open-format/mumbai subgraph.mumbai.yaml",
@@ -38,6 +41,7 @@
     "deploy:base": "graph deploy --studio open-format-base subgraph.base.yaml",
     "deploy:aurora": "graph deploy --studio open-format-aurora subgraph.aurora.yaml",
     "deploy:aurora-testnet": "graph deploy --studio open-format-aurora-testnet subgraph.aurora-testnet.yaml",
+    "deploy:turbo": "graph deploy open-format-local --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.turbo.yaml",
 
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
 
