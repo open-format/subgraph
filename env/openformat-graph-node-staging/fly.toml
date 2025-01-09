@@ -1,0 +1,57 @@
+# fly.toml app configuration file generated for openformat-turbo-graph-node-staging on 2025-01-08T19:31:39-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'openformat-turbo-graph-node-staging'
+primary_region = 'lhr'
+
+[env]
+  ipfs = "https://ipfs.satsuma.xyz"
+  ethereum = "turbo:https://rpc-0x4e45415f.aurora-cloud.dev"
+  GRAPH_LOG = "debug"
+
+[experimental]
+  allowed_public_ports = []
+
+[[services]]
+  http_checks = []
+  internal_port = 8000
+  protocol = "tcp"
+  script_checks = []
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+
+[[services]]
+  http_checks = []
+  internal_port = 8030
+  protocol = "tcp"
+  script_checks = []
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 8030
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 2
