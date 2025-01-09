@@ -1,0 +1,7 @@
+{
+  "network": "arbitrum-one",
+  "AppFactory": {
+    "startBlock": 21587443,
+    "address": "0x1F36176c0874686d6d480a90Ca039e789c7f7Fa3"
+  }
+}
