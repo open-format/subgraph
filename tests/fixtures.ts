@@ -17,6 +17,7 @@ export const TEST_NFT_ENTITY_TYPE = "NFT";
 export const TEST_TOKEN_ENTITY_TYPE = "Token";
 export const TEST_USER_ENTITY_TYPE = "User";
 export const TEST_CHARGE_ENTITY_TYPE = "Charge";
+export const TEST_REWARD_ENTITY_TYPE = "Reward";
 export const TEST_REQUIREDTOKENBALANCE_ENTITY_TYPE = "RequiredTokenBalance"
 export const TEST_APPFUNGIBLETOKEN_ENTITY_TYPE = "AppFungibleToken";
 
@@ -40,6 +41,7 @@ export const TEST_TOKEN_ROYALTYRECIPIENT = "0xfa8ebdb2560179cf6d63e32e6414472989
 export const TEST_TOKEN_ROYALTYBPS = "1000";
 export const TEST_TOKEN_IMPLEMENTATIONID_LAZYMINT = "LazyMint";
 export const TEST_TOKEN_IMPLEMENTATIONID_BASE = "Base";
+export const TEST_TOKEN_IMPLEMENTATIONID_POINT = "Point";
 export const TEST_TOKEN_IMPLEMENTATIONID_BADGE = "Badge";
 export const TEST_TOKEN_TOTAL_SUPPLY = "1234";
 export const TEST_BADGETOKEN_ID = "1233";

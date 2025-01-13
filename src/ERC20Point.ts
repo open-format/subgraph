@@ -1,9 +1,9 @@
 import {Address, dataSource} from "@graphprotocol/graph-ts";
 import {
   ContractURIUpdated,
-  ERC20Base as ERC20BaseContract,
+  ERC20Point as ERC20PointContract,
   Transfer,
-} from "../generated/templates/ERC20Base/ERC20Base";
+} from "../generated/templates/ERC20Point/ERC20Point";
 import {
   ZERO_ADDRESS,
   loadOrCreateFungibleToken,
@@ -14,8 +14,8 @@ import {
 
 export function handleTransfer(event: Transfer): void {
   let context = dataSource.context();
-  let contractAddress = Address.fromString(context.getString("ERC20BaseContract"));
-  const boundContract = ERC20BaseContract.bind(contractAddress);
+  let contractAddress = Address.fromString(context.getString("ERC20PointContract"));
+  const boundContract = ERC20PointContract.bind(contractAddress);
   const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
 
   // sender and receiver User and TokenBalance entities required for Wallet > Wallet transfers
@@ -76,7 +76,7 @@ export function handleTransfer(event: Transfer): void {
 
 export function handleContractURIUpdated(event: ContractURIUpdated): void {
   let context = dataSource.context();
-  let contractAddress = Address.fromString(context.getString("ERC20BaseContract"));
+  let contractAddress = Address.fromString(context.getString("ERC20PointContract"));
   const fungibleToken = loadOrCreateFungibleToken(contractAddress, event);
   const fungibleTokenMetadata = loadOrCreateFungibleTokenMetadata(
     contractAddress,

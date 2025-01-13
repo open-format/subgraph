@@ -1,3 +1,9 @@
+enum FungibleTokenType {
+  External
+  Point
+  Base
+}
+
 type FungibleTokenMetadata @entity {
   id: ID!
   URI: String!
@@ -21,6 +27,7 @@ type FungibleToken @entity {
   symbol: String!
   decimals: Int!
   metadata: FungibleTokenMetadata
+  tokenType: FungibleTokenType!
   """
   DEPRECATED: The `app` field has been deprecated as app-token is a many to many relationship, please use `apps` instead.
   """
@@ -94,12 +101,6 @@ type BadgeToken @entity {
   updatedAtBlock: BigInt!
 }
 
-type CollectedBadge @entity {
-  id: ID!
-  user: User!
-  metadataURI: String!
-}
-
 type Badge @entity {
   id: ID!
   name: String!
@@ -117,19 +118,6 @@ type Badge @entity {
   updatedAtBlock: BigInt!
 }
 
-# @TODO - Implement IPFS data types
-# type BadgeMetadata @entity {
-#   id: ID!
-#   name: String!
-#   description: String!
-#   image: String!
-#   external_url: String!
-#   animation_url: String!
-#   URI: String!
-#   createdAt: BigInt!
-#   createdAtBlock: BigInt!
-# }
-
 type User @entity {
   id: ID!
   tokenBalances: [FungibleTokenBalance!] @derivedFrom(field: "user")
@@ -140,6 +128,26 @@ type User @entity {
   updatedAtBlock: BigInt!
 }
 
+type Reward @entity (immutable: true) {
+  id: ID!
+  app: App!
+  rewardId: String!
+  rewardType: String!
+  metadataURI: String!
+  user: User!
+  token: FungibleToken
+  tokenAmount: BigInt!
+  badge: Badge
+  badgeTokens: [BadgeToken!]
+  badgeCount: Int!
+  transactionHash: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
+"""
+DEPRECATED: The `Action` entity has been deprecated as please query the `Reward` entity with `rewardType: "ACTION"` instead.
+"""
 type Action @entity {
   id: ID!
   metadata: ActionMetadata
@@ -150,12 +158,18 @@ type Action @entity {
   createdAtBlock: BigInt!
 }
 
+"""
+DEPRECATED: The `ActionMetadata` entity has been deprecated as please query the `Reward` with `rewardType: "ACTION"` instead.
+"""
 type ActionMetadata @entity {
   id: ID!
   name: String
   URI: String!
 }
 
+"""
+DEPRECATED: The `MissionFungibleToken` entity has been deprecated as please query the `Reward` entity instead.
+"""
 type MissionFungibleToken @entity {
   id: ID!
   token: FungibleToken!
@@ -163,12 +177,18 @@ type MissionFungibleToken @entity {
   amount_rewarded: BigInt!
 }
 
+"""
+DEPRECATED: The `MissionMetadata` entity has been deprecated as please query the `Reward` entity with `rewardType: "MISSION"` instead.
+"""
 type MissionMetadata @entity {
   id: ID!
   name: String
   URI: String!
 }
 
+"""
+DEPRECATED: The `Mission` entity has been deprecated as please query the `Reward` entity with `rewardType: "MISSION"` instead.
+"""
 type Mission @entity {
   id: ID!
   metadata: MissionMetadata

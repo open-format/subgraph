@@ -12,8 +12,8 @@ describe("ERC20Base tests", () => {
     
     beforeEach(() => {
         let context = new DataSourceContext()
-        context.set('ERC20Contract', Value.fromString(TEST_TOKEN_ID))
-        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20Contract', context)
+        context.set('ERC20BaseContract', Value.fromString(TEST_TOKEN_ID))
+        dataSourceMock.setReturnValues(TEST_TOKEN_ID, 'ERC20BaseContract', context)
     })
     
     test("Token transfer", () => {

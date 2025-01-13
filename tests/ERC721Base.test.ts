@@ -83,6 +83,9 @@ describe("ERC721Base tests", () => {
         // TODO: Should this be a counter instead
         assert.fieldEquals(TEST_APP_ENTITY_TYPE, TEST_APP_ID, "badgesAwarded", BigInt.fromString(TEST_BADGETOKEN_ID).plus(One).toString());
 
+        // Badge
+        assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAwarded", BigInt.fromString(TEST_BADGETOKEN_ID).plus(One).toString());
+
         // Badge Token
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeToken.id, "id", badgeToken.id);
         assert.fieldEquals(TEST_BADGETOKEN_ENTITY_TYPE, badgeToken.id, "owner", event.params.to.toHex());
@@ -106,6 +109,9 @@ describe("ERC721Base tests", () => {
         
         // TODO: Should this be a counter instead
         assert.fieldEquals(TEST_APP_ENTITY_TYPE, TEST_APP_ID, "badgesAwarded", BigInt.fromString(TEST_BADGETOKEN_ID).plus(One).toString());
+
+        // Badge
+        assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAwarded", BigInt.fromString(TEST_BADGETOKEN_ID).plus(One).toString());
 
         const badgeTokenId = BadgeId(Address.fromString(TEST_TOKEN_ID), BigInt.fromString(TEST_BADGETOKEN_ID).toHex());
 

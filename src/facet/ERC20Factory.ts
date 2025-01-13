@@ -4,7 +4,7 @@ import {
   DataSourceContext,
   dataSource,
 } from "@graphprotocol/graph-ts";
-import {ERC20Base} from "../../generated/templates";
+import {ERC20Base, ERC20Point} from "../../generated/templates";
 import {Created} from "../../generated/templates/ERC20FactoryFacet/ERC20FactoryFacet";
 import {
   loadOrCreateApp,
@@ -12,15 +12,25 @@ import {
   loadOrCreateFungibleToken,
   loadOrCreateUser,
 } from "../helpers";
+import { FUNGIBLE_TOKEN_TYPE_BASE, FUNGIBLE_TOKEN_TYPE_POINT } from "../helpers/enums";
 
 
 export function handleCreated(event: Created): void {
   let context = dataSource.context();
   let appAddress = Address.fromString(context.getString("App"));
   let ERC20Context = new DataSourceContext();
+  let tokenType = FUNGIBLE_TOKEN_TYPE_BASE;
 
-  ERC20Context.setString("ERC20Contract", event.params.id.toHex());
-  ERC20Base.createWithContext(event.params.id, ERC20Context);
+  let implementationId = event.params.implementationId.toString();
+  if (implementationId == "Base") {
+    ERC20Context.setString("ERC20BaseContract", event.params.id.toHex());
+    ERC20Base.createWithContext(event.params.id, ERC20Context);
+  } else {
+    ERC20Context.setString("ERC20PointContract", event.params.id.toHex());
+    ERC20Point.createWithContext(event.params.id, ERC20Context);
+    tokenType = FUNGIBLE_TOKEN_TYPE_POINT
+  }
+
 
   let fungibleToken = loadOrCreateFungibleToken(event.params.id, event);
   let appFungibleToken = loadOrCreateAppFungibleToken(appAddress, event.params.id);
@@ -33,6 +43,7 @@ export function handleCreated(event: Created): void {
   fungibleToken.totalSupply = BigInt.fromI32(0);
   fungibleToken.burntSupply = BigInt.fromI32(0);
   fungibleToken.owner = user.id;
+  fungibleToken.tokenType = tokenType;
 
   // DEPRECATED: `app` will be removed in the next major release.
   // Replaced with `apps` which is derived from `AppFungibleTokens`.
@@ -42,7 +53,7 @@ export function handleCreated(event: Created): void {
     app.xpToken = fungibleToken.id;
     app.save();
   }
-
+  
   fungibleToken.save();
   appFungibleToken.save();
   user.save();

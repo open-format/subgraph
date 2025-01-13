@@ -73,6 +73,9 @@ describe("ERC721Badge tests", () => {
         
         assert.fieldEquals(TEST_APP_ENTITY_TYPE, TEST_APP_ID, "badgesAwarded", BigInt.fromString(TEST_BADGETOKEN_ID).plus(One).toString());
 
+        // Badge
+        assert.fieldEquals(TEST_BADGE_ENTITY_TYPE, TEST_TOKEN_ID, "totalAwarded", BigInt.fromString(TEST_BADGETOKEN_ID).plus(One).toString());
+
         const badgeTokenId = BadgeId(Address.fromString(TEST_TOKEN_ID), BigInt.fromString(TEST_BADGETOKEN_ID).toHex());
 
         // Badge Token
