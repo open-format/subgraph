@@ -98,7 +98,7 @@ export function saveRewardTokenData(reward: Reward, event: ethereum.Event): void
   rewardData.userId           = reward.user;
   rewardData.tokenId          = reward.token;
   rewardData.tokenAmount      = reward.tokenAmount;
-  rewardData.badgeCount       = 0;
+  rewardData.badgeTokenCount       = 0;
   rewardData.save()
 
   const rewardTokenData           = new RewardTokenData("auto");
@@ -124,7 +124,7 @@ export function saveRewardBadgeData(reward: Reward, event: ethereum.Event): void
   rewardData.metadataURI      = reward.metadataURI;
   rewardData.userId           = reward.user;
   rewardData.badgeId          = reward.badge;
-  rewardData.badgeCount       = reward.badgeCount;
+  rewardData.badgeTokenCount       = reward.badgeCount;
   rewardData.tokenAmount      = Zero;
   rewardData.save()
 
@@ -137,7 +137,7 @@ export function saveRewardBadgeData(reward: Reward, event: ethereum.Event): void
   rewardBadgeData.metadataURI     = reward.metadataURI;
   rewardBadgeData.userId          = reward.user;
   rewardBadgeData.badgeId         = reward.badge;
-  rewardBadgeData.badgeCount      = reward.badgeCount;
+  rewardBadgeData.badgeTokenCount      = reward.badgeCount;
   rewardBadgeData.save();
 }
 
