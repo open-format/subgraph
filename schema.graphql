@@ -188,7 +188,7 @@ type RewardData @entity(timeseries: true){
   tokenAmount: BigInt!
   
   badgeId: String
-  badgeCount: Int!
+  badgeTokenCount: Int!
 
   metadataURI: String!
 }
@@ -219,7 +219,7 @@ type RewardBadgeData @entity(timeseries: true){
   transactionHash: String!
   
   badgeId: String
-  badgeCount: Int!
+  badgeTokenCount: Int!
   metadataURI: String!
 }
 
@@ -345,8 +345,8 @@ type RewardAppBadgeTypeStat @aggregation(intervals: ["hour", "day"], source: "Re
   appId: String!
   count: Int8! @aggregate(fn: "count")
   totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-  badgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount")
-  totalBadgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount", cumulative: true)
+  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
+  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
 }
 
 type RewardAppBadgeTypeUserStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
@@ -356,8 +356,8 @@ type RewardAppBadgeTypeUserStat @aggregation(intervals: ["hour", "day"], source:
   userId: String!
   count: Int8! @aggregate(fn: "count")
   totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-  badgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount")
-  totalBadgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount", cumulative: true)
+  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
+  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
 }
 
 type RewardAppBadgeStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
@@ -367,8 +367,8 @@ type RewardAppBadgeStat @aggregation(intervals: ["hour", "day"], source: "Reward
   badgeId: String!
   count: Int8! @aggregate(fn: "count")
   totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-  badgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount")
-  totalBadgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount", cumulative: true)
+  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
+  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
 }
 
 type RewardAppBadgeUserStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
@@ -379,8 +379,8 @@ type RewardAppBadgeUserStat @aggregation(intervals: ["hour", "day"], source: "Re
   userId: String!
   count: Int8! @aggregate(fn: "count")
   totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-  badgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount")
-  totalBadgeAmount: BigInt! @aggregate(fn: "sum", arg: "badgeCount", cumulative: true)
+  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
+  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
 }
 
 """
