@@ -299,23 +299,6 @@ type RewardAppUserRewardIdRewardTypeStat @aggregation(intervals: ["hour", "day"]
   totalCount: Int8! @aggregate(fn: "count", cumulative: true)
 }
 
-type RewardAppTokenTypeStat @aggregation(intervals: ["hour", "day"], source: "RewardTokenData") {
-  id: Int8!
-  timestamp: Timestamp!
-  appId: String!
-  count: Int8! @aggregate(fn: "count")
-  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-}
-
-type RewardAppTokenTypeUserStat @aggregation(intervals: ["hour", "day"], source: "RewardTokenData") {
-  id: Int8!
-  timestamp: Timestamp!
-  appId: String!
-  userId: String!
-  count: Int8! @aggregate(fn: "count")
-  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-}
-
 type RewardAppTokenStat @aggregation(intervals: ["hour", "day"], source: "RewardTokenData") {
   id: Int8!
   timestamp: Timestamp!
@@ -337,27 +320,6 @@ type RewardAppTokenUserStat @aggregation(intervals: ["hour", "day"], source: "Re
   totalCount: Int8! @aggregate(fn: "count", cumulative: true)
   tokenAmount: BigInt! @aggregate(fn: "sum", arg: "tokenAmount")
   totalTokenAmount: BigInt! @aggregate(fn: "sum", arg: "tokenAmount", cumulative: true)
-}
-
-type RewardAppBadgeTypeStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
-  id: Int8!
-  timestamp: Timestamp!
-  appId: String!
-  count: Int8! @aggregate(fn: "count")
-  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
-  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
-}
-
-type RewardAppBadgeTypeUserStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
-  id: Int8!
-  timestamp: Timestamp!
-  appId: String!
-  userId: String!
-  count: Int8! @aggregate(fn: "count")
-  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
-  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
-  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
 }
 
 type RewardAppBadgeStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
