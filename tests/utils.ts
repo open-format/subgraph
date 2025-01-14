@@ -90,6 +90,11 @@ export function createApp(): AppCreated {
   // Set the app in context so it is accessible
   let context = new DataSourceContext()
   context.set('App', Value.fromString(TEST_APP_ID))
+
+  // Matchstick doesn't support aggregation features.
+  // Setting this flag to false prevents aggregation functions from running during tests.
+  context.set("AggregationFeatureFlag", Value.fromBoolean(false))
+
   dataSourceMock.setReturnValues(TEST_APP_ID, 'App', context)
 
   return appEvent;

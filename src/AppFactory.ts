@@ -14,6 +14,7 @@ import {
 export function handleCreated(event: Created): void {
   let context = new DataSourceContext();
   context.setString("App", event.params.id.toHex());
+  context.setBoolean("AggregationFeatureFlag", true);
 
   ERC721FactoryFacet.createWithContext(event.params.id, context);
   ERC20FactoryFacet.createWithContext(event.params.id, context);

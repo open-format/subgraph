@@ -56,9 +56,11 @@ export function handleTokenMinted(event: TokenMinted): void {
   token.save()
   reward.save()
 
-  saveRewardTokenData(reward, event);
-  saveUserRewardData(appAddress, event.params.to, event);
-  saveAppRewardId(appAddress, reward.rewardId, event);
+  if (context.getBoolean("AggregationFeatureFlag")) {
+    saveRewardTokenData(reward, event);
+    saveUserRewardData(appAddress, event.params.to, event);
+    saveAppRewardId(appAddress, reward.rewardId, event);
+  }
 }
 
 export function handleTokenTransferred(event: TokenTransferred): void {
@@ -90,9 +92,11 @@ export function handleTokenTransferred(event: TokenTransferred): void {
   token.save()
   reward.save()
 
-  saveRewardTokenData(reward, event);
-  saveUserRewardData(appAddress, event.params.to, event);
-  saveAppRewardId(appAddress, reward.rewardId, event);
+  if (context.getBoolean("AggregationFeatureFlag")) {
+    saveRewardTokenData(reward, event);
+    saveUserRewardData(appAddress, event.params.to, event);
+    saveAppRewardId(appAddress, reward.rewardId, event);
+  }
 }
 
 // handles ERC721 tokens being rewarded with the uri being emitted from the event
@@ -127,9 +131,11 @@ export function handleERC721Minted(event: ERC721Minted): void {
   user.save()
   reward.save()
 
-  saveRewardBadgeData(reward, event);
-  saveUserRewardData(appAddress, event.params.to, event);
-  saveAppRewardId(appAddress, reward.rewardId, event);
+  if (context.getBoolean("AggregationFeatureFlag")) {
+    saveRewardBadgeData(reward, event);
+    saveUserRewardData(appAddress, event.params.to, event);
+    saveAppRewardId(appAddress, reward.rewardId, event);
+  }
 }
 
 // handles ERC721 badge tokens being rewarded with the uri on the contract
@@ -164,9 +170,11 @@ export function handleBadgeMinted(event: BadgeMinted): void {
   user.save()
   reward.save()
 
-  saveRewardBadgeData(reward, event);
-  saveUserRewardData(appAddress, event.params.to, event);
-  saveAppRewardId(appAddress, reward.rewardId, event);
+  if (context.getBoolean("AggregationFeatureFlag")) {
+    saveRewardBadgeData(reward, event);
+    saveUserRewardData(appAddress, event.params.to, event);
+    saveAppRewardId(appAddress, reward.rewardId, event);
+  }
 }
 
 // TODO: Remove as event no longer emitted from contracts, and only needed to maintain arbitrum-sepolia history
@@ -215,9 +223,11 @@ export function handleBadgeTransferred(event: BadgeTransferred): void {
   user.save()
   reward.save()
 
-  saveRewardBadgeData(reward, event);
-  saveUserRewardData(appAddress, event.params.to, event);
-  saveAppRewardId(appAddress, reward.rewardId, event);
+  if (context.getBoolean("AggregationFeatureFlag")) {
+    saveRewardBadgeData(reward, event);
+    saveUserRewardData(appAddress, event.params.to, event);
+    saveAppRewardId(appAddress, reward.rewardId, event);
+  }
 }
 
 function indexBadgeTokens(badge: Badge, quantity: BigInt, user: string, metadataURI: string, event: ethereum.Event): Array<string> {
