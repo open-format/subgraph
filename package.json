@@ -22,7 +22,8 @@
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:turbo": "graph create open-format-local --node http://127.0.0.1:8020",
-    "create:matchain": "dotenv cross-var -- graph create open-format-matchain --node https://subgraph.mobula.io:8020 --access-token %MOBULA_API_KEY%",
+    "create:matchain": "graph create open-format-matchain --node http://127.0.0.1:8020",
+    "create-mobula:matchain": "dotenv cross-var -- graph create open-format-matchain --node https://subgraph.mobula.io:8020 --access-token %MOBULA_API_KEY%",
 
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
     "gen:base-sepolia": "graph codegen subgraph.base-sepolia.yaml",
@@ -45,6 +46,7 @@
     "deploy:arbitrum-one": "graph deploy --studio open-format-arbitrum-one subgraph.arbitrum-one.yaml",
     "deploy:arbitrum-sepolia": "graph deploy --studio open-format-arbitrum-sepolia subgraph.arbitrum-sepolia.yaml",
     "deploy:turbo": "graph deploy open-format-local --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.turbo.yaml",
+    "deploy:matchain": "graph deploy open-format-matchain --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.matchain.yaml",
 
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
 
@@ -52,8 +54,8 @@
     "deploy-alchemy:polygon-amoy": "dotenv cross-var -- graph deploy open-format-amoy --version-label %ALCHEMY_SUBGRAPH_VERSION_POLYGON_AMOY% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.amoy.yaml",
     "deploy-alchemy:arbitrum-sepolia": "dotenv cross-var -- graph deploy open-format-arbitrum-sepolia --version-label %ALCHEMY_SUBGRAPH_VERSION_ARBITRUM_SEPOLIA% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.arbitrum-sepolia.yaml",
     "deploy-alchemy:arbitrum-sepolia-staging": "dotenv cross-var -- graph deploy open-format-arbitrum-sepolia-staging --version-label %ALCHEMY_SUBGRAPH_VERSION_ARBITRUM_SEPOLIA_STAGING% --node https://subgraphs.alchemy.com/api/subgraphs/deploy --deploy-key %ALCHEMY_DEPLOY_KEY% --ipfs https://ipfs.satsuma.xyz subgraph.arbitrum-sepolia-staging.yaml",
-
     "deploy-mobula:matchain": "dotenv cross-var -- graph deploy openformat-matchain --node https://subgraph.mobula.io:8020 --ipfs https://subgraph.mobula.io:5001 --access-token %MOBULA_API_KEY% subgraph.matchain.yaml",
+    
     "build": "graph build",
     "auth": "graph auth https://api.thegraph.com/deploy/",
 
