@@ -8,7 +8,6 @@ primary_region = 'lhr'
 
 [env]
   ipfs = "https://ipfs.satsuma.xyz"
-  ethereum = "matchain:https://rpc.ankr.com/matchain_mainnet"
   GRAPH_LOG = "debug"
 
 [experimental]
