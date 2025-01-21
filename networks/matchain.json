@@ -1,0 +1,7 @@
+{
+  "network": "matchain",
+  "AppFactory": {
+    "address": "0xf1811D1D6D9a718312c3c9466D8c4a2601f973e7",
+    "startBlock": 15636148
+  }
+}
