@@ -78,6 +78,14 @@ type AppMetadata @entity {
   createdAtBlock: BigInt!
 }
 
+type AppRewardId @entity (immutable: true) {
+  id: ID!
+  app: App!
+  rewardId: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
 type RequiredTokenBalance @entity {
   id: ID!
   app: App!
@@ -128,6 +136,27 @@ type User @entity {
   updatedAtBlock: BigInt!
 }
 
+type UserReward @entity (immutable: true) {
+  id: ID!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+}
+
+type UserRewardData @entity(timeseries: true) {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  userId: String!
+}
+
+type UserRewardAppStat @aggregation(intervals: ["hour", "day"], source: "UserRewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
 type Reward @entity (immutable: true) {
   id: ID!
   app: App!
@@ -143,6 +172,177 @@ type Reward @entity (immutable: true) {
   transactionHash: String!
   createdAt: BigInt!
   createdAtBlock: BigInt!
+}
+
+type RewardData @entity(timeseries: true){
+  id: Int8!
+  timestamp: Timestamp!
+  
+  appId: String!
+  userId: String!
+  rewardId: String!
+  rewardType: String!
+  transactionHash: String!
+
+  tokenId: String
+  tokenAmount: BigInt!
+  
+  badgeId: String
+  badgeTokenCount: Int!
+
+  metadataURI: String!
+}
+
+type RewardTokenData @entity(timeseries: true){
+  id: Int8!
+  timestamp: Timestamp!
+  
+  appId: String!
+  userId: String!
+  rewardId: String!
+  rewardType: String!
+  transactionHash: String!
+  
+  tokenId: String
+  tokenAmount: BigInt!
+  metadataURI: String!
+}
+
+type RewardBadgeData @entity(timeseries: true){
+  id: Int8!
+  timestamp: Timestamp!
+  
+  appId: String!
+  userId: String!
+  rewardId: String!
+  rewardType: String!
+  transactionHash: String!
+  
+  badgeId: String
+  badgeTokenCount: Int!
+  metadataURI: String!
+}
+
+type RewardAppStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppRewardIdStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  rewardId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppRewardTypeStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  rewardType: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppRewardIdRewardTypeStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  rewardId: String!
+  rewardType: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppUserStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  userId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppUserRewardTypeStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  userId: String!
+  rewardType: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppUserRewardIdStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  userId: String!
+  rewardId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppUserRewardIdRewardTypeStat @aggregation(intervals: ["hour", "day"], source: "RewardData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  userId: String!
+  rewardId: String!
+  rewardType: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+}
+
+type RewardAppTokenStat @aggregation(intervals: ["hour", "day"], source: "RewardTokenData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  tokenId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+  tokenAmount: BigInt! @aggregate(fn: "sum", arg: "tokenAmount")
+  totalTokenAmount: BigInt! @aggregate(fn: "sum", arg: "tokenAmount", cumulative: true)
+}
+
+type RewardAppTokenUserStat @aggregation(intervals: ["hour", "day"], source: "RewardTokenData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  tokenId: String!
+  userId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+  tokenAmount: BigInt! @aggregate(fn: "sum", arg: "tokenAmount")
+  totalTokenAmount: BigInt! @aggregate(fn: "sum", arg: "tokenAmount", cumulative: true)
+}
+
+type RewardAppBadgeStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  badgeId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
+  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
+}
+
+type RewardAppBadgeUserStat @aggregation(intervals: ["hour", "day"], source: "RewardBadgeData") {
+  id: Int8!
+  timestamp: Timestamp!
+  appId: String!
+  badgeId: String!
+  userId: String!
+  count: Int8! @aggregate(fn: "count")
+  totalCount: Int8! @aggregate(fn: "count", cumulative: true)
+  badgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount")
+  totalBadgeTokenAmount: BigInt! @aggregate(fn: "sum", arg: "badgeTokenCount", cumulative: true)
 }
 
 """

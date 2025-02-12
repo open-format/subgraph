@@ -39,3 +39,12 @@ export function RewardId(
   const rewardHash = crypto.keccak256(ByteArray.fromUTF8(`${label}|${rewardType}|${metadataURI}`))
   return rewardHash.toHex() + "-" + event.transaction.hash.toHex() + "-" + event.logIndex.toString()
 }
+
+export function UserRewardId(appAddress: Address, userAddress: Address): string {
+  return appAddress.toHex() + "-" + userAddress.toHex();
+}
+
+export function AppRewardIdTemplate(appAddress: Address, rewardId: string): string {
+  const rewardHash = crypto.keccak256(ByteArray.fromUTF8(rewardId))
+  return appAddress.toHex() + "-" + rewardHash.toHex();
+}

@@ -1,6 +1,6 @@
 {
   "name": "@openformat/subgraph",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "scripts": {
     "reinstall": "rm -rf .pnp* && yarn",
     "clean": "rm -rf build/ generated/",
