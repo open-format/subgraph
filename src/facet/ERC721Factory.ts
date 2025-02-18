@@ -20,10 +20,10 @@ export function handleCreated(event: Created): void {
   let ERC721Context = new DataSourceContext();
 
   let implementationId = event.params.implementationId.toString();
-  if (implementationId == "LazyMint") {
+  if (implementationId.startsWith("LazyMint")) {
     ERC721Context.setString("ERC721ContractLazyMint", event.params.id.toHex());
     ERC721LazyMint.createWithContext(event.params.id, ERC721Context);
-  } else if (implementationId == "Badge") {
+  } else if (implementationId.startsWith("Badge")) {
     ERC721Context.setString("ERC721ContractBadge", event.params.id.toHex());
     ERC721Badge.createWithContext(event.params.id, ERC721Context);
   } else {
