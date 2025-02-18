@@ -22,13 +22,13 @@ export function handleCreated(event: Created): void {
   let tokenType = FUNGIBLE_TOKEN_TYPE_BASE;
 
   let implementationId = event.params.implementationId.toString();
-  if (implementationId == "Base") {
-    ERC20Context.setString("ERC20BaseContract", event.params.id.toHex());
-    ERC20Base.createWithContext(event.params.id, ERC20Context);
-  } else {
+  if (implementationId.startsWith("Point")) {
     ERC20Context.setString("ERC20PointContract", event.params.id.toHex());
     ERC20Point.createWithContext(event.params.id, ERC20Context);
     tokenType = FUNGIBLE_TOKEN_TYPE_POINT
+  } else {
+    ERC20Context.setString("ERC20BaseContract", event.params.id.toHex());
+    ERC20Base.createWithContext(event.params.id, ERC20Context);
   }
 
 
