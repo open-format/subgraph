@@ -1,0 +1,7 @@
+{
+  "network": "openformat",
+   "AppFactory": {
+    "address": "0x20A9FB49618a10fD7ea79C82ac4e6D9345CB4C97",
+    "startBlock": 140558204
+  }
+}
