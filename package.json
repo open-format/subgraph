@@ -17,12 +17,14 @@
     "prepare:polygon-amoy": "mustache networks/polygon-amoy.json subgraph.template.yaml subgraph.polygon-amoy.yaml",
     "prepare:turbo": "mustache networks/turbo.json subgraph.template.yaml subgraph.turbo.yaml",
     "prepare:matchain": "mustache networks/matchain.json subgraph.template.yaml subgraph.matchain.yaml",
+    "prepare:openformat": "mustache networks/openformat.json subgraph.template.yaml subgraph.openformat.yaml",
 
     "create:local": "graph create open-format-local --node http://0.0.0.0:8020",
     "create:aurora": "dotenv cross-var -- graph create open-format/aurora --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:aurora-testnet": "dotenv cross-var -- graph create open-format/aurora-testnet --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
     "create:turbo": "graph create open-format-local --node http://127.0.0.1:8020",
     "create:matchain": "graph create open-format-matchain --node http://127.0.0.1:8020",
+    "create:openformat": "graph create open-format-openformat --node http://127.0.0.1:8020",
     "create-mobula:matchain": "dotenv cross-var -- graph create open-format-matchain-%MOBULA_VERSION% --node http://20.84.160.190:8020",
 
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
@@ -37,6 +39,7 @@
     "gen:polygon-amoy": "graph codegen subgraph.polygon-amoy.yaml",
     "gen:turbo": "graph codegen subgraph.turbo.yaml",
     "gen:matchain": "graph codegen subgraph.matchain.yaml",
+    "gen:openformat": "graph codegen subgraph.openformat.yaml",
 
     "deploy:local": "graph deploy open-format-local --ipfs http://0.0.0.0:5001 --node http://0.0.0.0:8020 subgraph.local.yaml",
     "deploy:base-sepolia": "graph deploy --studio open-format-base-sepolia subgraph.base-sepolia.yaml",
@@ -47,6 +50,7 @@
     "deploy:arbitrum-sepolia": "graph deploy --studio open-format-arbitrum-sepolia subgraph.arbitrum-sepolia.yaml",
     "deploy:turbo": "graph deploy open-format-local --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.turbo.yaml",
     "deploy:matchain": "graph deploy open-format-matchain --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.matchain.yaml",
+    "deploy:openformat": "graph deploy open-format-openformat --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.openformat.yaml",
 
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
 
