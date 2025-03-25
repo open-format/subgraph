@@ -26,6 +26,8 @@
     "create:matchain": "graph create open-format-matchain --node http://127.0.0.1:8020",
     "create:openformat": "graph create open-format-openformat --node http://127.0.0.1:8020",
     "create-mobula:matchain": "dotenv cross-var -- graph create open-format-matchain-%MOBULA_VERSION% --node http://20.84.160.190:8020",
+    "create:fly-openformat": "dotenv cross-var -- graph create open-format-openformat --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
+    "create:fly-turbo": "dotenv cross-var -- graph create open-format-turbo --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL%",
 
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
     "gen:base-sepolia": "graph codegen subgraph.base-sepolia.yaml",
@@ -51,6 +53,8 @@
     "deploy:turbo": "graph deploy open-format-local --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.turbo.yaml",
     "deploy:matchain": "graph deploy open-format-matchain --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.matchain.yaml",
     "deploy:openformat": "graph deploy open-format-openformat --ipfs https://ipfs.satsuma.xyz --node http://127.0.0.1:8020 subgraph.openformat.yaml",
+    "deploy:fly-openformat": "dotenv cross-var -- graph deploy open-format-openformat --ipfs https://ipfs.satsuma.xyz --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% subgraph.openformat.yaml",
+    "deploy:fly-turbo": "dotenv cross-var -- graph deploy open-format-turbo --ipfs https://ipfs.satsuma.xyz --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% subgraph.turbo.yaml",
 
     "remove:aurora-testnet": "dotenv cross-var -- graph remove --node https://admin:%GRAPH_NODE_PASSWORD%@%GRAPH_NODE_URL% open-format/aurora-testnet",
 

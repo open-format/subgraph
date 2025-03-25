@@ -1,0 +1,22 @@
+[store]
+[store.primary]
+connection = "postgresql://${postgres_user}:${postgres_pass}@${postgres_host}/${postgres_db}"
+pool_size = 50
+
+[chains]
+ingestor = "block_ingestor_node"
+[chains.openformat]
+shard = "primary"
+provider = [
+  { label = "openformat", url = "https://rpc-0x4e454168.aurora-cloud.dev/", transport="rpc", features = [ "archive", "traces" ] },
+]
+[chains.turbo]
+shard = "primary"
+provider = [
+  { label = "turbo", url = "https://rpc-0x4e45415f.aurora-cloud.dev", transport="rpc", features = [ "archive", "traces" ] },
+]
+
+[deployment]
+[[deployment.rule]]
+shard = "primary"
+indexers = ["default"]
