@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Modifiend version of https://github.com/graphprotocol/graph-node/blob/master/docker/start
+# Differences from original:
+# - Added socat execution to function `run_graph_node()`
+
 save_coredumps() {
     graph_dir=/var/lib/graph
     datestamp=$(date +"%Y-%m-%dT%H:%M:%S")
