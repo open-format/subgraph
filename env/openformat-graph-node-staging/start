@@ -57,6 +57,8 @@ wait_for_ipfs() {
 run_graph_node() {
     echo "Forwarding IPv6 traffic to IPv4 on port 8020"
     nohup socat TCP6-LISTEN:8020,bind=[::],reuseaddr,ipv6only=1,fork TCP4:127.0.0.1:8020 &
+    echo "Forwarding IPv6 traffic to IPv4 on port 8040"
+    nohup socat TCP6-LISTEN:8040,bind=[::],reuseaddr,ipv6only=1,fork TCP4:127.0.0.1:8040 &
     if [ -n "$GRAPH_NODE_CONFIG" ]
     then
         # Start with a configuration file; we don't do a check whether
