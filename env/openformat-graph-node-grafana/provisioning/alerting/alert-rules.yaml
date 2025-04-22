@@ -78,7 +78,7 @@ groups:
                     uid: PBFA97CFB590B2093
                 disableTextWrap: false
                 editorMode: builder
-                expr: store_connection_error_count
+                expr: increase(store_connection_error_count[1m])
                 fullMetaSearch: false
                 hide: false
                 includeNullMetadata: true
@@ -194,7 +194,7 @@ groups:
                     uid: PBFA97CFB590B2093
                 disableTextWrap: false
                 editorMode: builder
-                expr: polling_monitor_errors
+                expr: increase(polling_monitor_errors[1m])
                 fullMetaSearch: false
                 hide: false
                 includeNullMetadata: true
