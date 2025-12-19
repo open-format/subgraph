@@ -15,6 +15,11 @@ shard = "primary"
 provider = [
   { label = "turbo", url = "https://rpc-0x4e45415f.aurora-cloud.dev", transport="rpc", features = [ "archive", "traces" ] },
 ]
+[chains.aurora]
+shard = "primary"
+provider = [
+  { label = "aurora", url = "https://mainnet.aurora.dev", transport="rpc", features = [ "archive", "traces" ] },
+]
 
 [deployment]
 [[deployment.rule]]
