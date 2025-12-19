@@ -7,7 +7,7 @@ app = 'openformat-graph-node-staging'
 primary_region = 'lhr'
 
 [env]
-  ipfs = "https://ipfs.satsuma.xyz"
+  ipfs = "https://ipfs.network.thegraph.com"
   GRAPH_NODE_CONFIG = "/config.toml"
   GRAPH_LOG = "debug"
 
